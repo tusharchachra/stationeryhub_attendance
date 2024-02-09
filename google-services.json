@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "292507911533",
+    "project_id": "stationery-hub-4b34e",
+    "storage_bucket": "stationery-hub-4b34e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:292507911533:android:e7c4b807f875245bc38664",
+        "android_client_info": {
+          "package_name": "com.flyingantsstudios.stationeryhub_attendance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "292507911533-g0hccg36j9nsehcbfe5noeo64gcrd2dl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.flyingantsstudios.stationeryhub_attendance",
+            "certificate_hash": "bd77b20aefd1dbd42211a01bd39b0e767fcb2b7f"
+          }
+        },
+        {
+          "client_id": "292507911533-9r4brhi48nqvki7vcslhjpkt40osajh9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvY2bAV1RYdP5xuDIkUQTtZdrzDgQAKO0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "292507911533-9r4brhi48nqvki7vcslhjpkt40osajh9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
