@@ -13,6 +13,9 @@ class ScreenLogin extends StatefulWidget {
 
 class _ScreenLoginState extends State<ScreenLogin> {
   TextEditingController phoneNumController = TextEditingController();
+  bool isPhoneNumValid = false;
+  final _formKey = GlobalKey<FormState>();
+  String? errorMsg;
   @override
   Widget build(BuildContext context) {
     return ScaffoldHome(
@@ -35,6 +38,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
                 fontSize: SizeConfig.getSize(10),
               ),
             ),
+            SizedBox(height: SizeConfig.getSize(5)),
             Text(
               'Attendance Marking System',
               style: TextStyle(
@@ -43,47 +47,105 @@ class _ScreenLoginState extends State<ScreenLogin> {
                 fontSize: SizeConfig.getSize(3),
               ),
             ),
-            SizedBox(
-              width: SizeConfig.getSize(70),
-              child: TextFormField(
-                controller: phoneNumController,
-                style: const TextStyle(
-                  color: Colors.white,
-                  letterSpacing: 5,
-                ),
-                keyboardType: TextInputType.phone,
-                autofocus: false,
-                maxLength: 10,
-                cursorColor: Colors.white,
-                decoration: const InputDecoration(
-                    prefix: Text(
-                      '+91-',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    prefixIcon: Icon(Icons.phone),
-                    prefixIconColor: Colors.white,
-                    fillColor: Colors.black38,
-                    counterText: '',
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(40.0),
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                        borderRadius: BorderRadius.all(Radius.circular(40.0))),
-                    contentPadding: EdgeInsets.only(left: 20.0, right: 20.0),
-                    errorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                        borderRadius: BorderRadius.all(Radius.circular(40.0)))),
+            SizedBox(height: SizeConfig.getSize(20)),
+            Text(
+              'Login with your phone number',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+                fontSize: SizeConfig.getSize(3),
               ),
             ),
+            SizedBox(height: SizeConfig.getSize(2)),
+            Form(
+              key: _formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: SizedBox(
+                width: SizeConfig.getSize(70),
+                height: SizeConfig.getSize(20),
+                child: TextFormField(
+                  controller: phoneNumController,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    letterSpacing: 5,
+                  ),
+                  keyboardType: TextInputType.phone,
+                  autofocus: false,
+                  maxLength: 10,
+                  cursorColor: Colors.white,
+                  decoration: InputDecoration(
+                      prefix: const Text(
+                        '+91-',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      prefixIcon: const Icon(Icons.phone),
+                      prefixIconColor: Colors.white,
+                      fillColor: Colors.black38,
+                      counterText: '',
+                      filled: true,
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(40.0),
+                        ),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(40.0))),
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 20.0),
+                      errorStyle: TextStyle(
+                          height: 0.1,
+                          color: Colors.red[900],
+                          fontWeight: FontWeight.bold,
+                          fontSize: SizeConfig.getSize(3))),
+                  validator: (value) {
+                    if (value == '7808814341') {
+                      return null;
+                    } else if (value!.length < 10) {
+                      return null;
+                    } else {
+                      return 'Unauthorised user';
+                    }
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      if (value == '7808814341') {
+                        isPhoneNumValid = true;
+                      } else {
+                        isPhoneNumValid = false;
+                      }
+                    });
+                  },
+                ),
+              ),
+            ),
+            SizedBox(height: SizeConfig.getSize(20)),
             GestureDetector(
               child: Container(
-                color: Colors.white,
-                child: Text('Submit'),
+                width: SizeConfig.getSize(30),
+                height: SizeConfig.getSize(10),
+                decoration: BoxDecoration(
+                    color: isPhoneNumValid ? Colors.white : Colors.black26,
+                    borderRadius:
+                        const BorderRadius.all(Radius.circular(40.0))),
+                child: Center(
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(
+                        color:
+                            isPhoneNumValid ? Colors.black54 : Colors.black38,
+                        fontSize: SizeConfig.getSize(5),
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
               ),
+              onTap: () {
+                if (isPhoneNumValid) {
+                } else {}
+
+                ///Navigate to OTP screen
+              },
             )
           ],
         ),
