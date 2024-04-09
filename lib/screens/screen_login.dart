@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:stationeryhub_attendance/helpers/size_config.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_home.dart';
+import 'package:stationeryhub_attendance/services/firebase_services.dart';
+
+import '../form_fields/form_field_button.dart';
+import '../form_fields/form_field_phone_num.dart';
 
 class ScreenLogin extends StatefulWidget {
   const ScreenLogin({
@@ -32,29 +36,17 @@ class _ScreenLoginState extends State<ScreenLogin> {
           children: [
             Text(
               'Stationery Hub',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: SizeConfig.getSize(10),
-              ),
+              style: Theme.of(context).textTheme.displayLarge,
             ),
             SizedBox(height: SizeConfig.getSize(5)),
             Text(
               'Attendance Marking System',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-                fontSize: SizeConfig.getSize(3),
-              ),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
             SizedBox(height: SizeConfig.getSize(20)),
             Text(
               'Login with your phone number',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-                fontSize: SizeConfig.getSize(3),
-              ),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
             SizedBox(height: SizeConfig.getSize(2)),
             Form(
@@ -63,85 +55,43 @@ class _ScreenLoginState extends State<ScreenLogin> {
               child: SizedBox(
                 width: SizeConfig.getSize(70),
                 height: SizeConfig.getSize(20),
-                child: TextFormField(
-                  controller: phoneNumController,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    letterSpacing: 5,
-                  ),
-                  keyboardType: TextInputType.phone,
-                  autofocus: false,
-                  maxLength: 10,
-                  cursorColor: Colors.white,
-                  decoration: InputDecoration(
-                      prefix: const Text(
-                        '+91-',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      prefixIcon: const Icon(Icons.phone),
-                      prefixIconColor: Colors.white,
-                      fillColor: Colors.black38,
-                      counterText: '',
-                      filled: true,
-                      border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(40.0),
-                        ),
-                      ),
-                      focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(40.0))),
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 20.0),
-                      errorStyle: TextStyle(
-                          height: 0.1,
-                          color: Colors.red[900],
-                          fontWeight: FontWeight.bold,
-                          fontSize: SizeConfig.getSize(3))),
-                  validator: (value) {
-                    if (value == '7808814341') {
+                child: FormFieldPhoneNum(
+                  phoneNumController: phoneNumController,
+                  validatorPhoneNum: (value) {
+                    /* if (value == '7808814341') {
                       return null;
-                    } else if (value!.length < 10) {
+                    } else */
+                    if (value!.length == 10) {
                       return null;
                     } else {
                       return 'Unauthorised user';
                     }
                   },
-                  onChanged: (value) {
+                  onChangedAction: (value) {
                     setState(() {
-                      if (value == '7808814341') {
+                      if (_formKey.currentState!.validate()) {
+                        isPhoneNumValid = true;
+                      }
+                      /* if (value == '7808814341') {
                         isPhoneNumValid = true;
                       } else {
                         isPhoneNumValid = false;
-                      }
+                      }*/
                     });
                   },
                 ),
               ),
             ),
             SizedBox(height: SizeConfig.getSize(20)),
-            GestureDetector(
-              child: Container(
-                width: SizeConfig.getSize(30),
-                height: SizeConfig.getSize(10),
-                decoration: BoxDecoration(
-                    color: isPhoneNumValid ? Colors.white : Colors.black26,
-                    borderRadius:
-                        const BorderRadius.all(Radius.circular(40.0))),
-                child: Center(
-                  child: Text(
-                    'Submit',
-                    style: TextStyle(
-                        color:
-                            isPhoneNumValid ? Colors.black54 : Colors.black38,
-                        fontSize: SizeConfig.getSize(5),
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-              onTap: () {
-                if (isPhoneNumValid) {
+            FormFieldButton(
+              isPhoneNumValid: isPhoneNumValid,
+              buttonText: 'Submit',
+              height: 10,
+              width: 30,
+              onTapAction: () async {
+                if (_formKey.currentState!.validate()) {
+                  FirebaseService.firebaseInstance
+                      .sendOtp('+91${phoneNumController.text.trim()}');
                 } else {}
 
                 ///Navigate to OTP screen

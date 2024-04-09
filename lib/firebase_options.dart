@@ -63,8 +63,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '292507911533',
     projectId: 'stationery-hub-4b34e',
     storageBucket: 'stationery-hub-4b34e.appspot.com',
-    androidClientId: '292507911533-g0hccg36j9nsehcbfe5noeo64gcrd2dl.apps.googleusercontent.com',
-    iosClientId: '292507911533-1oc4a50uaa1851nt3e5p8dihjpqvrf5d.apps.googleusercontent.com',
+    androidClientId:
+        '292507911533-g0hccg36j9nsehcbfe5noeo64gcrd2dl.apps.googleusercontent.com',
+    iosClientId:
+        '292507911533-1oc4a50uaa1851nt3e5p8dihjpqvrf5d.apps.googleusercontent.com',
     iosBundleId: 'com.flyingantsstudios.stationeryhubAttendance',
   );
 }

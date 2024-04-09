@@ -38,6 +38,8 @@ dependencies:
   firebase_core: ^2.25.4
   firebase_auth: ^4.17.4
   loading_overlay: ^0.3.0
+  process_run: ^0.14.2
+  dartpy: ^0.0.3
 
 dev_dependencies:
   flutter_test:
