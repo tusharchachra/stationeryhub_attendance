@@ -9,11 +9,13 @@ import 'package:stationeryhub_attendance/screens/screen_login.dart';
 import 'firebase_options.dart';
 
 void main() async {
+  const reCaptchaSiteKey = '6LdiirYpAAAAAFZ1pyLKhZEcZpp2w6x_PullHH5r';
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebaseAppCheck.instance.activate(
-      webProvider:
-          ReCaptchaV3Provider('6LdiirYpAAAAAFZ1pyLKhZEcZpp2w6x_PullHH5r'));
+      androidProvider: AndroidProvider.debug,
+      appleProvider: AppleProvider.debug,
+      webProvider: ReCaptchaV3Provider(reCaptchaSiteKey));
   runApp(const StationeryHubAttendance());
 }
 

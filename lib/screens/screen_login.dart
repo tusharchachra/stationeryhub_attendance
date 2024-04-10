@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stationeryhub_attendance/helpers/size_config.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_home.dart';
-import 'package:stationeryhub_attendance/services/firebase_services.dart';
+import 'package:stationeryhub_attendance/screens/screen_otp.dart';
 
 import '../form_fields/form_field_button.dart';
 import '../form_fields/form_field_phone_num.dart';
@@ -63,6 +63,8 @@ class _ScreenLoginState extends State<ScreenLogin> {
                     } else */
                     if (value!.length == 10) {
                       return null;
+                    } else if (value.length < 10) {
+                      return 'Invalid phone number';
                     } else {
                       return 'Unauthorised user';
                     }
@@ -71,6 +73,8 @@ class _ScreenLoginState extends State<ScreenLogin> {
                     setState(() {
                       if (_formKey.currentState!.validate()) {
                         isPhoneNumValid = true;
+                      } else {
+                        isPhoneNumValid = false;
                       }
                       /* if (value == '7808814341') {
                         isPhoneNumValid = true;
@@ -89,10 +93,14 @@ class _ScreenLoginState extends State<ScreenLogin> {
               height: 10,
               width: 30,
               onTapAction: () async {
-                if (_formKey.currentState!.validate()) {
+                /*if (_formKey.currentState!.validate()) {
                   FirebaseService.firebaseInstance
-                      .sendOtp('+91${phoneNumController.text.trim()}');
-                } else {}
+                      .sendOtp('+91${phoneNumController.text.trim()}');}
+
+                } else {}*/
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => OtpScreen(
+                        phoneNumber: '99999999999', onSubmit: () {})));
 
                 ///Navigate to OTP screen
               },
