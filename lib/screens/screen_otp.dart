@@ -4,7 +4,7 @@ import 'package:stationeryhub_attendance/form_fields/form_field_button.dart';
 
 import '../form_fields/form_error.dart';
 import '../form_fields/otpbox.dart';
-import '../services/firebase_services.dart';
+import '../services/firebase_login_services.dart';
 
 class OtpScreen extends StatefulWidget {
   final String phoneNumber;
@@ -59,7 +59,7 @@ class _OtpScreenState extends State<OtpScreen> {
         otpDigitController4.text.trim() +
         otpDigitController5.text.trim() +
         otpDigitController6.text.trim();
-    firebaseMessage = await FirebaseService.firebaseInstance
+    firebaseMessage = await FirebaseLoginServices.firebaseInstance
         .signInPhone(phoneNum: widget.phoneNumber, otp: otp, context: context);
   }
 
@@ -79,12 +79,12 @@ class _OtpScreenState extends State<OtpScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(
+                  const Text(
                     'Verify phone number',
                     /* style: kTextStyleTitle.copyWith(
                         fontSize: kTextStyleTitle.fontSize! * 2),*/
                   ),
-                  Text(
+                  const Text(
                     'Check SMS messages. We\'ve sent you the pin',
                     /*  style: kTextStyleTitle.copyWith(
                         fontSize: kTextStyleTitle.fontSize! * kSizeFactor09),*/
@@ -152,7 +152,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     ],
                   ),
                   FormError(errors: errors),
-                  Text(
+                  const Text(
                     'Didn\'t you receive the OTP? Resend OTP',
                     /*style: kTextStyleBody.copyWith(
                       fontSize: kTextStyleBody.fontSize! * kSizeFactor02

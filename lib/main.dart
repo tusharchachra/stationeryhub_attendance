@@ -13,9 +13,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebaseAppCheck.instance.activate(
-      androidProvider: AndroidProvider.debug,
-      appleProvider: AppleProvider.debug,
-      webProvider: ReCaptchaV3Provider(reCaptchaSiteKey));
+    androidProvider: AndroidProvider.debug,
+    appleProvider: AppleProvider.debug,
+  );
   runApp(const StationeryHubAttendance());
 }
 
@@ -31,7 +31,7 @@ class StationeryHubAttendance extends StatelessWidget {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             return LayoutBuilder(builder: (context, constraints) {
-              return ScreenLogin();
+              return const ScreenLogin();
             });
           }),
     );

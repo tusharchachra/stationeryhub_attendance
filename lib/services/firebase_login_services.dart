@@ -5,25 +5,23 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class FirebaseService {
-  FirebaseService._privateConstructor();
+class FirebaseLoginServices {
+  FirebaseLoginServices._privateConstructor();
 
-  static final FirebaseService firebaseInstance =
-      FirebaseService._privateConstructor();
+  static final FirebaseLoginServices firebaseInstance =
+      FirebaseLoginServices._privateConstructor();
   FirebaseAuth auth = FirebaseAuth.instance;
 
   String firebaseMessage = '';
   late User user;
   String verificationId = '111111';
 
-  Future sendOtp(String phoneNum) async {
-    await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: phoneNum,
-      verificationCompleted: (PhoneAuthCredential credential) {},
-      verificationFailed: (FirebaseAuthException e) {},
-      codeSent: (String verificationId, int? resendToken) {},
-      codeAutoRetrievalTimeout: (String verificationId) {},
-    );
+  Future checkUser(String phoneNum) async {
+    try {
+      //await FirebaseAuth.instance.signInWithCredential();
+    } on Exception catch (e) {
+      print('Error:${e.toString()}');
+    }
   }
 
   Future<String> signInPhone({
@@ -54,7 +52,7 @@ class FirebaseService {
       );
     } on FirebaseAuthException catch (e) {
       if (kDebugMode) {
-        print(e.code);
+        print('Error:${e.code}');
       }
       firebaseMessage = getAuthErrorMsg(e);
     }
@@ -68,7 +66,7 @@ class FirebaseService {
       userCredential = await auth.signInWithCredential(credential);
       user = userCredential.user!;
       FirebaseAuth.instance.currentUser!.reload();
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException {
       /* firebaseMessage = kErrorOtp;*/
       // print(e.code);
     }

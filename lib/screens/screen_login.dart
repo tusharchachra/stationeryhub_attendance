@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stationeryhub_attendance/helpers/size_config.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_home.dart';
-import 'package:stationeryhub_attendance/screens/screen_otp.dart';
+import 'package:stationeryhub_attendance/services/firebase_firestore_services.dart';
 
 import '../form_fields/form_field_button.dart';
 import '../form_fields/form_field_phone_num.dart';
@@ -93,14 +93,29 @@ class _ScreenLoginState extends State<ScreenLogin> {
               height: 10,
               width: 30,
               onTapAction: () async {
-                /*if (_formKey.currentState!.validate()) {
-                  FirebaseService.firebaseInstance
-                      .sendOtp('+91${phoneNumController.text.trim()}');}
+                ///TODO check if user exists in firebase. if yes, login. if not, ask to register as an organisation or employee
+                FirebaseFirestoreServices firestoreServices =
+                    FirebaseFirestoreServices();
+                print(await firestoreServices.isUserExists(
+                    phoneNum: '999999999'));
 
-                } else {}*/
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => OtpScreen(
-                        phoneNumber: '99999999999', onSubmit: () {})));
+                /*if (isPhoneNumValid) {
+                  Navigator.of(context)
+                } else {}
+*/
+                /*try {
+                  if (_formKey.currentState!.validate()) {
+                    await FirebaseService.firebaseInstance.signInPhone(
+                        context: context,
+                        phoneNum: phoneNumController.text.trim(),
+                        otp: '000000');
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => OtpScreen(
+                            phoneNumber: '99999999999', onSubmit: () {})));
+                  }
+                } on Exception catch (e) {
+                  print(e.toString());
+                }*/
 
                 ///Navigate to OTP screen
               },

@@ -41,6 +41,9 @@ dependencies:
   process_run: ^0.14.2
   dartpy: ^0.0.3
   firebase_app_check: ^0.2.1+17
+  firebase_storage: ^11.7.1
+  cloud_firestore: ^4.16.1
+
 
 dev_dependencies:
   flutter_test:
@@ -51,7 +54,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
