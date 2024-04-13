@@ -4,7 +4,6 @@ import 'package:stationeryhub_attendance/form_fields/form_field_button.dart';
 
 import '../form_fields/form_error.dart';
 import '../form_fields/otpbox.dart';
-import '../services/firebase_login_services.dart';
 
 class OtpScreen extends StatefulWidget {
   final String phoneNumber;
@@ -59,8 +58,8 @@ class _OtpScreenState extends State<OtpScreen> {
         otpDigitController4.text.trim() +
         otpDigitController5.text.trim() +
         otpDigitController6.text.trim();
-    firebaseMessage = await FirebaseLoginServices.firebaseInstance
-        .signInPhone(phoneNum: widget.phoneNumber, otp: otp, context: context);
+    /*firebaseMessage = await FirebaseLoginServices.firebaseInstance
+        .signInPhone(phoneNum: widget.phoneNumber, otp: otp, context: context);*/
   }
 
   @override
@@ -159,6 +158,16 @@ class _OtpScreenState extends State<OtpScreen> {
                     ),*/
                   ),
                   FormFieldButton(
+                    textStyle: isFormValid
+                        ? Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(color: Colors.indigo)
+                        : Theme.of(context).textTheme.bodyMedium,
+                    buttonDecoration: BoxDecoration(
+                        color: isFormValid ? Colors.white : Colors.black26,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(40.0))),
                     /* buttonDecoration: isFormValid
                           ? null
                           : kDecorationButton.copyWith(color: kColourTextBody),*/
@@ -206,7 +215,6 @@ class _OtpScreenState extends State<OtpScreen> {
                           }
                         : () {},
                     buttonText: 'Verify',
-                    isPhoneNumValid: true,
                     width: 30,
                     height: 10,
                   ),

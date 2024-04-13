@@ -1,7 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:stationeryhub_attendance/albums/album_users.dart';
 import 'package:stationeryhub_attendance/helpers/size_config.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_home.dart';
+import 'package:stationeryhub_attendance/screens/screen_otp.dart';
 import 'package:stationeryhub_attendance/services/firebase_firestore_services.dart';
+import 'package:stationeryhub_attendance/services/firebase_login_services.dart';
 
 import '../form_fields/form_field_button.dart';
 import '../form_fields/form_field_phone_num.dart';
@@ -18,12 +22,14 @@ class ScreenLogin extends StatefulWidget {
 class _ScreenLoginState extends State<ScreenLogin> {
   TextEditingController phoneNumController = TextEditingController();
   bool isPhoneNumValid = false;
+  AlbumUsers? registeredUser;
   final _formKey = GlobalKey<FormState>();
   String? errorMsg;
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return ScaffoldHome(
-      isLoading: false,
+      isLoading: isLoading,
       scaffoldDecoration: const BoxDecoration(
           image: DecorationImage(
               image: AssetImage('assets/images/background.jpg'),
@@ -88,36 +94,60 @@ class _ScreenLoginState extends State<ScreenLogin> {
             ),
             SizedBox(height: SizeConfig.getSize(20)),
             FormFieldButton(
-              isPhoneNumValid: isPhoneNumValid,
               buttonText: 'Submit',
               height: 10,
               width: 30,
+              textStyle: isPhoneNumValid
+                  ? Theme.of(context)
+                      .textTheme
+                      .bodyMedium!
+                      .copyWith(color: Colors.indigo)
+                  : Theme.of(context).textTheme.bodyMedium,
+              buttonDecoration: BoxDecoration(
+                  color: isPhoneNumValid ? Colors.white : Colors.black26,
+                  borderRadius: const BorderRadius.all(Radius.circular(40.0))),
               onTapAction: () async {
-                ///TODO check if user exists in firebase. if yes, login. if not, ask to register as an organisation or employee
+                setState(() {
+                  isLoading = true;
+                });
+
+                ///TODO check if user exists in firebase. if yes, login. if not, ask to register as an organisation
                 FirebaseFirestoreServices firestoreServices =
                     FirebaseFirestoreServices();
-                print(await firestoreServices.isUserExists(
-                    phoneNum: '999999999'));
+                registeredUser = await firestoreServices.isUserExists(
+                    phoneNum: phoneNumController.text.trim());
+                /*setState(() {
+                  isLoading = false;
+                });*/
+                if (registeredUser != null) {
+                  /*setState(() {
+                    isLoading = true;
+                  });*/
+                  FirebaseLoginServices.firebaseInstance.signInPhone(
+                      phoneNum: phoneNumController.text.trim(),
+                      otp: '',
+                      onCodeSentAction: () async {
+                        if (kDebugMode) {
+                          print('otp sent');
+                        }
 
-                /*if (isPhoneNumValid) {
-                  Navigator.of(context)
-                } else {}
-*/
-                /*try {
-                  if (_formKey.currentState!.validate()) {
-                    await FirebaseService.firebaseInstance.signInPhone(
-                        context: context,
-                        phoneNum: phoneNumController.text.trim(),
-                        otp: '000000');
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => OtpScreen(
-                            phoneNumber: '99999999999', onSubmit: () {})));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => OtpScreen(
+                                phoneNumber: phoneNumController.text.trim(),
+                                onSubmit: () {})));
+                      });
+                } else {
+                  if (kDebugMode) {
+                    print('User not registered');
                   }
-                } on Exception catch (e) {
-                  print(e.toString());
-                }*/
-
-                ///Navigate to OTP screen
+                  /*setState(() {
+                    isLoading = false;
+                  });*/
+                  buildShowAdaptiveDialog(context);
+                }
+                setState(() {
+                  isLoading = false;
+                });
               },
             )
           ],
@@ -125,5 +155,48 @@ class _ScreenLoginState extends State<ScreenLogin> {
       ),
       pageTitle: '',
     );
+  }
+
+  Future<dynamic> buildShowAdaptiveDialog(BuildContext context) {
+    return showAdaptiveDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            actions: [
+              FormFieldButton(
+                width: 30,
+                height: 10,
+                buttonText: 'Yes',
+                onTapAction: () {
+                  Navigator.of(context).pop;
+                },
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(color: Colors.indigo),
+                buttonDecoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              ),
+              FormFieldButton(
+                width: 30,
+                height: 10,
+                buttonText: 'Cancel',
+                onTapAction: () {
+                  Navigator.pop(context);
+                },
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(color: Colors.indigo),
+                buttonDecoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              )
+            ],
+            title: const Text(
+                'User not found.\n\nIf you are an employee, request your organization to grant access.\nIf you wish to register a new organization, tap Yes '),
+          );
+        });
   }
 }

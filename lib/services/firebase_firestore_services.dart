@@ -4,23 +4,35 @@ import 'package:stationeryhub_attendance/albums/album_users.dart';
 
 class FirebaseFirestoreServices {
   final FirebaseFirestore db = FirebaseFirestore.instance;
-  List<AlbumUsers> usersList = [];
+  // List<AlbumUsers> usersList = [];
   //FirebaseFirestoreServices(this.db);
 
-  Future<bool> isUserExists({required String phoneNum}) async {
-    await db.collection("users").get().then((event) {
-      for (var doc in event.docs) {
-        AlbumUsers tempUser = AlbumUsers.fromJson(doc.data());
-        tempUser.uid = doc.id;
-        usersList.add(tempUser);
-      }
+  Future<AlbumUsers?> isUserExists({required String phoneNum}) async {
+    AlbumUsers? tempUser;
+    try {
+      await db
+          .collection("users")
+          .where('phone_num', isEqualTo: phoneNum)
+          .get()
+          .then((event)async {
+
+        for (var doc in event.docs) {
+          tempUser = AlbumUsers.fromJson(doc.data());
+          tempUser?.uid = doc.id;
+          print('Fetched user=$tempUser');
+          //usersList.add(tempUser);
+        }
+        if (kDebugMode) {
+          //print('User List: $usersList\n');
+        }
+        return tempUser;
+      });
+    } on Exception catch (e) {
+      // TODO
       if (kDebugMode) {
-        print('User List: $usersList\n');
+        print('Error:${e.toString()}');
       }
-    });
-    for (var user in usersList) {
-      if (user.phoneNum == phoneNum) return true;
     }
-    return false;
+    return tempUser;
   }
 }

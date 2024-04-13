@@ -3,7 +3,6 @@ import 'dart:io' show File, Platform;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 
 class FirebaseLoginServices {
   FirebaseLoginServices._privateConstructor();
@@ -16,18 +15,11 @@ class FirebaseLoginServices {
   late User user;
   String verificationId = '111111';
 
-  Future checkUser(String phoneNum) async {
-    try {
-      //await FirebaseAuth.instance.signInWithCredential();
-    } on Exception catch (e) {
-      print('Error:${e.toString()}');
-    }
-  }
-
   Future<String> signInPhone({
-    required BuildContext context,
+    /*required BuildContext context,*/
     required String phoneNum,
     required String otp,
+    required Function onCodeSentAction,
   }) async {
     if (kDebugMode) {
       print('signing in');
@@ -47,6 +39,11 @@ class FirebaseLoginServices {
         },
         codeSent: (String verId, int? resendToken) async {
           verificationId = verId;
+          print('Verification sent to $phoneNum');
+          onCodeSentAction();
+          /* Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) =>
+                  OtpScreen(phoneNumber: phoneNum, onSubmit: () {})));*/
         },
         codeAutoRetrievalTimeout: (String verId) {},
       );
