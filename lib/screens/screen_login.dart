@@ -110,44 +110,23 @@ class _ScreenLoginState extends State<ScreenLogin> {
                 setState(() {
                   isLoading = true;
                 });
-
-                ///TODO check if user exists in firebase. if yes, login. if not, ask to register as an organisation
+                //check if user exists
                 FirebaseFirestoreServices firestoreServices =
                     FirebaseFirestoreServices();
                 registeredUser = await firestoreServices.isUserExists(
                     phoneNum: phoneNumController.text.trim());
-                /*setState(() {
+                setState(() {
                   isLoading = false;
-                });*/
+                });
                 if (registeredUser != null) {
-                  /*setState(() {
-                    isLoading = true;
-                  });*/
-                  FirebaseLoginServices.firebaseInstance.signInPhone(
-                      phoneNum: phoneNumController.text.trim(),
-                      otp: '',
-                      onCodeSentAction: () async {
-                        if (kDebugMode) {
-                          print('otp sent');
-                        }
-
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => OtpScreen(
-                                phoneNumber: phoneNumController.text.trim(),
-                                onSubmit: () {})));
-                      });
+                  loginUser();
                 } else {
                   if (kDebugMode) {
                     print('User not registered');
                   }
-                  /*setState(() {
-                    isLoading = false;
-                  });*/
-                  buildShowAdaptiveDialog(context);
+                  //show dialog to register the new user or cancel
+                  buildShowAdaptiveDialog();
                 }
-                setState(() {
-                  isLoading = false;
-                });
               },
             )
           ],
@@ -157,7 +136,32 @@ class _ScreenLoginState extends State<ScreenLogin> {
     );
   }
 
-  Future<dynamic> buildShowAdaptiveDialog(BuildContext context) {
+  Future<void> loginUser() async {
+    setState(() {
+      isLoading = true;
+    });
+    await FirebaseLoginServices.firebaseInstance.signInPhone(
+      phoneNum: phoneNumController.text.trim(),
+      otp: '',
+      onCodeSentAction: () async {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => OTPScreen(
+              phoneNum: phoneNumController.text.trim(),
+              isNewUser: registeredUser == null ? true : false,
+              /*registeredUser: registeredUser!,*/
+            ),
+          ),
+          (route) => false,
+        );
+      },
+    );
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  Future<dynamic> buildShowAdaptiveDialog() {
     return showAdaptiveDialog(
         context: context,
         builder: (context) {
@@ -168,7 +172,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
                 height: 10,
                 buttonText: 'Yes',
                 onTapAction: () {
-                  Navigator.of(context).pop;
+                  loginUser();
                 },
                 textStyle: Theme.of(context)
                     .textTheme

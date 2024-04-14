@@ -15,7 +15,7 @@ class AlbumUsers {
         'uid': uid,
         'category': category,
         'name': name,
-        'phoneNum': phoneNum,
+        'phone_num': phoneNum,
       };
 
   AlbumUsers.fromJson(Map<String, dynamic> json)
@@ -23,11 +23,6 @@ class AlbumUsers {
         name = json['name'].toString(),
         category = json['category'].toString(),
         phoneNum = json['phone_num'];
-
-  /*AlbumUsers.fromJsonNoId(Map<String, dynamic> json)
-      : name = json['name'].toString(),
-        category = json['category'].toString(),
-        phoneNum = json['phone_num'];*/
 
   void setUid(String id) {
     uid = id;

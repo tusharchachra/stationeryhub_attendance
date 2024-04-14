@@ -39,7 +39,7 @@ class FirebaseLoginServices {
         },
         codeSent: (String verId, int? resendToken) async {
           verificationId = verId;
-          print('Verification sent to $phoneNum');
+          print('Verification code sent to $phoneNum');
           onCodeSentAction();
           /* Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (context) =>
