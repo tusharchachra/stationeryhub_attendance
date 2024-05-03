@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stationeryhub_attendance/albums/album_organization.dart';
+import 'package:stationeryhub_attendance/albums/album_organizations.dart';
 import 'package:stationeryhub_attendance/albums/album_users.dart';
 import 'package:stationeryhub_attendance/form_fields/form_field_button.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_home.dart';

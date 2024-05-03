@@ -16,6 +16,7 @@ void main() async {
     androidProvider: AndroidProvider.debug,
     appleProvider: AppleProvider.debug,
   );
+
   runApp(const StationeryHubAttendance());
 }
 

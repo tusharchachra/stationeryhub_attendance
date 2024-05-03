@@ -22,10 +22,12 @@ class ScreenLogin extends StatefulWidget {
 class _ScreenLoginState extends State<ScreenLogin> {
   TextEditingController phoneNumController = TextEditingController();
   bool isPhoneNumValid = false;
+  //Map<String?, dynamic>? fetchedUser;
   AlbumUsers? registeredUser;
   final _formKey = GlobalKey<FormState>();
   String? errorMsg;
   bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return ScaffoldHome(
@@ -82,11 +84,6 @@ class _ScreenLoginState extends State<ScreenLogin> {
                       } else {
                         isPhoneNumValid = false;
                       }
-                      /* if (value == '7808814341') {
-                        isPhoneNumValid = true;
-                      } else {
-                        isPhoneNumValid = false;
-                      }*/
                     });
                   },
                 ),
@@ -107,25 +104,25 @@ class _ScreenLoginState extends State<ScreenLogin> {
                   color: isPhoneNumValid ? Colors.white : Colors.black26,
                   borderRadius: const BorderRadius.all(Radius.circular(40.0))),
               onTapAction: () async {
-                setState(() {
-                  isLoading = true;
-                });
-                //check if user exists
-                FirebaseFirestoreServices firestoreServices =
-                    FirebaseFirestoreServices();
-                registeredUser = await firestoreServices.isUserExists(
-                    phoneNum: phoneNumController.text.trim());
-                setState(() {
-                  isLoading = false;
-                });
-                if (registeredUser != null) {
-                  loginUser();
-                } else {
-                  if (kDebugMode) {
-                    print('User not registered');
+                if (isPhoneNumValid) {
+                  setState(() {
+                    isLoading = true;
+                  });
+                  //check if user exists
+                  FirebaseFirestoreServices firestoreServices =
+                      FirebaseFirestoreServices();
+                  registeredUser = await firestoreServices.isUserExists(
+                      phoneNum: phoneNumController.text.trim());
+                  print('registered user= $registeredUser');
+                  if (registeredUser != null) {
+                    loginUser();
+                  } else {
+                    if (kDebugMode) {
+                      print('User not registered');
+                    }
+                    //show dialog to register the new user or cancel
+                    buildShowAdaptiveDialog();
                   }
-                  //show dialog to register the new user or cancel
-                  buildShowAdaptiveDialog();
                 }
               },
             )
@@ -137,14 +134,11 @@ class _ScreenLoginState extends State<ScreenLogin> {
   }
 
   Future<void> loginUser() async {
-    setState(() {
-      isLoading = true;
-    });
     await FirebaseLoginServices.firebaseInstance.signInPhone(
       phoneNum: phoneNumController.text.trim(),
       otp: '',
       onCodeSentAction: () async {
-        Navigator.of(context).pushAndRemoveUntil(
+        Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => OTPScreen(
               phoneNum: phoneNumController.text.trim(),
@@ -152,7 +146,6 @@ class _ScreenLoginState extends State<ScreenLogin> {
               /*registeredUser: registeredUser!,*/
             ),
           ),
-          (route) => false,
         );
       },
     );

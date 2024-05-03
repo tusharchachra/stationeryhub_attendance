@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:stationeryhub_attendance/albums/album_users.dart';
+import 'package:stationeryhub_attendance/albums/enum_user_type.dart';
 import 'package:stationeryhub_attendance/form_fields/form_field_button.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_home.dart';
 import 'package:stationeryhub_attendance/screens/screen_admin_dashboard.dart';
@@ -18,7 +20,6 @@ class OTPScreen extends StatefulWidget {
   });
   final String phoneNum;
   final bool isNewUser;
-  /*final AlbumUsers registeredUser;*/
 
   @override
   State<OTPScreen> createState() => _OTPScreenState();
@@ -26,6 +27,7 @@ class OTPScreen extends StatefulWidget {
 
 class _OTPScreenState extends State<OTPScreen> {
   TextEditingController otpController = TextEditingController();
+  //Map<String?, dynamic>? fetchedUser;
   AlbumUsers? registeredUser;
 
   bool isLoading = false;
@@ -58,20 +60,26 @@ class _OTPScreenState extends State<OTPScreen> {
                         smsCode: otpController.text.trim()));
 
                 if (funcMsg == 'success') {
-                  print('successfully signed in');
+                  if (kDebugMode) {
+                    print('successfully signed in');
+                  }
 
                   FirebaseFirestoreServices firestoreServices =
                       FirebaseFirestoreServices();
                   //add new user
                   if (widget.isNewUser) {
                     await firestoreServices.addNewUser(
-                        phoneNum: widget.phoneNum, userType: 'admin');
+                        phoneNum: widget.phoneNum, userType: UserType.admin);
                   }
 
                   registeredUser = await firestoreServices.isUserExists(
                       phoneNum: widget.phoneNum);
-                  print(registeredUser);
-                  if (registeredUser?.category == 'admin') {
+                  FirebaseLoginServices.firebaseInstance
+                      .storeUserToSharedPrefs(user: registeredUser!);
+                  if (kDebugMode) {
+                    print(registeredUser);
+                  }
+                  if (registeredUser?.userType == UserType.admin) {
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
                             builder: (context) => AdminDashboardScreen(
@@ -79,7 +87,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                 )),
                         (route) => false);
                   } else {
-                    if (registeredUser?.category == 'employee') {
+                    if (registeredUser?.userType == UserType.employee) {
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                               builder: (context) =>
@@ -88,6 +96,22 @@ class _OTPScreenState extends State<OTPScreen> {
                     }
                   }
                 }
+              },
+              textStyle: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(color: Colors.indigo),
+              buttonDecoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              ),
+            ),
+            FormFieldButton(
+              width: 30,
+              height: 10,
+              buttonText: 'Back',
+              onTapAction: () {
+                Navigator.of(context).pop();
               },
               textStyle: Theme.of(context)
                   .textTheme

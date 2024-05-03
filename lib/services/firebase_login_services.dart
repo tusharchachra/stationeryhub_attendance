@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io' show File, Platform;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../albums/album_users.dart';
 
 class FirebaseLoginServices {
   FirebaseLoginServices._privateConstructor();
@@ -72,6 +76,17 @@ class FirebaseLoginServices {
     } else {
       return firebaseMessage;
     }
+  }
+
+  void storeUserToSharedPrefs({required AlbumUsers user}) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    /*String user =
+        jsonEncode(AlbumUsers.fromJson(user));*/
+    print(user);
+    var temp = jsonEncode(user);
+    print(temp);
+    //bool result = await prefs.setString('user', jsonEncode(user));
+    //   if (result) print("current user stored in shared preference");
   }
 
   Future signOutUser() async {
