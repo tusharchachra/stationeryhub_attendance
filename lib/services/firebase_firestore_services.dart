@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:stationeryhub_attendance/albums/album_organizations.dart';
 import 'package:stationeryhub_attendance/albums/album_users.dart';
@@ -63,12 +62,12 @@ class FirebaseFirestoreServices {
   Future<void> addNewUser(
       {required String phoneNum, required UserType userType}) async {
     try {
-      AlbumUsers tempUser =
-          AlbumUsers(userType: userType, name: '', phoneNum: phoneNum);
       final ref = db.collection("users").doc().withConverter(
             fromFirestore: AlbumUsers.fromFirestore,
             toFirestore: (AlbumUsers user, _) => user.toJson(),
           );
+      AlbumUsers tempUser = AlbumUsers(
+          uid: ref.id, userType: userType, name: '', phoneNum: phoneNum);
       await ref.set(tempUser);
       if (kDebugMode) {
         print('New user added = ${ref.id}');
@@ -82,22 +81,6 @@ class FirebaseFirestoreServices {
     }
   }
 
-  /*AlbumUsers tempUser =
-        AlbumUsers(userType: userType, name: '', phoneNum: phoneNum);
-    try {
-      await db.collection("users").add(tempUser.toJson()).then((event) async {
-        if (kDebugMode) {
-          //print('User List: $usersList\n');
-        }
-        return tempUser;
-      });
-    } on Exception catch (e) {
-      // TODO
-      if (kDebugMode) {
-        print('Error:${e.toString()}');
-      }
-    }*/
-
   //get organization details based on phone number of the user
   Future<AlbumOrganization?> getOrganization({required String phoneNum}) async {
     AlbumOrganization? fetchedOrganization;
@@ -108,24 +91,11 @@ class FirebaseFirestoreServices {
           .withConverter(
             fromFirestore: AlbumOrganization.fromFirestore,
             toFirestore: (AlbumOrganization organization, _) =>
-                organization.toFirestore(),
+                organization.toJson(),
           );
       final docSnap = await ref.get();
       if (docSnap.docs.isEmpty) return null;
       fetchedOrganization = docSnap.docs[0].data();
-
-      /*await db
-          .collection("organizations")
-          .where('phone_num', isEqualTo: phoneNum)
-          .get()
-          .then((event) async {
-        for (var doc in event.docs) {
-          organization = AlbumOrganization.fromFirestore(doc.data());
-        }
-        if (kDebugMode) {
-          //print('User List: $usersList\n');
-        }
-      });*/
     } on Exception catch (e) {
       // TODO
       if (kDebugMode) {
@@ -142,7 +112,7 @@ class FirebaseFirestoreServices {
       final ref = db.collection("organizations").doc().withConverter(
             fromFirestore: AlbumOrganization.fromFirestore,
             toFirestore: (AlbumOrganization organization, _) =>
-                organization.toFirestore(),
+                organization.toJson(),
           );
       await ref.set(newOrganization);
       if (kDebugMode) {
@@ -158,10 +128,14 @@ class FirebaseFirestoreServices {
   }
 
   //update OrganizationId to the user's/creator's profile
-  Future<void> updateOrganizationId({required String organizationId}) async {
+  Future<void> updateOrganizationId(
+      {required String currentUserId, required String organizationId}) async {
     try {
-      final ref =
-          db.collection("users").doc(FirebaseAuth.instance.currentUser!.uid);
+      final ref = db.collection("users").doc(currentUserId).withConverter(
+            fromFirestore: AlbumOrganization.fromFirestore,
+            toFirestore: (AlbumOrganization organization, _) =>
+                organization.toJson(),
+          );
       ref.update({"organizationId": organizationId}).then(
           (value) => print("DocumentSnapshot successfully updated!"),
           onError: (e) => print("Error updating document $e"));

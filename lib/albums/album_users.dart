@@ -24,13 +24,14 @@ class AlbumUsers {
     return AlbumUsers(
         uid: data?['uid'],
         name: data?['name'],
-        userType: UserType.values.byName(data?['userType']),
-        phoneNum: data?['phoneNum'],
-        organizationId: data?['organizationId']);
+        userType: UserType.values.byName(data!['userType']),
+        phoneNum: data['phoneNum'],
+        organizationId: data['organizationId']);
   }
   AlbumUsers.fromJson(Map<String, dynamic> json)
       : uid = json['uid'].toString() == '' ? '' : json['uid'].toString(),
         name = json['name'].toString() == '' ? '' : json['name'].toString(),
+        //json returns "UserType.admin" hence splitting the string to get the exact enum
         userType = UserType.values.byName(json['userType']),
         phoneNum = json['phoneNum'].toString() == ''
             ? ''
@@ -41,7 +42,7 @@ class AlbumUsers {
 
   Map<String, dynamic> toJson() => {
         'uid': uid ?? 'null',
-        'userType': userType.toString(),
+        'userType': userType?.name,
         'name': name,
         'phoneNum': phoneNum,
         'organizationId': organizationId ?? 'null',

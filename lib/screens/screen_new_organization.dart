@@ -1,12 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:stationeryhub_attendance/albums/album_organizations.dart';
 import 'package:stationeryhub_attendance/albums/enum_subscription_type.dart';
 import 'package:stationeryhub_attendance/form_fields/form_field_button.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_home.dart';
+import 'package:stationeryhub_attendance/screens/screen_admin_dashboard.dart';
+import 'package:stationeryhub_attendance/services/firebase_login_services.dart';
 import 'package:stationeryhub_attendance/services/location_handler.dart';
 
+import '../albums/album_users.dart';
 import '../services/firebase_firestore_services.dart';
 
 class NewOrganizationScreen extends StatefulWidget {
@@ -23,6 +25,25 @@ class _NewOrganizationScreenState extends State<NewOrganizationScreen> {
   TextEditingController addressController = TextEditingController();
   TextEditingController geoLocationController = TextEditingController();
   Position? currentPosition;
+  AlbumUsers? currentUser;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadData();
+  }
+
+  void loadData() async {
+    setState(() {
+      isLoading = true;
+    });
+    currentUser =
+        await FirebaseLoginServices.firebaseInstance.getUserFromSharedPrefs();
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +112,7 @@ class _NewOrganizationScreenState extends State<NewOrganizationScreen> {
                       geoLocationLat: currentPosition?.latitude,
                       geoLocationLong: currentPosition?.longitude,
                       createdOn: DateTime.now(),
-                      createdBy: FirebaseAuth.instance.currentUser!.uid,
+                      createdBy: currentUser!.uid!,
                       subscription: SubscriptionType.gold,
                     );
                     setState(() {
@@ -101,11 +122,24 @@ class _NewOrganizationScreenState extends State<NewOrganizationScreen> {
                         .createOrganization(newOrganization: newOrganization);
                     //inserting the newOrganizationId to the user's profile
                     await firestoreServices.updateOrganizationId(
+                        currentUserId: currentUser!.uid!,
                         organizationId: insertedOrganizationId!);
                     setState(() {
                       isLoading = false;
                     });
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            AdminDashboardScreen(user: currentUser!)));
                   }
+                },
+                buttonDecoration: BoxDecoration(color: Colors.green),
+                textStyle: TextStyle()),
+            FormFieldButton(
+                width: 30,
+                height: 10,
+                buttonText: 'back',
+                onTapAction: () {
+                  Navigator.of(context).pop();
                 },
                 buttonDecoration: BoxDecoration(color: Colors.green),
                 textStyle: TextStyle()),

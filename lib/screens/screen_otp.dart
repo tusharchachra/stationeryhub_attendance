@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -70,29 +71,38 @@ class _OTPScreenState extends State<OTPScreen> {
                   if (widget.isNewUser) {
                     await firestoreServices.addNewUser(
                         phoneNum: widget.phoneNum, userType: UserType.admin);
+                    registeredUser = await firestoreServices.isUserExists(
+                        phoneNum: widget.phoneNum);
+                  } else {
+                    registeredUser = await firestoreServices.isUserExists(
+                        phoneNum: widget.phoneNum,
+                        getOptions: const GetOptions(source: Source.cache));
                   }
 
-                  registeredUser = await firestoreServices.isUserExists(
-                      phoneNum: widget.phoneNum);
-                  FirebaseLoginServices.firebaseInstance
+                  /* registeredUser = await firestoreServices.isUserExists(
+                      phoneNum: widget.phoneNum);*/
+                  await FirebaseLoginServices.firebaseInstance
                       .storeUserToSharedPrefs(user: registeredUser!);
+                  setState(() {
+                    isLoading = false;
+                  });
                   if (kDebugMode) {
-                    print(registeredUser);
+                    print('Registered user = $registeredUser');
+                    print(registeredUser!.userType);
                   }
-                  if (registeredUser?.userType == UserType.admin) {
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                            builder: (context) => AdminDashboardScreen(
-                                  user: registeredUser!,
-                                )),
-                        (route) => false);
+                  if (registeredUser!.userType == UserType.admin) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => AdminDashboardScreen(
+                                user: registeredUser!,
+                              )),
+                    );
                   } else {
-                    if (registeredUser?.userType == UserType.employee) {
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const MarkAttendanceScreen()),
-                          (route) => false);
+                    if (registeredUser!.userType == UserType.employee) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => const MarkAttendanceScreen()),
+                      );
                     }
                   }
                 }

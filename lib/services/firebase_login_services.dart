@@ -78,15 +78,20 @@ class FirebaseLoginServices {
     }
   }
 
-  void storeUserToSharedPrefs({required AlbumUsers user}) async {
+  Future<void> storeUserToSharedPrefs({required AlbumUsers user}) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     /*String user =
         jsonEncode(AlbumUsers.fromJson(user));*/
-    print(user);
-    var temp = jsonEncode(user);
-    print(temp);
-    //bool result = await prefs.setString('user', jsonEncode(user));
-    //   if (result) print("current user stored in shared preference");
+    bool result = await prefs.setString('user', jsonEncode(user));
+    if (result) print("current user stored in shared preference");
+  }
+
+  Future<AlbumUsers> getUserFromSharedPrefs() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    /*String user =
+        jsonEncode(AlbumUsers.fromJson(user));*/
+    var fetchedUser = prefs.getString('user');
+    return AlbumUsers.fromJson(jsonDecode(fetchedUser!));
   }
 
   Future signOutUser() async {

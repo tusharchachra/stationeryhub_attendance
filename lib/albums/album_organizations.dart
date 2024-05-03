@@ -22,7 +22,7 @@ class AlbumOrganization {
     required this.subscription,
   });
 
-  Map<String, dynamic> toFirestore() {
+  Map<String, dynamic> toJson() {
     return {
       'name': name,
       'address': address,
@@ -52,6 +52,6 @@ class AlbumOrganization {
 
   @override
   String toString() {
-    return toFirestore().toString();
+    return toJson().toString();
   }
 }
