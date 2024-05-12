@@ -82,20 +82,17 @@ class FirebaseFirestoreServices {
   }
 
   //get organization details based on phone number of the user
-  Future<AlbumOrganization?> getOrganization({required String phoneNum}) async {
+  Future<AlbumOrganization?> getOrganization({required String orgId}) async {
     AlbumOrganization? fetchedOrganization;
     try {
-      final ref = db
-          .collection("organizations")
-          .where('phoneNum', isEqualTo: phoneNum)
-          .withConverter(
+      final ref = db.collection("organizations").doc(orgId).withConverter(
             fromFirestore: AlbumOrganization.fromFirestore,
             toFirestore: (AlbumOrganization organization, _) =>
                 organization.toJson(),
           );
       final docSnap = await ref.get();
-      if (docSnap.docs.isEmpty) return null;
-      fetchedOrganization = docSnap.docs[0].data();
+      // if (docSnap.docs.isEmpty) return null;
+      fetchedOrganization = docSnap.data();
     } on Exception catch (e) {
       // TODO
       if (kDebugMode) {

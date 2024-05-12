@@ -8,18 +8,20 @@ import 'package:stationeryhub_attendance/screens/screen_new_organization.dart';
 import '../services/firebase_firestore_services.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
-  const AdminDashboardScreen({super.key, required this.user});
+  const AdminDashboardScreen(
+      {super.key, required this.user, this.organizationId});
 
   final AlbumUsers user;
+  final String? organizationId;
 
   @override
   State<AdminDashboardScreen> createState() => _AdminDashboardScreenState();
 }
 
 class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
-  AlbumOrganization? organization;
   bool isLoading = false;
   FirebaseFirestoreServices firestoreServices = FirebaseFirestoreServices();
+  AlbumOrganization? organization;
 
   @override
   void initState() {
@@ -31,8 +33,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     setState(() {
       isLoading = true;
     });
-    organization =
-        await firestoreServices.getOrganization(phoneNum: widget.user.phoneNum);
+    if (widget.organizationId != null) {
+      organization = await firestoreServices.getOrganization(
+          orgId: widget.organizationId!);
+    }
     setState(() {
       isLoading = false;
     });
@@ -54,6 +58,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        TextButton(
+            onPressed: () async {
+              await loadOrganizationDetails();
+            },
+            child: Text('reload')),
         Text('Set up new organization'),
         FormFieldButton(
             width: 30,

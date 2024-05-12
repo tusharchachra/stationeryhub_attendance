@@ -44,10 +44,10 @@ class AlbumOrganization {
         address: data?['address'],
         geoLocationLat: data?['geoLocationLat'],
         geoLocationLong: data?['geoLocationLong'],
-        createdOn: data?['createdOn'],
-        createdBy: data?['createdBy'],
+        createdOn: DateTime.parse(data!['createdOn'].toDate().toString()),
+        createdBy: data['createdBy'],
         subscription: SubscriptionType.values
-            .byName(data?['subscription'])); //converts the string to enum
+            .byName(data['subscription'])); //converts the string to enum
   }
 
   @override

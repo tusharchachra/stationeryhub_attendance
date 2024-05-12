@@ -128,8 +128,10 @@ class _NewOrganizationScreenState extends State<NewOrganizationScreen> {
                       isLoading = false;
                     });
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            AdminDashboardScreen(user: currentUser!)));
+                        builder: (context) => AdminDashboardScreen(
+                              user: currentUser!,
+                              organizationId: insertedOrganizationId,
+                            )));
                   }
                 },
                 buttonDecoration: BoxDecoration(color: Colors.green),
