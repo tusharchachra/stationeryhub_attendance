@@ -115,7 +115,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
                       phoneNum: phoneNumController.text.trim());
                   print('registered user= $registeredUser');
                   if (registeredUser != null) {
-                    loginUser();
+                    await loginUser();
                   } else {
                     if (kDebugMode) {
                       print('User not registered');
@@ -138,6 +138,9 @@ class _ScreenLoginState extends State<ScreenLogin> {
       phoneNum: phoneNumController.text.trim(),
       otp: '',
       onCodeSentAction: () async {
+        setState(() {
+          isLoading = true;
+        });
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => OTPScreen(

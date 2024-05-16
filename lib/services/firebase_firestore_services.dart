@@ -82,17 +82,27 @@ class FirebaseFirestoreServices {
   }
 
   //get organization details based on phone number of the user
-  Future<AlbumOrganization?> getOrganization({required String orgId}) async {
+  Future<AlbumOrganization?> getOrganization({
+    String? orgId,
+    AlbumUsers? user,
+    GetOptions? getOptions,
+  }) async {
     AlbumOrganization? fetchedOrganization;
     try {
-      final ref = db.collection("organizations").doc(orgId).withConverter(
-            fromFirestore: AlbumOrganization.fromFirestore,
-            toFirestore: (AlbumOrganization organization, _) =>
-                organization.toJson(),
-          );
-      final docSnap = await ref.get();
-      // if (docSnap.docs.isEmpty) return null;
-      fetchedOrganization = docSnap.data();
+      if (user != null) {
+        final ref = db
+            .collection("organizations")
+            .doc(user.organizationId)
+            .withConverter(
+              fromFirestore: AlbumOrganization.fromFirestore,
+              toFirestore: (AlbumOrganization organization, _) =>
+                  organization.toJson(),
+            );
+        final docSnap = await ref
+            .get(getOptions ?? const GetOptions(source: Source.server));
+        // if (docSnap.docs.isEmpty) return null;
+        fetchedOrganization = docSnap.data();
+      }
     } on Exception catch (e) {
       // TODO
       if (kDebugMode) {

@@ -88,14 +88,11 @@ class _OTPScreenState extends State<OTPScreen> {
                   });
                   if (kDebugMode) {
                     print('Registered user = $registeredUser');
-                    print(registeredUser!.userType);
                   }
                   if (registeredUser!.userType == UserType.admin) {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                          builder: (context) => AdminDashboardScreen(
-                                user: registeredUser!,
-                              )),
+                          builder: (context) => AdminDashboardScreen()),
                     );
                   } else {
                     if (registeredUser!.userType == UserType.employee) {
