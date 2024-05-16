@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:stationeryhub_attendance/albums/album_organizations.dart';
 import 'package:stationeryhub_attendance/albums/album_users.dart';
 import 'package:stationeryhub_attendance/albums/enum_user_type.dart';
+import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
 class FirebaseFirestoreServices {
   final FirebaseFirestore db = FirebaseFirestore.instance;
@@ -72,6 +73,11 @@ class FirebaseFirestoreServices {
       if (kDebugMode) {
         print('New user added = ${ref.id}');
       }
+      AlbumUsers? insertedUser = await isUserExists(phoneNum: phoneNum);
+      if (insertedUser != null) {
+        await SharedPrefsServices.sharedPrefsInstance
+            .storeUserToSharedPrefs(user: insertedUser);
+      }
       // return ref.id;
     } on Exception catch (e) {
       // TODO
@@ -125,6 +131,13 @@ class FirebaseFirestoreServices {
       if (kDebugMode) {
         print('New organization added = ${ref.id}');
       }
+      AlbumOrganization? insertedOrganization =
+          await getOrganization(orgId: ref.id);
+      if (insertedOrganization != null) {
+        await SharedPrefsServices.sharedPrefsInstance
+            .storeOrganizationToSharedPrefs(organization: insertedOrganization);
+      }
+
       return ref.id;
     } on Exception catch (e) {
       // TODO

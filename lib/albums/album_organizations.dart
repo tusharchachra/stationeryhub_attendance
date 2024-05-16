@@ -50,6 +50,16 @@ class AlbumOrganization {
             .byName(data['subscription'])); //converts the string to enum
   }
 
+  AlbumOrganization.fromJson(Map<String, dynamic> json)
+      : name = json['name'].toString(),
+        address = json['address'].toString(),
+        geoLocationLat = double.parse(json['geoLocationLat'].toString()),
+        geoLocationLong = double.parse(json['geoLocationLong'].toString()),
+        createdOn = DateTime.parse(json['createdOn'].toDate().toString()),
+        createdBy = json['createdBy'].toString(),
+        subscription = SubscriptionType.values.byName(
+            json['subscription'].toString()); //converts the string to enum
+
   @override
   String toString() {
     return toJson().toString();

@@ -5,8 +5,8 @@ import 'package:stationeryhub_attendance/albums/enum_subscription_type.dart';
 import 'package:stationeryhub_attendance/form_fields/form_field_button.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_home.dart';
 import 'package:stationeryhub_attendance/screens/screen_admin_dashboard.dart';
-import 'package:stationeryhub_attendance/services/firebase_login_services.dart';
 import 'package:stationeryhub_attendance/services/location_handler.dart';
+import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
 import '../albums/album_users.dart';
 import '../services/firebase_firestore_services.dart';
@@ -39,7 +39,7 @@ class _NewOrganizationScreenState extends State<NewOrganizationScreen> {
       isLoading = true;
     });
     currentUser =
-        await FirebaseLoginServices.firebaseInstance.getUserFromSharedPrefs();
+        await SharedPrefsServices.sharedPrefsInstance.getUserFromSharedPrefs();
     setState(() {
       isLoading = false;
     });

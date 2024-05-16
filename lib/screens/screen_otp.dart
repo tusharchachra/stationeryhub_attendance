@@ -78,11 +78,9 @@ class _OTPScreenState extends State<OTPScreen> {
                         phoneNum: widget.phoneNum,
                         getOptions: const GetOptions(source: Source.cache));
                   }
-
                   /* registeredUser = await firestoreServices.isUserExists(
                       phoneNum: widget.phoneNum);*/
-                  await FirebaseLoginServices.firebaseInstance
-                      .storeUserToSharedPrefs(user: registeredUser!);
+
                   setState(() {
                     isLoading = false;
                   });

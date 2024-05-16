@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:stationeryhub_attendance/albums/album_organizations.dart';
@@ -6,7 +5,8 @@ import 'package:stationeryhub_attendance/albums/album_users.dart';
 import 'package:stationeryhub_attendance/form_fields/form_field_button.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_home.dart';
 import 'package:stationeryhub_attendance/screens/screen_new_organization.dart';
-import 'package:stationeryhub_attendance/services/firebase_login_services.dart';
+import 'package:stationeryhub_attendance/screens/screen_new_user_for_organization.dart';
+import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
 import '../services/firebase_firestore_services.dart';
 
@@ -34,10 +34,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       isLoading = true;
     });
     user =
-        await FirebaseLoginServices.firebaseInstance.getUserFromSharedPrefs();
-    organization = await firestoreServices.getOrganization(
-        user: user!,
-        getOptions: const GetOptions(source: Source.serverAndCache));
+        await SharedPrefsServices.sharedPrefsInstance.getUserFromSharedPrefs();
+    organization = await SharedPrefsServices.sharedPrefsInstance
+        .getOrganizationFromSharedPrefs();
     if (kDebugMode) {
       print('Fetched organization : $organization');
     }
@@ -59,7 +58,22 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   }
 
   Column buildDashboard() => Column(
-        children: [TextButton(onPressed: () {}, child: Text(''))],
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextButton(
+              onPressed: () {},
+              child: FormFieldButton(
+                  width: 30,
+                  height: 10,
+                  buttonText: 'Create new user',
+                  onTapAction: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            const NewUserForOrganizationScreen()));
+                  },
+                  buttonDecoration: const BoxDecoration(),
+                  textStyle: const TextStyle()))
+        ],
       );
 
   Column buildNewOrganizationMessage() {
