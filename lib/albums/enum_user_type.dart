@@ -1,7 +1,7 @@
-enum UserType { admin, employee, none }
+enum UserType { admin, employee }
 
 extension UserTypeString on String {
-  UserType get userType {
+/*  UserType get userType {
     switch (this) {
       case 'admin':
         return UserType.admin;
@@ -10,5 +10,5 @@ extension UserTypeString on String {
       default:
         return UserType.none;
     }
-  }
+  }*/
 }

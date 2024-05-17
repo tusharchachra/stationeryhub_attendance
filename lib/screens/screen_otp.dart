@@ -11,6 +11,7 @@ import 'package:stationeryhub_attendance/screens/screen_mark_attendance.dart';
 import 'package:stationeryhub_attendance/services/firebase_login_services.dart';
 
 import '../services/firebase_firestore_services.dart';
+import '../services/shared_prefs_services.dart';
 
 class OTPScreen extends StatefulWidget {
   const OTPScreen({
@@ -80,7 +81,8 @@ class _OTPScreenState extends State<OTPScreen> {
                   }
                   /* registeredUser = await firestoreServices.isUserExists(
                       phoneNum: widget.phoneNum);*/
-
+                  await SharedPrefsServices.sharedPrefsInstance
+                      .storeUserToSharedPrefs(user: registeredUser!);
                   setState(() {
                     isLoading = false;
                   });

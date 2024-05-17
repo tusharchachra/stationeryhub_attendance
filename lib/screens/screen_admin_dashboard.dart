@@ -35,10 +35,19 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     });
     user =
         await SharedPrefsServices.sharedPrefsInstance.getUserFromSharedPrefs();
-    organization = await SharedPrefsServices.sharedPrefsInstance
-        .getOrganizationFromSharedPrefs();
+    bool isOrganizationInSharedPrefs = await SharedPrefsServices
+        .sharedPrefsInstance
+        .isKeyExists(key: 'organization');
+    if (isOrganizationInSharedPrefs) {
+      organization = await SharedPrefsServices.sharedPrefsInstance
+          .getOrganizationFromSharedPrefs();
+    } else {
+      organization =
+          await firestoreServices.getOrganization(orgId: user!.organizationId);
+    }
     if (kDebugMode) {
-      print('Fetched organization : $organization');
+      print(
+          'Fetched organization from ${isOrganizationInSharedPrefs ? 'Shared Prefs' : 'Server'} : $organization');
     }
     setState(() {
       isLoading = false;

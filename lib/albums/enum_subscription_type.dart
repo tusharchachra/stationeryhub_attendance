@@ -1,7 +1,7 @@
 enum SubscriptionType { basic, silver, gold }
 
 extension SubscriptTypeString on String {
-  SubscriptionType get subscriptionType {
+  /*SubscriptionType get subscriptionType {
     switch (this) {
       case 'basic':
         return SubscriptionType.basic;
@@ -12,5 +12,5 @@ extension SubscriptTypeString on String {
       default:
         return SubscriptionType.basic;
     }
-  }
+  }*/
 }

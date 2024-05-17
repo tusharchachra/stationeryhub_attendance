@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:stationeryhub_attendance/helpers/size_config.dart';
 import 'package:stationeryhub_attendance/helpers/theme.dart';
 import 'package:stationeryhub_attendance/screens/screen_login.dart';
+import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
 import 'firebase_options.dart';
 
@@ -16,6 +17,7 @@ void main() async {
     androidProvider: AndroidProvider.debug,
     appleProvider: AppleProvider.debug,
   );
+  await SharedPrefsServices.sharedPrefsInstance.clearSharedPrefs();
 
   runApp(const StationeryHubAttendance());
 }

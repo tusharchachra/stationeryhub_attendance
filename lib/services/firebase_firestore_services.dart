@@ -57,27 +57,31 @@ class FirebaseFirestoreServices {
         print('Error:${e.toString()}');
       }
     }
+    return null;
     //return {'user': tempUser, 'userId': };
   }
 
   Future<void> addNewUser(
-      {required String phoneNum, required UserType userType}) async {
+      {required String phoneNum,
+      required UserType userType,
+      String? name,
+      String? orgId}) async {
     try {
       final ref = db.collection("users").doc().withConverter(
             fromFirestore: AlbumUsers.fromFirestore,
             toFirestore: (AlbumUsers user, _) => user.toJson(),
           );
       AlbumUsers tempUser = AlbumUsers(
-          uid: ref.id, userType: userType, name: '', phoneNum: phoneNum);
+          uid: ref.id,
+          userType: userType,
+          name: name ?? '',
+          phoneNum: phoneNum,
+          organizationId: orgId);
       await ref.set(tempUser);
       if (kDebugMode) {
         print('New user added = ${ref.id}');
       }
-      AlbumUsers? insertedUser = await isUserExists(phoneNum: phoneNum);
-      if (insertedUser != null) {
-        await SharedPrefsServices.sharedPrefsInstance
-            .storeUserToSharedPrefs(user: insertedUser);
-      }
+
       // return ref.id;
     } on Exception catch (e) {
       // TODO
@@ -95,19 +99,17 @@ class FirebaseFirestoreServices {
   }) async {
     AlbumOrganization? fetchedOrganization;
     try {
-      if (user != null) {
-        final ref = db
-            .collection("organizations")
-            .doc(user.organizationId)
-            .withConverter(
-              fromFirestore: AlbumOrganization.fromFirestore,
-              toFirestore: (AlbumOrganization organization, _) =>
-                  organization.toJson(),
-            );
-        final docSnap = await ref
-            .get(getOptions ?? const GetOptions(source: Source.server));
-        // if (docSnap.docs.isEmpty) return null;
-        fetchedOrganization = docSnap.data();
+      final ref = db.collection("organizations").doc("$orgId").withConverter(
+            fromFirestore: AlbumOrganization.fromFirestore,
+            toFirestore: (AlbumOrganization organization, _) =>
+                organization.toJson(),
+          );
+      final docSnap =
+          await ref.get(getOptions ?? const GetOptions(source: Source.server));
+      // if (docSnap.docs.isEmpty) return null;
+      fetchedOrganization = docSnap.data();
+      if (kDebugMode) {
+        print('fetched organization=$fetchedOrganization');
       }
     } on Exception catch (e) {
       // TODO
@@ -133,6 +135,9 @@ class FirebaseFirestoreServices {
       }
       AlbumOrganization? insertedOrganization =
           await getOrganization(orgId: ref.id);
+      if (kDebugMode) {
+        print('inserted organization=$insertedOrganization');
+      }
       if (insertedOrganization != null) {
         await SharedPrefsServices.sharedPrefsInstance
             .storeOrganizationToSharedPrefs(organization: insertedOrganization);
@@ -145,10 +150,11 @@ class FirebaseFirestoreServices {
         print('Error:${e.toString()}');
       }
     }
+    return null;
   }
 
   //update OrganizationId to the user's/creator's profile
-  Future<void> updateOrganizationId(
+  Future<void> updateOrganizationIdInCreator(
       {required String currentUserId, required String organizationId}) async {
     try {
       final ref = db.collection("users").doc(currentUserId).withConverter(
@@ -157,8 +163,17 @@ class FirebaseFirestoreServices {
                 organization.toJson(),
           );
       ref.update({"organizationId": organizationId}).then(
-          (value) => print("DocumentSnapshot successfully updated!"),
-          onError: (e) => print("Error updating document $e"));
+        (value) async {
+          if (kDebugMode) {
+            print("DocumentSnapshot successfully updated!");
+          }
+        },
+        onError: (e) {
+          if (kDebugMode) {
+            print("Error updating document $e");
+          }
+        },
+      );
     } on Exception catch (e) {
       // TODO
       if (kDebugMode) {

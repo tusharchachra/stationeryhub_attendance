@@ -28,7 +28,7 @@ class AlbumOrganization {
       'address': address,
       'geoLocationLat': geoLocationLat ?? '',
       'geoLocationLong': geoLocationLong ?? '',
-      'createdOn': createdOn,
+      'createdOn': createdOn.toIso8601String(),
       'createdBy': createdBy,
       'subscription': subscription.name,
     };
@@ -44,7 +44,7 @@ class AlbumOrganization {
         address: data?['address'],
         geoLocationLat: data?['geoLocationLat'],
         geoLocationLong: data?['geoLocationLong'],
-        createdOn: DateTime.parse(data!['createdOn'].toDate().toString()),
+        createdOn: DateTime.parse(data!['createdOn'].toString()),
         createdBy: data['createdBy'],
         subscription: SubscriptionType.values
             .byName(data['subscription'])); //converts the string to enum
@@ -55,7 +55,7 @@ class AlbumOrganization {
         address = json['address'].toString(),
         geoLocationLat = double.parse(json['geoLocationLat'].toString()),
         geoLocationLong = double.parse(json['geoLocationLong'].toString()),
-        createdOn = DateTime.parse(json['createdOn'].toDate().toString()),
+        createdOn = DateTime.parse(json['createdOn'].toString()),
         createdBy = json['createdBy'].toString(),
         subscription = SubscriptionType.values.byName(
             json['subscription'].toString()); //converts the string to enum

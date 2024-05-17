@@ -104,6 +104,9 @@ class _NewOrganizationScreenState extends State<NewOrganizationScreen> {
                 buttonText: 'Submit',
                 onTapAction: () async {
                   if (_formKey.currentState!.validate()) {
+                    setState(() {
+                      isLoading = true;
+                    });
                     FirebaseFirestoreServices firestoreServices =
                         FirebaseFirestoreServices();
                     AlbumOrganization newOrganization = AlbumOrganization(
@@ -115,15 +118,22 @@ class _NewOrganizationScreenState extends State<NewOrganizationScreen> {
                       createdBy: currentUser!.uid!,
                       subscription: SubscriptionType.gold,
                     );
-                    setState(() {
-                      isLoading = true;
-                    });
+
                     String? insertedOrganizationId = await firestoreServices
                         .createOrganization(newOrganization: newOrganization);
                     //inserting the newOrganizationId to the user's profile
-                    await firestoreServices.updateOrganizationId(
+                    await firestoreServices.updateOrganizationIdInCreator(
                         currentUserId: currentUser!.uid!,
                         organizationId: insertedOrganizationId!);
+
+                    /*AlbumOrganization? insertedOrganization =
+                        await firestoreServices.getOrganization(
+                            orgId: insertedOrganizationId);
+                    print(insertedOrganization);
+                    await SharedPrefsServices.sharedPrefsInstance
+                        .storeOrganizationToSharedPrefs(
+                            organization: insertedOrganization!);*/
+
                     setState(() {
                       isLoading = false;
                     });

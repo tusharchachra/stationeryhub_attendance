@@ -11,10 +11,18 @@ class SharedPrefsServices {
   static final SharedPrefsServices sharedPrefsInstance =
       SharedPrefsServices._privateConstructor();
 
+  Future<void> clearSharedPrefs() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+  }
+
+  Future<bool> isKeyExists({required key}) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.containsKey(key);
+  }
+
   Future<void> storeUserToSharedPrefs({required AlbumUsers user}) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    /*String user =
-        jsonEncode(AlbumUsers.fromJson(user));*/
     bool result = await prefs.setString('user', jsonEncode(user));
     if (result) {
       if (kDebugMode) {
@@ -34,8 +42,6 @@ class SharedPrefsServices {
   Future<void> storeOrganizationToSharedPrefs(
       {required AlbumOrganization organization}) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    /*String user =
-        jsonEncode(AlbumUsers.fromJson(user));*/
     bool result =
         await prefs.setString('organization', jsonEncode(organization));
     if (result) {

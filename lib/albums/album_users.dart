@@ -28,6 +28,7 @@ class AlbumUsers {
         phoneNum: data['phoneNum'],
         organizationId: data['organizationId']);
   }
+
   AlbumUsers.fromJson(Map<String, dynamic> json)
       : uid = json['uid'].toString() == '' ? '' : json['uid'].toString(),
         name = json['name'].toString() == '' ? '' : json['name'].toString(),
