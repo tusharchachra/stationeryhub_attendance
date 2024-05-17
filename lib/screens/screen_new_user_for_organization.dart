@@ -38,7 +38,9 @@ class _NewUserForOrganizationScreenState
     userTypeList = UserType.values.map((e) => e.name).toList();
     currentUser =
         await SharedPrefsServices.sharedPrefsInstance.getUserFromSharedPrefs();
-    print(currentUser);
+    if (kDebugMode) {
+      print(currentUser);
+    }
   }
 
   @override
@@ -85,7 +87,7 @@ class _NewUserForOrganizationScreenState
                       isLoading = true;
                     });
                     AlbumUsers? registeredUser = await firestoreServices
-                        .isUserExists(phoneNum: phoneNumController.text.trim());
+                        .getUser(phoneNum: phoneNumController.text.trim());
                     if (registeredUser != null) {
                       if (kDebugMode) {
                         print('User already exists');
@@ -93,15 +95,21 @@ class _NewUserForOrganizationScreenState
                     } else {
                       try {
                         await firestoreServices.addNewUser(
-                            phoneNum: phoneNumController.text.trim(),
-                            userType: UserType.values.byName(selUserType),
-                            orgId: currentUser!.organizationId);
-                        registeredUser = await firestoreServices.isUserExists(
+                          phoneNum: phoneNumController.text.trim(),
+                          userType: UserType.values.byName(selUserType),
+                          orgId: currentUser!.organizationId,
+                          name: nameController.text.trim(),
+                        );
+                        registeredUser = await firestoreServices.getUser(
                             phoneNum: phoneNumController.text.trim());
                         if (registeredUser != null) {
                           if (kDebugMode) {
                             print('New user created:$registeredUser');
                           }
+                          Navigator.of(context).pop();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('New user created')));
                         }
                       } on Exception catch (e) {
                         print(e);

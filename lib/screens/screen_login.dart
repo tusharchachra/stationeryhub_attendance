@@ -111,7 +111,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
                   //check if user exists
                   FirebaseFirestoreServices firestoreServices =
                       FirebaseFirestoreServices();
-                  registeredUser = await firestoreServices.isUserExists(
+                  registeredUser = await firestoreServices.getUser(
                       phoneNum: phoneNumController.text.trim());
                   print('registered user= $registeredUser');
                   if (registeredUser != null) {

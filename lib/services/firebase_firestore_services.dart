@@ -10,7 +10,7 @@ class FirebaseFirestoreServices {
   // List<AlbumUsers> usersList = [];
   //FirebaseFirestoreServices(this.db);
 
-  Future<AlbumUsers?> isUserExists({
+  Future<AlbumUsers?> getUser({
     required String phoneNum,
     GetOptions? getOptions,
   }) async {
@@ -79,7 +79,7 @@ class FirebaseFirestoreServices {
           organizationId: orgId);
       await ref.set(tempUser);
       if (kDebugMode) {
-        print('New user added = ${ref.id}');
+        print('New user Id added = ${ref.id}');
       }
 
       // return ref.id;
@@ -165,8 +165,19 @@ class FirebaseFirestoreServices {
       ref.update({"organizationId": organizationId}).then(
         (value) async {
           if (kDebugMode) {
-            print("DocumentSnapshot successfully updated!");
+            print(
+                "DocumentSnapshot successfully updated!\nstoring new user data to shared prefs");
           }
+          AlbumUsers? currentUser = await SharedPrefsServices
+              .sharedPrefsInstance
+              .getUserFromSharedPrefs();
+          currentUser = await getUser(phoneNum: currentUser!.phoneNum);
+          if (kDebugMode) {
+            print(
+                'Updated user details:$currentUser.\n Storing to Shared prefs');
+          }
+          await SharedPrefsServices.sharedPrefsInstance
+              .storeUserToSharedPrefs(user: currentUser!);
         },
         onError: (e) {
           if (kDebugMode) {

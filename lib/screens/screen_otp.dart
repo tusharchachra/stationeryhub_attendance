@@ -72,10 +72,10 @@ class _OTPScreenState extends State<OTPScreen> {
                   if (widget.isNewUser) {
                     await firestoreServices.addNewUser(
                         phoneNum: widget.phoneNum, userType: UserType.admin);
-                    registeredUser = await firestoreServices.isUserExists(
+                    registeredUser = await firestoreServices.getUser(
                         phoneNum: widget.phoneNum);
                   } else {
-                    registeredUser = await firestoreServices.isUserExists(
+                    registeredUser = await firestoreServices.getUser(
                         phoneNum: widget.phoneNum,
                         getOptions: const GetOptions(source: Source.cache));
                   }
