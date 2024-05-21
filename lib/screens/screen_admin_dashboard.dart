@@ -4,6 +4,7 @@ import 'package:stationeryhub_attendance/albums/album_organizations.dart';
 import 'package:stationeryhub_attendance/albums/album_users.dart';
 import 'package:stationeryhub_attendance/form_fields/form_field_button.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_home.dart';
+import 'package:stationeryhub_attendance/screens/screen_mark_attendance.dart';
 import 'package:stationeryhub_attendance/screens/screen_new_organization.dart';
 import 'package:stationeryhub_attendance/screens/screen_new_user_for_organization.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
@@ -79,6 +80,18 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) =>
                             const NewUserForOrganizationScreen()));
+                  },
+                  buttonDecoration: const BoxDecoration(),
+                  textStyle: const TextStyle())),
+          TextButton(
+              onPressed: () {},
+              child: FormFieldButton(
+                  width: 30,
+                  height: 10,
+                  buttonText: 'Mark Attendance',
+                  onTapAction: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const MarkAttendanceScreen()));
                   },
                   buttonDecoration: const BoxDecoration(),
                   textStyle: const TextStyle()))
