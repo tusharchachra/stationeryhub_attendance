@@ -70,19 +70,19 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   Column buildDashboard() => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TextButton(
-              onPressed: () {},
-              child: FormFieldButton(
-                  width: 30,
-                  height: 10,
-                  buttonText: 'Create new user',
-                  onTapAction: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            const NewUserForOrganizationScreen()));
-                  },
-                  buttonDecoration: const BoxDecoration(),
-                  textStyle: const TextStyle())),
+          FormFieldButton(
+              width: 30,
+              height: 10,
+              buttonText: 'Create new user',
+              onTapAction: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          const NewUserForOrganizationScreen()),
+                );
+              },
+              buttonDecoration: const BoxDecoration(),
+              textStyle: const TextStyle()),
           TextButton(
               onPressed: () {},
               child: FormFieldButton(
@@ -90,8 +90,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                   height: 10,
                   buttonText: 'Mark Attendance',
                   onTapAction: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const MarkAttendanceScreen()));
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      MaterialPageRoute(
+                          builder: (context) => MarkAttendanceScreen()),
+                      (route) => false,
+                    );
                   },
                   buttonDecoration: const BoxDecoration(),
                   textStyle: const TextStyle()))

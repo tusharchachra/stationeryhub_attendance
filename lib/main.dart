@@ -9,6 +9,8 @@ import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
 import 'firebase_options.dart';
 
+///TODO:perform setup steps for iOs for google_mlkit_face_detection using steps in pub.dev
+
 void main() async {
   const reCaptchaSiteKey = '6LdiirYpAAAAAFZ1pyLKhZEcZpp2w6x_PullHH5r';
   WidgetsFlutterBinding.ensureInitialized();
