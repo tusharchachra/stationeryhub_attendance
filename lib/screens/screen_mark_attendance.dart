@@ -31,7 +31,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen>
   CameraImage? frame;
   late FaceDetector faceDetector;
   late Recognizer recognizer;
-  List<Face> faces = [];
+  //List<Face> faces = [];
   img.Image? image;
   bool register = false;
   TextEditingController nameController = TextEditingController();
@@ -66,7 +66,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen>
     initializeCamera();
   }
 
-  initializeCamera() async {
+  Future<void> initializeCamera() async {
     _cameras = await availableCameras();
     controller =
         CameraController(_cameras[cameraIndex], ResolutionPreset.medium,
@@ -105,90 +105,18 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen>
   doFaceDetectionOnFrame() async {
     print('dfd');
     InputImage? inputImage = getInputImage();
-    faces = await faceDetector.processImage(inputImage!);
-    print("fl=" + faces.length.toString());
-    for (Face face in faces) {}
-    performFaceRecognition(faces);
-    setState(() {
+    List<Face> faces = await faceDetector.processImage(inputImage!);
+    print("faces=${faces.length}");
+    //for (Face face in faces) {}
+    // performFaceRecognition(faces);
+    /*setState(() {
       _scanResults = faces;
       isBusy = false;
-    });
-  }
-
-  InputImage? getInputImage() {
-    final camera = _cameras[cameraIndex];
-    final sensorOrientation = camera.sensorOrientation;
-    InputImageRotation? rotation;
-    if (Platform.isIOS) {
-      rotation = InputImageRotationValue.fromRawValue(sensorOrientation);
-    } else if (Platform.isAndroid) {
-      var rotationCompensation =
-          _orientations[controller!.value.deviceOrientation];
-      print(rotationCompensation);
-      if (rotationCompensation == null) return null;
-      if (camera.lensDirection == CameraLensDirection.front) {
-        // front-facing
-        rotationCompensation = (sensorOrientation + rotationCompensation) % 360;
-        print(rotationCompensation);
-      } else {
-        // back-facing
-        rotationCompensation =
-            (sensorOrientation - rotationCompensation + 360) % 360;
-      }
-      rotation = InputImageRotationValue.fromRawValue(rotationCompensation);
-    }
-    if (rotation == null) return null;
-
-    final format = InputImageFormatValue.fromRawValue(frame!.format.raw);
-    /*  if (format == InputImageFormat.yuv_420_888) {
-      image = _convertNV21(frame!);
-    }*/
-    print(format);
-/*    if (format == null ||
-        (Platform.isAndroid && format != InputImageFormat.nv21) ||
-        (Platform.isIOS && format != InputImageFormat.bgra8888)) return null;*/
-
-    //if (frame!.planes.length != 1) return null;
-    final plane = frame!.planes.first;
-
-    return InputImage.fromBytes(
-      bytes: plane.bytes,
-      metadata: InputImageMetadata(
-        size: Size(frame!.width.toDouble(), frame!.height.toDouble()),
-        rotation: rotation,
-        format: format,
-        bytesPerRow: plane.bytesPerRow,
-      ),
-    );
-  }
-
-  final _orientations = {
-    DeviceOrientation.portraitUp: 0,
-    DeviceOrientation.landscapeLeft: 90,
-    DeviceOrientation.portraitDown: 180,
-    DeviceOrientation.landscapeRight: 270,
-  };
-
-  Widget buildResult() {
-    if (_scanResults == null ||
-        controller == null ||
-        !controller.value.isInitialized) {
-      return const Center(child: Text('Camera is not initialized'));
-    }
-    final Size imageSize = Size(
-      controller.value.previewSize!.height,
-      controller.value.previewSize!.width,
-    );
-    CustomPainter painter = FaceDetectorPainter(
-        imageSize, _scanResults, _cameras[cameraIndex].lensDirection);
-    return CustomPaint(
-      painter: painter,
-    );
+    });*/
   }
 
   performFaceRecognition(List<Face> faces) async {
     recognitions.clear();
-
     //TODO convert CameraImage to Image and rotate it so that our frame will be in a portrait
     image = Platform.isIOS
         ? _convertBGRA8888ToImage(frame!) as img.Image?
@@ -225,6 +153,73 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen>
       isBusy = false;
       _scanResults = recognitions;
     });
+  }
+
+  InputImage? getInputImage() {
+    final camera = _cameras[cameraIndex];
+    final sensorOrientation = camera.sensorOrientation;
+    InputImageRotation? rotation;
+    if (Platform.isIOS) {
+      rotation = InputImageRotationValue.fromRawValue(sensorOrientation);
+    } else if (Platform.isAndroid) {
+      var rotationCompensation =
+          _orientations[controller!.value.deviceOrientation];
+      print(rotationCompensation);
+      if (rotationCompensation == null) return null;
+      if (camera.lensDirection == CameraLensDirection.front) {
+        // front-facing
+        rotationCompensation = (sensorOrientation + rotationCompensation) % 360;
+        print(rotationCompensation);
+      } else {
+        // back-facing
+        rotationCompensation =
+            (sensorOrientation - rotationCompensation + 360) % 360;
+      }
+      rotation = InputImageRotationValue.fromRawValue(rotationCompensation);
+    }
+    if (rotation == null) return null;
+
+    final format = InputImageFormatValue.fromRawValue(frame!.format.raw);
+
+    if (format == null ||
+        (Platform.isAndroid && format != InputImageFormat.nv21) ||
+        (Platform.isIOS && format != InputImageFormat.bgra8888)) return null;
+
+    final plane = frame!.planes.first;
+
+    return InputImage.fromBytes(
+      bytes: plane.bytes,
+      metadata: InputImageMetadata(
+        size: Size(frame!.width.toDouble(), frame!.height.toDouble()),
+        rotation: rotation,
+        format: format,
+        bytesPerRow: plane.bytesPerRow,
+      ),
+    );
+  }
+
+  final _orientations = {
+    DeviceOrientation.portraitUp: 0,
+    DeviceOrientation.landscapeLeft: 90,
+    DeviceOrientation.portraitDown: 180,
+    DeviceOrientation.landscapeRight: 270,
+  };
+
+  Widget buildResult() {
+    if (_scanResults == null ||
+        controller == null ||
+        !controller.value.isInitialized) {
+      return const Center(child: Text('Camera is not initialized'));
+    }
+    final Size imageSize = Size(
+      controller.value.previewSize!.height,
+      controller.value.previewSize!.width,
+    );
+    CustomPainter painter = FaceDetectorPainter(
+        imageSize, _scanResults, _cameras[cameraIndex].lensDirection);
+    return CustomPaint(
+      painter: painter,
+    );
   }
 
   static img.Image _convertBGRA8888ToImage(CameraImage cameraImage) {
@@ -427,22 +422,21 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen>
 
   @override
   void dispose() {
-    controller?.dispose();
-    faceDetector.close();
+    controller.dispose();
     super.dispose();
   }
 
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
-    final CameraController? cameraController = controller;
+    //final CameraController? cameraController = controller;
 
     // App state changed before we got the chance to initialize.
-    if (cameraController == null || !cameraController.value.isInitialized) {
+    if (controller == null || !controller.value.isInitialized) {
       return;
     }
 
     if (state == AppLifecycleState.inactive) {
-      cameraController.dispose();
+      controller.dispose();
     } else if (state == AppLifecycleState.resumed) {
       // _initializeCameraController(cameraController.description);
       await initializeCamera();
@@ -451,58 +445,156 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen>
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldHome(
-      isLoading: isLoading,
-      pageTitle: 'Mark Att',
-      bodyWidget: isLoading
-          ? Container()
-          : Column(
-              children: [
-                CameraPreview(controller),
-                IconButton(
-                  onPressed: () async {
-                    cameraIndex = cameraIndex == 1 ? 0 : 1;
-                    await initializeCamera();
-                  },
-                  icon: Icon(Icons.cameraswitch),
-                ),
-                IconButton(
-                  onPressed: () {
-                    takePicture().then((XFile? file) async {
-                      if (mounted) {
-                        setState(() {
-                          //imageFile = file;
-                        });
-                      }
-                    });
-                  },
-                  icon: Icon(Icons.camera),
-                ),
-                IconButton(
-                  icon: const Icon(
-                    Icons.face_retouching_natural,
-                    color: Colors.white,
-                  ),
-                  iconSize: 40,
-                  color: Colors.black,
-                  onPressed: () {
-                    setState(() {
-                      register = true;
-                    });
-                  },
-                ),
-                faces.isNotEmpty
-                    ? Positioned(
-                        top: 0.0,
-                        left: 0.0,
-                        width: size.width,
-                        height: size.height,
-                        child: buildResult(),
-                      )
-                    : Container()
-              ],
+    Size size = MediaQuery.of(context).size;
+    List<Widget> stackChildren = [];
+    if (isLoading)
+      return CircularProgressIndicator();
+    else {
+      if (controller != null) {
+        //TODO View for displaying the live camera footage
+        stackChildren.add(
+          Positioned(
+            top: 0.0,
+            left: 0.0,
+            width: size.width,
+            height: size.height,
+            child: Container(
+              child: (controller.value.isInitialized)
+                  ? AspectRatio(
+                      aspectRatio: controller.value.aspectRatio,
+                      child: CameraPreview(controller),
+                    )
+                  : Container(),
             ),
-    );
+          ),
+        );
+
+        //TODO View for displaying rectangles around detected aces
+        stackChildren.add(
+          Positioned(
+              top: 0.0,
+              left: 0.0,
+              width: size.width,
+              height: size.height,
+              child: buildResult()),
+        );
+      }
+      stackChildren.add(Positioned(
+        top: size.height - 140,
+        left: 0,
+        width: size.width,
+        height: 80,
+        child: Card(
+          margin: const EdgeInsets.only(left: 20, right: 20),
+          color: Colors.blue,
+          child: Center(
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                        icon: const Icon(
+                          Icons.cached,
+                          color: Colors.white,
+                        ),
+                        iconSize: 40,
+                        color: Colors.black,
+                        onPressed: () {
+                          //_toggleCameraDirection();
+                        },
+                      ),
+                      Container(
+                        width: 30,
+                      ),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.face_retouching_natural,
+                          color: Colors.white,
+                        ),
+                        iconSize: 40,
+                        color: Colors.black,
+                        onPressed: () {
+                          setState(() {
+                            register = true;
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ));
+      return ScaffoldHome(
+          isLoading: isLoading,
+          pageTitle: 'Mark Att',
+          bodyWidget: isLoading
+              ? Container()
+              : Stack(
+                  children: stackChildren,
+                )
+
+          /*Column(
+        children: [
+          if (controller != null)
+            (controller.value.isInitialized)
+                ? AspectRatio(
+                    aspectRatio: controller.value.aspectRatio,
+                    child: CameraPreview(controller),
+                  )
+                : Container(),
+          // if (controller != null) CameraPreview(controller),
+          IconButton(
+            onPressed: () async {
+              cameraIndex = cameraIndex == 1 ? 0 : 1;
+              await initializeCamera();
+            },
+            icon: Icon(Icons.cameraswitch),
+          ),
+          IconButton(
+            onPressed: () {
+              takePicture().then((XFile? file) async {
+                if (mounted) {
+                  setState(() {
+                    //imageFile = file;
+                  });
+                }
+              });
+            },
+            icon: Icon(Icons.camera),
+          ),
+          IconButton(
+            icon: const Icon(
+              Icons.face_retouching_natural,
+              color: Colors.white,
+            ),
+            iconSize: 40,
+            color: Colors.black,
+            onPressed: () {
+              setState(() {
+                register = true;
+              });
+            },
+          ),
+          */ /* faces.isNotEmpty
+              ? Positioned(
+                  top: 0.0,
+                  left: 0.0,
+                  width: size.width,
+                  height: size.height,
+                  child: buildResult(),
+                )
+              : Container()*/ /*
+        ],
+      ),*/
+          );
+    }
   }
 
   Future<XFile?> takePicture() async {

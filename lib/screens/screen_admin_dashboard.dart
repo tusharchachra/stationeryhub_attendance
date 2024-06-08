@@ -83,21 +83,18 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               },
               buttonDecoration: const BoxDecoration(),
               textStyle: const TextStyle()),
-          TextButton(
-              onPressed: () {},
-              child: FormFieldButton(
-                  width: 30,
-                  height: 10,
-                  buttonText: 'Mark Attendance',
-                  onTapAction: () {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (context) => MarkAttendanceScreen()),
-                      (route) => false,
-                    );
-                  },
-                  buttonDecoration: const BoxDecoration(),
-                  textStyle: const TextStyle()))
+          FormFieldButton(
+              width: 30,
+              height: 10,
+              buttonText: 'Mark Attendance',
+              onTapAction: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => MarkAttendanceScreen()),
+                );
+              },
+              buttonDecoration: const BoxDecoration(),
+              textStyle: const TextStyle())
         ],
       );
 
