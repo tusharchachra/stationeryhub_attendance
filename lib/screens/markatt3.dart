@@ -35,7 +35,7 @@ class _MarkAtt3State extends State<MarkAtt3> {
   @override
   void initState() {
     super.initState();
-
+    initializeCamera();
     //TODO initialize face detector
     var options = FaceDetectorOptions(
         performanceMode: FaceDetectorMode.fast, enableClassification: true);
@@ -43,13 +43,12 @@ class _MarkAtt3State extends State<MarkAtt3> {
     //TODO initialize face recognizer
     recognizer = Recognizer();
     //TODO initialize camera footage
-    initializeCamera();
   }
 
   //TODO code to initialize the camera feed
   initializeCamera() async {
     cameras = await availableCameras();
-    controller = CameraController(description, ResolutionPreset.medium,
+    controller = CameraController(description, ResolutionPreset.low,
         imageFormatGroup: Platform.isAndroid
             ? ImageFormatGroup.nv21 // for Android
             : ImageFormatGroup.bgra8888,
@@ -81,15 +80,18 @@ class _MarkAtt3State extends State<MarkAtt3> {
     InputImage? inputImage = getInputImage();
     //TODO pass InputImage to face detection model and detect faces
     List<Face> faces = await faceDetector.processImage(inputImage!);
+    print("fl=" + faces.length.toString());
     for (Face face in faces) {
       if (face.smilingProbability != null) {
         print('smiling');
+        dispose();
+        return;
         // performFaceRecognition(faces);
       } else {
         print('not smiling');
       }
     }
-    // print("fl=" + faces.length.toString());
+
     //TODO perform face recognition on detected faces
     // performFaceRecognition(faces);
     // setState(() {
@@ -409,8 +411,8 @@ class _MarkAtt3State extends State<MarkAtt3> {
         Positioned(
             top: 0.0,
             left: 0.0,
-            width: size.width,
-            height: size.height,
+            width: size.width * 0.5,
+            height: size.height * 0.5,
             child: buildResult()),
       );
     }
