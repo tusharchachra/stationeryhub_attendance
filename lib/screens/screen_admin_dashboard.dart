@@ -9,7 +9,7 @@ import 'package:stationeryhub_attendance/screens/screen_new_organization.dart';
 import 'package:stationeryhub_attendance/screens/screen_new_user_for_organization.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
-import '../services/firebase_firestore_services.dart';
+import '../services/firebase_services.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
@@ -20,7 +20,7 @@ class AdminDashboardScreen extends StatefulWidget {
 
 class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   bool isLoading = false;
-  FirebaseFirestoreServices firestoreServices = FirebaseFirestoreServices();
+  FirebaseServices firestoreServices = FirebaseServices();
   AlbumUsers? user;
   AlbumOrganization? organization;
 

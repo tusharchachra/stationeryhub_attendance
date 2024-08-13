@@ -1,11 +1,11 @@
 import 'package:camera/camera.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:stationeryhub_attendance/helpers/size_config.dart';
 import 'package:stationeryhub_attendance/helpers/theme.dart';
-import 'package:stationeryhub_attendance/screens/martatt4.dart';
+import 'package:stationeryhub_attendance/screens/screen_splash.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
 import 'firebase_options.dart';
@@ -30,7 +30,7 @@ void main() async {
 class StationeryHubAttendance extends StatelessWidget {
   const StationeryHubAttendance({super.key});
 
-  @override
+  /* @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return MaterialApp(
@@ -38,10 +38,15 @@ class StationeryHubAttendance extends StatelessWidget {
       home: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
-            return LayoutBuilder(builder: (context, constraints) {
-              return MarkAtt4();
-            });
+            return ScreenSplash();
           }),
+    );*/
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    return GetMaterialApp(
+      theme: ThemeCustom.lightTheme,
+      home: ScreenSplash(),
     );
   }
 }

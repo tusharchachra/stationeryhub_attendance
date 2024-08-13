@@ -10,7 +10,7 @@ import 'package:stationeryhub_attendance/screens/screen_admin_dashboard.dart';
 import 'package:stationeryhub_attendance/screens/screen_mark_attendance.dart';
 import 'package:stationeryhub_attendance/services/firebase_login_services.dart';
 
-import '../services/firebase_firestore_services.dart';
+import '../services/firebase_services.dart';
 import '../services/shared_prefs_services.dart';
 
 class OTPScreen extends StatefulWidget {
@@ -66,8 +66,7 @@ class _OTPScreenState extends State<OTPScreen> {
                     print('successfully signed in');
                   }
 
-                  FirebaseFirestoreServices firestoreServices =
-                      FirebaseFirestoreServices();
+                  FirebaseServices firestoreServices = FirebaseServices();
                   //add new user
                   if (widget.isNewUser) {
                     await firestoreServices.addNewUser(
