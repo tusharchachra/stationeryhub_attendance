@@ -5,10 +5,8 @@ import 'package:stationeryhub_attendance/albums/album_users.dart';
 import 'package:stationeryhub_attendance/albums/enum_user_type.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
-class FirebaseServices {
-  final FirebaseFirestore _firestore;
-  FirebaseServices(this._firestore);
-  //final FirebaseFirestore db = FirebaseFirestore.instance;
+class FirebaseFirestoreServices {
+  final FirebaseFirestore db = FirebaseFirestore.instance;
   // List<AlbumUsers> usersList = [];
   //FirebaseFirestoreServices(this.db);
 
@@ -18,7 +16,7 @@ class FirebaseServices {
   }) async {
     AlbumUsers? tempUser;
     try {
-      final ref = _firestore
+      final ref = db
           .collection("users")
           .where('phoneNum', isEqualTo: phoneNum)
           .withConverter(

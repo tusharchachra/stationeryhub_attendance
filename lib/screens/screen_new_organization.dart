@@ -9,7 +9,7 @@ import 'package:stationeryhub_attendance/services/location_handler.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
 import '../albums/album_users.dart';
-import '../services/firebase_services.dart';
+import '../services/firebase_firestore_services.dart';
 
 class NewOrganizationScreen extends StatefulWidget {
   const NewOrganizationScreen({super.key});
@@ -107,7 +107,8 @@ class _NewOrganizationScreenState extends State<NewOrganizationScreen> {
                     setState(() {
                       isLoading = true;
                     });
-                    FirebaseServices firestoreServices = FirebaseServices();
+                    FirebaseFirestoreServices firestoreServices =
+                        FirebaseFirestoreServices();
                     AlbumOrganization newOrganization = AlbumOrganization(
                       name: nameController.text.trim(),
                       address: addressController.text.trim(),

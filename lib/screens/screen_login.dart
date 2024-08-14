@@ -5,10 +5,10 @@ import 'package:stationeryhub_attendance/helpers/size_config.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_home.dart';
 import 'package:stationeryhub_attendance/screens/screen_otp.dart';
 import 'package:stationeryhub_attendance/services/firebase_login_services.dart';
-import 'package:stationeryhub_attendance/services/firebase_services.dart';
 
 import '../form_fields/form_field_button.dart';
 import '../form_fields/form_field_phone_num.dart';
+import '../services/firebase_firestore_services.dart';
 
 class ScreenLogin extends StatefulWidget {
   const ScreenLogin({
@@ -109,7 +109,8 @@ class _ScreenLoginState extends State<ScreenLogin> {
                     isLoading = true;
                   });
                   //check if user exists
-                  FirebaseServices firestoreServices = FirebaseServices();
+                  FirebaseFirestoreServices firestoreServices =
+                      FirebaseFirestoreServices();
                   registeredUser = await firestoreServices.getUser(
                       phoneNum: phoneNumController.text.trim());
                   print('registered user= $registeredUser');

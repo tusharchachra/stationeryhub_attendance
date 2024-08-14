@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:stationeryhub_attendance/albums/album_users.dart';
-import 'package:stationeryhub_attendance/screens/screen_admin_dashboard.dart';
-import 'package:stationeryhub_attendance/screens/screen_login.dart';
+import 'package:stationeryhub_attendance/screens/screen_login_new.dart';
+
+import '../screens/screen_admin_dashboard.dart';
 
 class FirebaseAuthController extends GetxController {
   static FirebaseAuthController instance = Get.find();
-  late Rx<AlbumUsers?> _user;
+  late Rx<User?> _user;
   FirebaseAuth auth = FirebaseAuth.instance;
 
   String firebaseMessage = '';
@@ -16,16 +16,16 @@ class FirebaseAuthController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    _user = Rx<AlbumUsers?>(auth.currentUser as AlbumUsers?);
-    _user.bindStream(auth.userChanges() as Stream<AlbumUsers?>);
+    _user = Rx<User?>(auth.currentUser);
+    _user.bindStream(auth.userChanges());
     ever(_user, _initialScreen);
   }
 
-  _initialScreen(AlbumUsers? user) {
+  _initialScreen(User? user) {
     if (user == null) {
-      Get.offAll(ScreenLogin());
+      Get.offAll(() => ScreenLoginNew());
     } else {
-      Get.offAll(AdminDashboardScreen());
+      Get.offAll(() => AdminDashboardScreen());
     }
   }
 
@@ -77,7 +77,7 @@ class FirebaseAuthController extends GetxController {
     UserCredential? userCredential;
     try {
       userCredential = await auth.signInWithCredential(credential);
-      _user = userCredential.user! as Rx<AlbumUsers?>;
+      _user = Rx<User>(userCredential.user!);
       FirebaseAuth.instance.currentUser!.reload();
     } on FirebaseAuthException {
       /* firebaseMessage = kErrorOtp;*/
@@ -87,6 +87,17 @@ class FirebaseAuthController extends GetxController {
       return 'success';
     } else {
       return firebaseMessage;
+    }
+  }
+
+  Future signOutUser() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      // FirebaseAuth.instance.currentUser!.reload();
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 

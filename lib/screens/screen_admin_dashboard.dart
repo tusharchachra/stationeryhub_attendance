@@ -7,9 +7,8 @@ import 'package:stationeryhub_attendance/scaffold/scaffold_home.dart';
 import 'package:stationeryhub_attendance/screens/screen_mark_attendance.dart';
 import 'package:stationeryhub_attendance/screens/screen_new_organization.dart';
 import 'package:stationeryhub_attendance/screens/screen_new_user_for_organization.dart';
+import 'package:stationeryhub_attendance/services/firebase_login_services.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
-
-import '../services/firebase_services.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
@@ -20,7 +19,7 @@ class AdminDashboardScreen extends StatefulWidget {
 
 class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   bool isLoading = false;
-  FirebaseServices firestoreServices = FirebaseServices();
+  //FirebaseFirestoreServices firestoreServices = FirebaseFirestoreServices();
   AlbumUsers? user;
   AlbumOrganization? organization;
 
@@ -43,8 +42,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       organization = await SharedPrefsServices.sharedPrefsInstance
           .getOrganizationFromSharedPrefs();
     } else {
-      organization =
-          await firestoreServices.getOrganization(orgId: user!.organizationId);
+      /* organization =
+          await firestoreServices.getOrganization(orgId: user!.organizationId);*/
     }
     if (kDebugMode) {
       print(
@@ -94,6 +93,15 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                 );
               },
               buttonDecoration: const BoxDecoration(),
+              textStyle: const TextStyle()),
+          FormFieldButton(
+              width: 30,
+              height: 10,
+              buttonText: 'Logout',
+              onTapAction: () {
+                FirebaseLoginServices.firebaseInstance.signOutUser();
+              },
+              buttonDecoration: const BoxDecoration(),
               textStyle: const TextStyle())
         ],
       );
@@ -110,6 +118,15 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             onTapAction: () {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const NewOrganizationScreen()));
+            },
+            buttonDecoration: const BoxDecoration(),
+            textStyle: const TextStyle()),
+        FormFieldButton(
+            width: 30,
+            height: 10,
+            buttonText: 'Logout',
+            onTapAction: () {
+              FirebaseLoginServices.firebaseInstance.signOutUser();
             },
             buttonDecoration: const BoxDecoration(),
             textStyle: const TextStyle())

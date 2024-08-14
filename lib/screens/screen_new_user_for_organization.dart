@@ -2,11 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:stationeryhub_attendance/albums/album_users.dart';
 import 'package:stationeryhub_attendance/albums/enum_user_type.dart';
-import 'package:stationeryhub_attendance/services/firebase_services.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
 import '../form_fields/form_field_button.dart';
 import '../scaffold/scaffold_home.dart';
+import '../services/firebase_firestore_services.dart';
 
 class NewUserForOrganizationScreen extends StatefulWidget {
   const NewUserForOrganizationScreen({super.key});
@@ -19,7 +19,7 @@ class NewUserForOrganizationScreen extends StatefulWidget {
 class _NewUserForOrganizationScreenState
     extends State<NewUserForOrganizationScreen> {
   final _formKey = GlobalKey<FormState>();
-  FirebaseServices firestoreServices = FirebaseServices();
+  FirebaseFirestoreServices firestoreServices = FirebaseFirestoreServices();
   bool isLoading = false;
   List<String> userTypeList = [];
   AlbumUsers? currentUser;

@@ -2,10 +2,12 @@ import 'package:camera/camera.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/helpers/size_config.dart';
 import 'package:stationeryhub_attendance/helpers/theme.dart';
 import 'package:stationeryhub_attendance/screens/screen_splash.dart';
+import 'package:stationeryhub_attendance/services/firebase_auth_controller.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
 import 'firebase_options.dart';
@@ -16,7 +18,8 @@ import 'firebase_options.dart';
 void main() async {
   const reCaptchaSiteKey = '6LdiirYpAAAAAFZ1pyLKhZEcZpp2w6x_PullHH5r';
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
+      .then((value) => Get.put(FirebaseAuthController()));
   await FirebaseAppCheck.instance.activate(
     androidProvider: AndroidProvider.debug,
     appleProvider: AppleProvider.debug,
@@ -46,7 +49,19 @@ class StationeryHubAttendance extends StatelessWidget {
     SizeConfig().init(context);
     return GetMaterialApp(
       theme: ThemeCustom.lightTheme,
-      home: ScreenSplash(),
+      home: HomePage(),
     );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    //Set the fit size (fill in the screen size of the device in the design)
+    //If the design is based on the size of the 360*690(dp)
+    ScreenUtil.init(context, designSize: const Size(460, 932));
+    return ScreenSplash();
   }
 }
