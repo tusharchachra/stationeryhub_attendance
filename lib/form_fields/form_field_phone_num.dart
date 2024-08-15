@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stationeryhub_attendance/helpers/constants.dart';
 
 class FormFieldPhoneNum extends StatefulWidget {
   const FormFieldPhoneNum({
@@ -21,25 +22,19 @@ class _FormFieldPhoneNumState extends State<FormFieldPhoneNum> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.phoneNumController,
-      style:
-          Theme.of(context).textTheme.bodyLarge!.copyWith(letterSpacing: 5.0),
+      style: Theme.of(context).textTheme.displayMedium!,
       keyboardType: TextInputType.phone,
       autofocus: false,
       maxLength: 10,
-      cursorColor: Colors.white,
+      cursorColor: colourTextLight,
       decoration: const InputDecoration()
           .applyDefaults(Theme.of(context).inputDecorationTheme)
           .copyWith(
             counterText: '',
-            prefix: Text(
-              '+91-',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge!
-                  .copyWith(letterSpacing: 5.0),
-            ),
-            prefixIcon: const Icon(Icons.phone),
-            prefixIconColor: Colors.white,
+            prefix:
+                Text('+91-', style: Theme.of(context).textTheme.displayMedium!),
+            /*prefixIcon: const Icon(Icons.phone),*/
+            /*prefixIconColor: Colors.white,*/
           ),
       validator: widget.validatorPhoneNum,
       onChanged: (value) {

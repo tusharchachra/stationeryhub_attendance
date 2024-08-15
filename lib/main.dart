@@ -1,7 +1,9 @@
 import 'package:camera/camera.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/helpers/size_config.dart';
@@ -16,6 +18,10 @@ import 'firebase_options.dart';
 //late List<CameraDescription> cameras;
 
 void main() async {
+  LicenseRegistry.addLicense(() async* {
+    final license = await rootBundle.loadString('google_fonts/OFL.txt');
+    yield LicenseEntryWithLineBreaks(['google_fonts'], license);
+  });
   const reCaptchaSiteKey = '6LdiirYpAAAAAFZ1pyLKhZEcZpp2w6x_PullHH5r';
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
@@ -26,7 +32,7 @@ void main() async {
   );
   await SharedPrefsServices.sharedPrefsInstance.clearSharedPrefs();
   final cameras = await availableCameras();
-
+ // await ScreenUtil.ensureScreenSize();
   runApp(const StationeryHubAttendance());
 }
 
@@ -47,9 +53,23 @@ class StationeryHubAttendance extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return GetMaterialApp(
-      theme: ThemeCustom.lightTheme,
-      home: HomePage(),
+    /* ScreenUtil.init(context,
+        designSize: const Size(460, 932),
+        minTextAdapt: true,
+        splitScreenMode: true);*/
+
+    return ScreenUtilInit(
+      designSize: const Size(460, 932),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (_, child) {
+        return GetMaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeCustom.lightTheme,
+          home: child,
+        );
+      },
+      child: ScreenSplash(),
     );
   }
 }
@@ -61,7 +81,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     //Set the fit size (fill in the screen size of the device in the design)
     //If the design is based on the size of the 360*690(dp)
-    ScreenUtil.init(context, designSize: const Size(460, 932));
+
     return ScreenSplash();
   }
 }

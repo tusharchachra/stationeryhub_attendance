@@ -47,5 +47,8 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
     <string>Used to capture images</string>
+    <key>com.apple.security.network.client</key>
+    <true/>
+
 </dict>
 </plist>

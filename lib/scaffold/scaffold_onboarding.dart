@@ -13,23 +13,26 @@ class ScaffoldOnboarding extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.8),
-      body: Stack(children: [
-        Container(
-          width: 460.w,
-          height: 379.h,
-          decoration: BoxDecoration(
-            color: colourPrimary,
-            image: const DecorationImage(
-                image: AssetImage('assets/images/map.png'), fit: BoxFit.fill),
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(90.r),
-              bottomRight: Radius.circular(90.r),
+      body: Stack(
+          clipBehavior: Clip.none,
+          alignment: Alignment.topCenter,
+          children: [
+            Container(
+              width: 460.w,
+              height: 379.h,
+              decoration: BoxDecoration(
+                color: colourPrimary,
+                image: const DecorationImage(
+                    image: AssetImage('assets/images/map.png'),
+                    fit: BoxFit.fill),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(90.r),
+                  bottomRight: Radius.circular(90.r),
+                ),
+              ),
             ),
-          ),
-        ),
-        bodyWidget,
-      ]),
+            bodyWidget,
+          ]),
     );
   }
 }

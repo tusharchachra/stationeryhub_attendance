@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../helpers/size_config.dart';
-
 class FormFieldButton extends StatelessWidget {
   const FormFieldButton({
     super.key,
@@ -13,8 +11,8 @@ class FormFieldButton extends StatelessWidget {
     required this.textStyle,
   });
 
-  final int width;
-  final int height;
+  final double width;
+  final double height;
   final String buttonText;
   final void Function() onTapAction;
   final BoxDecoration buttonDecoration;
@@ -25,8 +23,8 @@ class FormFieldButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTapAction,
       child: Container(
-        width: SizeConfig.getSize(width),
-        height: SizeConfig.getSize(height),
+        width: width,
+        height: height,
         decoration: buttonDecoration,
         child: Center(
           child: Text(
