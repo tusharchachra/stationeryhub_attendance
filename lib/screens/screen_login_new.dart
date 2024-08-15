@@ -14,52 +14,83 @@ class ScreenLoginNew extends GetWidget<FirebaseAuthController> {
   @override
   Widget build(BuildContext context) {
     TextEditingController phoneNumController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+
+    var isPhoneNumValid = false.obs;
     return ScaffoldOnboarding(
       bodyWidget: Center(
-        child: Container(
-          width: 364.w,
-          height: 353.h,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(color: Colors.grey, blurRadius: 30.0),
-            ],
-          ),
+        child: Form(
+          key: formKey,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                width: 75.w,
-                height: 75.h,
+                width: 364.w,
+                height: 353.h,
                 decoration: BoxDecoration(
-                  color: colourIconBackground,
-                  shape: BoxShape.circle,
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(color: Colors.grey, blurRadius: 62.0.r),
+                  ],
+                  borderRadius: BorderRadius.circular(5.0.r),
                 ),
-                child: FittedBox(
-                  fit: BoxFit.fill,
-                  child: Padding(
-                    padding: EdgeInsets.all(20.0).w,
-                    child: Icon(
-                      Icons.phone,
-                      color: colourPrimary,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 75.w,
+                      height: 75.h,
+                      decoration: BoxDecoration(
+                        color: colourIconBackground,
+                        shape: BoxShape.circle,
+                      ),
+                      child: FittedBox(
+                        fit: BoxFit.fill,
+                        child: Padding(
+                          padding: EdgeInsets.all(20.0).w,
+                          child: Icon(
+                            Icons.phone,
+                            color: colourPrimary,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                    Text(
+                      'Enter your phone number',
+                      style: Theme.of(context).textTheme.displayLarge,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12.w),
+                      child: FormFieldPhoneNum(
+                        phoneNumController: phoneNumController,
+                        onChangedAction: (value) {
+                          if (formKey.currentState!.validate() &&
+                              isPhoneNumValid != Rx<bool>(true)) {
+                            isPhoneNumValid.value = true;
+                          } else {
+                            isPhoneNumValid.value = false;
+                          }
+                        },
+                        validatorPhoneNum: (value) {
+                          /* if (value == '7808814341') {
+                        return null;
+                      } else */
+                          if (value!.length == 10) {
+                            return null;
+                          } else if (value.length < 10) {
+                            return 'Invalid phone number';
+                          } else {
+                            return 'Unauthorised user';
+                          }
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Text(
-                'Enter your phone number',
-                style: Theme.of(context).textTheme.displayLarge,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.w),
-                child: FormFieldPhoneNum(
-                  onChangedAction: () {},
-                  phoneNumController: phoneNumController,
-                  validatorPhoneNum: (value) {
-                    return null;
-                  },
-                ),
-              ),
+              SizedBox(height: 20.h),
               FormFieldButton1(
                 width: 384.w,
                 height: 56.h,

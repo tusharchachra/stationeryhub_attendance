@@ -18,10 +18,14 @@ class FormFieldButton1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FilledButton(
-      onPressed: onTapAction,
-      child: Text(
-        buttonText,
+    return SizedBox(
+      width: width,
+      height: height,
+      child: FilledButton(
+        onPressed: onTapAction,
+        child: Text(
+          buttonText,
+        ),
       ),
     );
   }

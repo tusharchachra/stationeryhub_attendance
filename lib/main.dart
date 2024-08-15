@@ -25,14 +25,16 @@ void main() async {
   const reCaptchaSiteKey = '6LdiirYpAAAAAFZ1pyLKhZEcZpp2w6x_PullHH5r';
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
-      .then((value) => Get.put(FirebaseAuthController()));
+      .then((value) {
+    return Get.put(FirebaseAuthController());
+  });
   await FirebaseAppCheck.instance.activate(
     androidProvider: AndroidProvider.debug,
     appleProvider: AppleProvider.debug,
   );
   await SharedPrefsServices.sharedPrefsInstance.clearSharedPrefs();
   final cameras = await availableCameras();
- // await ScreenUtil.ensureScreenSize();
+  // await ScreenUtil.ensureScreenSize();
   runApp(const StationeryHubAttendance());
 }
 

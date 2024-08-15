@@ -79,6 +79,7 @@ class ThemeCustom {
             padding: WidgetStatePropertyAll(
               EdgeInsets.symmetric(vertical: 12.7.h),
             ),
+            maximumSize: WidgetStatePropertyAll(Size(384.w, 56.h)),
             shape: WidgetStatePropertyAll(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50.r),
@@ -88,7 +89,7 @@ class ThemeCustom {
               TextStyle(
                 color: Colors.white,
                 fontSize: 14.sp,
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.w600,
               ),
             )),
       ),
