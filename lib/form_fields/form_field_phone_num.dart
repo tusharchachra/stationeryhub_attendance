@@ -1,28 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 
-class FormFieldPhoneNum extends StatefulWidget {
+class FormFieldPhoneNum extends StatelessWidget {
   const FormFieldPhoneNum({
     super.key,
-    required this.phoneNumController,
+    this.phoneNumController,
     required this.validatorPhoneNum,
     required this.onChangedAction,
   });
 
-  final TextEditingController phoneNumController;
+  final TextEditingController? phoneNumController;
   final String? Function(String?)? validatorPhoneNum;
-  final Function onChangedAction;
+  final void Function(String?)? onChangedAction;
 
-  @override
-  State<FormFieldPhoneNum> createState() => _FormFieldPhoneNumState();
-}
-
-class _FormFieldPhoneNumState extends State<FormFieldPhoneNum> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: widget.phoneNumController,
-      style: Theme.of(context).textTheme.displayMedium!,
+      // controller: phoneNumController,
+      style: Get.textTheme.displayMedium!,
       keyboardType: TextInputType.phone,
       autofocus: false,
       maxLength: 10,
@@ -31,15 +27,12 @@ class _FormFieldPhoneNumState extends State<FormFieldPhoneNum> {
           .applyDefaults(Theme.of(context).inputDecorationTheme)
           .copyWith(
             counterText: '',
-            prefix:
-                Text('+91-', style: Theme.of(context).textTheme.displayMedium!),
+            prefix: Text('+91-', style: Get.textTheme.displayMedium!),
             /*prefixIcon: const Icon(Icons.phone),*/
             /*prefixIconColor: Colors.white,*/
           ),
-      validator: widget.validatorPhoneNum,
-      onChanged: (value) {
-        widget.onChangedAction(value);
-      },
+      validator: validatorPhoneNum,
+      onChanged: onChangedAction,
     );
   }
 }

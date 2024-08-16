@@ -8,8 +8,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/helpers/size_config.dart';
 import 'package:stationeryhub_attendance/helpers/theme.dart';
+import 'package:stationeryhub_attendance/helpers/utils.dart';
 import 'package:stationeryhub_attendance/screens/screen_splash.dart';
-import 'package:stationeryhub_attendance/services/firebase_auth_controller.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
 import 'firebase_options.dart';
@@ -24,10 +24,11 @@ void main() async {
   });
   const reCaptchaSiteKey = '6LdiirYpAAAAAFZ1pyLKhZEcZpp2w6x_PullHH5r';
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
-      .then((value) {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  /* .then((value) {
     return Get.put(FirebaseAuthController());
-  });
+  });*/
+  await registerControllers();
   await FirebaseAppCheck.instance.activate(
     androidProvider: AndroidProvider.debug,
     appleProvider: AppleProvider.debug,
@@ -36,6 +37,10 @@ void main() async {
   final cameras = await availableCameras();
   // await ScreenUtil.ensureScreenSize();
   runApp(const StationeryHubAttendance());
+}
+
+Future<void> registerControllers() async {
+  await registerFirebaseAuthController();
 }
 
 class StationeryHubAttendance extends StatelessWidget {

@@ -33,6 +33,11 @@ class ThemeCustom {
           fontSize: 14.sp,
           fontWeight: FontWeight.w400,
         ),
+        displaySmall: TextStyle(
+          color: colourTextDark,
+          fontSize: 10.sp,
+          fontWeight: FontWeight.w100,
+        ),
         bodyLarge: TextStyle(
           color: Colors.white,
           fontSize: SizeConfig.getSize(4),
@@ -66,10 +71,10 @@ class ThemeCustom {
         ),
         contentPadding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
         errorStyle: TextStyle(
-          height: 0.1,
-          color: Colors.red[900],
-          fontWeight: FontWeight.bold,
-          fontSize: SizeConfig.getSize(3),
+          height: 0.1.h,
+          color: Colors.red,
+          fontWeight: FontWeight.normal,
+          fontSize: 10.sp,
         ),
       ),
       filledButtonTheme: FilledButtonThemeData(

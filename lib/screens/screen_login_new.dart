@@ -3,24 +3,49 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/form_fields/form_field_button1.dart';
 import 'package:stationeryhub_attendance/form_fields/form_field_phone_num.dart';
-import 'package:stationeryhub_attendance/services/firebase_auth_controller.dart';
 
 import '../helpers/constants.dart';
 import '../scaffold/scaffold_onboarding.dart';
 
-class ScreenLoginNew extends GetWidget<FirebaseAuthController> {
-  const ScreenLoginNew({super.key});
+class ScreenLoginNewController extends GetxController {
+  final formKey = GlobalKey<FormState>();
+  //Rx<TextEditingController> phoneNumController = TextEditingController().obs;
+  RxBool isPhoneNumValid = false.obs;
+
+  validatePhoneNum(String? value) {
+    /*if (value == '7808814341') {
+      return null;
+    } else*/
+    if (value!.length == 10) {
+      isPhoneNumValid.value = true;
+      return null;
+    } else if (value.length < 10) {
+      isPhoneNumValid.value = false;
+      return 'Invalid phone number';
+    } else {
+      isPhoneNumValid.value = false;
+      return 'Unauthorised user';
+    }
+  }
+
+  Future onLogin() async {
+    (formKey.currentState!.validate());
+    if (isPhoneNumValid.value) {}
+  }
+}
+
+class ScreenLoginNew extends StatelessWidget {
+  ScreenLoginNew({super.key});
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController phoneNumController = TextEditingController();
-    final formKey = GlobalKey<FormState>();
+    final controller = Get.put(ScreenLoginNewController());
 
-    var isPhoneNumValid = false.obs;
     return ScaffoldOnboarding(
       bodyWidget: Center(
         child: Form(
-          key: formKey,
+          key: controller.formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.min,
@@ -64,26 +89,19 @@ class ScreenLoginNew extends GetWidget<FirebaseAuthController> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
                       child: FormFieldPhoneNum(
-                        phoneNumController: phoneNumController,
+                        /* phoneNumController:
+                                controller.phoneNumController.value,*/
                         onChangedAction: (value) {
-                          if (formKey.currentState!.validate() &&
-                              isPhoneNumValid != Rx<bool>(true)) {
-                            isPhoneNumValid.value = true;
-                          } else {
-                            isPhoneNumValid.value = false;
-                          }
+                          /*if (controller.formKey.currentState!.validate() &&
+                                controller.isPhoneNumValid != true) {
+                              isPhoneNumValid.value = true;
+                            } else {
+                              isPhoneNumValid.value = false;
+                            }
+                            print(isPhoneNumValid);*/
                         },
                         validatorPhoneNum: (value) {
-                          /* if (value == '7808814341') {
-                        return null;
-                      } else */
-                          if (value!.length == 10) {
-                            return null;
-                          } else if (value.length < 10) {
-                            return 'Invalid phone number';
-                          } else {
-                            return 'Unauthorised user';
-                          }
+                          return controller.validatePhoneNum(value);
                         },
                       ),
                     ),
@@ -95,7 +113,30 @@ class ScreenLoginNew extends GetWidget<FirebaseAuthController> {
                 width: 384.w,
                 height: 56.h,
                 buttonText: 'Continue',
-                onTapAction: () {},
+                onTapAction: () {
+                  print('tapped');
+                  controller.onLogin();
+                }
+                /*if (isPhoneNumValid) {
+                      isLoading = true;
+
+                      //check if user exists
+                      FirebaseFirestoreServices firestoreServices =
+                          FirebaseFirestoreServices();
+                      registeredUser = await firestoreServices.getUser(
+                          phoneNum: phoneNumController.text.trim());
+                      print('registered user= $registeredUser');
+                      if (registeredUser != null) {
+                        await loginUser();
+                      } else {
+                        if (kDebugMode) {
+                          print('User not registered');
+                        }
+                        //show dialog to register the new user or cancel
+                        buildShowAdaptiveDialog();
+                      }
+                    }*/
+                ,
               )
             ],
           ),
