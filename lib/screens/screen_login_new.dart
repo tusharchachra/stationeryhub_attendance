@@ -7,7 +7,6 @@ import 'package:stationeryhub_attendance/form_fields/form_field_phone_num.dart';
 import 'package:stationeryhub_attendance/services/firebase_auth_controller.dart';
 import 'package:stationeryhub_attendance/services/firebase_firestore_controller.dart';
 
-import '../form_fields/form_field_button.dart';
 import '../helpers/constants.dart';
 import '../scaffold/scaffold_onboarding.dart';
 import '../services/screen_login_controller.dart';
@@ -99,17 +98,17 @@ class ScreenLoginNew extends StatelessWidget {
                       height: 56.h,
                       buttonText: 'Continue',
                       onTapAction: () async {
-                        await loginController.onLogin();
                         if (loginController.isPhoneNumValid.value) {
+                          await loginController.onLogin();
                           //check if user exists
                           //FirebaseFirestoreServices firestoreServices = FirebaseFirestoreServices();
 
                           /*registeredUser = await firestoreServices.getUser(
           phoneNum: phoneNumController.text.trim());*/
-                          loginController.isLoading.value = false;
                           print(
                               'registered user= ${firestoreController.registeredUser}');
-                          if (firestoreController.registeredUser != null) {
+                          if (firestoreController.registeredUser?.value?.uid !=
+                              null) {
                             await loginController.loginUser();
                           } else {
                             if (kDebugMode) {
@@ -117,40 +116,8 @@ class ScreenLoginNew extends StatelessWidget {
                             }
                             //show dialog to register the new user or cancel
                             // buildShowAdaptiveDialog();
-                            Get.bottomSheet(Column(
-                              children: [
-                                Text(
-                                    'User not found.\n\nIf you are an employee, request your organization to grant access.\nIf you wish to register a new organization, tap Yes '),
-                                FormFieldButton(
-                                  width: 30,
-                                  height: 10,
-                                  buttonText: 'Yes',
-                                  onTapAction: () {
-                                    loginController.loginUser();
-                                  },
-                                  textStyle: Get.textTheme.bodyMedium!
-                                      .copyWith(color: colourPrimary),
-                                  buttonDecoration: const BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10.0))),
-                                ),
-                                FormFieldButton(
-                                  width: 30,
-                                  height: 10,
-                                  buttonText: 'Cancel',
-                                  onTapAction: () {
-                                    Get.back();
-                                  },
-                                  textStyle: Get.textTheme.bodyMedium!
-                                      .copyWith(color: Colors.indigo),
-                                  buttonDecoration: const BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10.0))),
-                                )
-                              ],
-                            ));
+                            Get.bottomSheet(buildBottomSheet(),
+                                backgroundColor: Colors.white);
                           }
                         }
                       }
@@ -178,6 +145,53 @@ class ScreenLoginNew extends StatelessWidget {
                     ))
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildBottomSheet() {
+    return Container(
+      height: 0.5.sh,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 20.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'User not found',
+              style: Get.textTheme.displayLarge,
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              'If you are an employee, request your organization to grant access.',
+              style: Get.textTheme.displayMedium,
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              'Or',
+              style: Get.textTheme.displayMedium,
+              textAlign: TextAlign.center,
+            ),
+            FormFieldButton1(
+              width: 384.w,
+              height: 56.h,
+              buttonText: 'Create new organization',
+              onTapAction: () {
+                loginController.loginUser();
+              },
+            ),
+            FormFieldButton1(
+              width: 384.w,
+              height: 56.h,
+              buttonText: 'Cancel',
+              onTapAction: () {
+                Get.back();
+              },
+            ),
+          ],
         ),
       ),
     );
