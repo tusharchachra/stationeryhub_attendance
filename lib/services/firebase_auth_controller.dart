@@ -6,9 +6,9 @@ import 'package:stationeryhub_attendance/screens/screen_login_new.dart';
 import '../screens/screen_admin_dashboard.dart';
 
 class FirebaseAuthController extends GetxController {
-  static FirebaseAuthController instance = Get.find();
-  late Rx<User?> _user;
-  FirebaseAuth auth = FirebaseAuth.instance;
+  static FirebaseAuthController authControllerInstance = Get.find();
+  late Rx<User?> firebaseUser;
+  FirebaseAuth authInstance = FirebaseAuth.instance;
 
   String firebaseMessage = '';
   String verificationId = '111111';
@@ -16,9 +16,9 @@ class FirebaseAuthController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    _user = Rx<User?>(auth.currentUser);
-    _user.bindStream(auth.userChanges());
-    ever(_user, _initialScreen);
+    firebaseUser = Rx<User?>(authInstance.currentUser);
+    firebaseUser.bindStream(authInstance.userChanges());
+    ever(firebaseUser, _initialScreen);
   }
 
   _initialScreen(User? user) {
@@ -39,7 +39,7 @@ class FirebaseAuthController extends GetxController {
       print('signing in');
     }
     try {
-      await FirebaseAuth.instance.verifyPhoneNumber(
+      await authInstance.verifyPhoneNumber(
         timeout: const Duration(seconds: 10),
         phoneNumber: '+91$phoneNum',
         verificationCompleted: (PhoneAuthCredential credential) async {
@@ -76,9 +76,9 @@ class FirebaseAuthController extends GetxController {
   Future _signIn({required AuthCredential credential}) async {
     UserCredential? userCredential;
     try {
-      userCredential = await auth.signInWithCredential(credential);
-      _user = Rx<User>(userCredential.user!);
-      FirebaseAuth.instance.currentUser!.reload();
+      userCredential = await authInstance.signInWithCredential(credential);
+      firebaseUser = Rx<User>(userCredential.user!);
+      authInstance.currentUser!.reload();
     } on FirebaseAuthException {
       /* firebaseMessage = kErrorOtp;*/
       // print(e.code);
@@ -92,8 +92,8 @@ class FirebaseAuthController extends GetxController {
 
   Future signOutUser() async {
     try {
-      await FirebaseAuth.instance.signOut();
-      // FirebaseAuth.instance.currentUser!.reload();
+      await authInstance.signOut();
+      // auth.currentUser!.reload();
     } on Exception catch (e) {
       if (kDebugMode) {
         print(e);

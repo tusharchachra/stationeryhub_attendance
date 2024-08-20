@@ -8,8 +8,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/helpers/size_config.dart';
 import 'package:stationeryhub_attendance/helpers/theme.dart';
-import 'package:stationeryhub_attendance/helpers/utils.dart';
 import 'package:stationeryhub_attendance/screens/screen_splash.dart';
+import 'package:stationeryhub_attendance/services/firebase_auth_controller.dart';
+import 'package:stationeryhub_attendance/services/firebase_firestore_controller.dart';
+import 'package:stationeryhub_attendance/services/screen_login_controller.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
 import 'firebase_options.dart';
@@ -40,7 +42,9 @@ void main() async {
 }
 
 Future<void> registerControllers() async {
-  await registerFirebaseAuthController();
+  Get.put(FirebaseAuthController());
+  Get.put(FirebaseFirestoreController());
+  Get.put(ScreenLoginNewController());
 }
 
 class StationeryHubAttendance extends StatelessWidget {

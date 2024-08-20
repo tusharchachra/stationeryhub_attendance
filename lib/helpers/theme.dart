@@ -18,7 +18,7 @@ class ThemeCustom {
         foregroundColor: Colors.white,
       ),
       progressIndicatorTheme: const ProgressIndicatorThemeData(
-        color: Colors.white,
+        color: colourPrimary,
         circularTrackColor: Colors.transparent,
       ),
       iconTheme: const IconThemeData(color: colourPrimary),

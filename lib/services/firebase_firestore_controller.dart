@@ -1,22 +1,41 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:stationeryhub_attendance/albums/album_organizations.dart';
-import 'package:stationeryhub_attendance/albums/album_users.dart';
-import 'package:stationeryhub_attendance/albums/enum_user_type.dart';
+import 'package:get/get.dart';
+import 'package:stationeryhub_attendance/services/screen_login_controller.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
-class FirebaseFirestoreServices {
-  final FirebaseFirestore db = FirebaseFirestore.instance;
-  // List<AlbumUsers> usersList = [];
-  //FirebaseFirestoreServices(this.db);
+import '../albums/album_organizations.dart';
+import '../albums/album_users.dart';
+import '../albums/enum_user_type.dart';
+import 'firebase_auth_controller.dart';
+
+class FirebaseFirestoreController extends GetxController {
+  static FirebaseFirestoreController firestoreControllerInstance = Get.find();
+  static FirebaseAuthController authControllerInstance = Get.find();
+  static ScreenLoginNewController loginController = Get.find();
+  Rx<AlbumUsers?>? registeredUser = AlbumUsers().obs;
+  final FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
+
+  @override
+  void onReady() async {
+    super.onReady();
+    var tempUser =
+        await getUser(phoneNum: loginController.phoneNum.value ?? '');
+    registeredUser?.update((user) {
+      user?.phoneNum = tempUser?.phoneNum;
+      user?.name = tempUser?.name;
+    });
+    //registeredUser?.value = tempUser;
+  }
 
   Future<AlbumUsers?> getUser({
     required String phoneNum,
     GetOptions? getOptions,
   }) async {
+    print(phoneNum);
     AlbumUsers? tempUser;
     try {
-      final ref = db
+      final ref = firestoreInstance
           .collection("users")
           .where('phoneNum', isEqualTo: phoneNum)
           .withConverter(
@@ -67,7 +86,7 @@ class FirebaseFirestoreServices {
       String? name,
       String? orgId}) async {
     try {
-      final ref = db.collection("users").doc().withConverter(
+      final ref = firestoreInstance.collection("users").doc().withConverter(
             fromFirestore: AlbumUsers.fromFirestore,
             toFirestore: (AlbumUsers user, _) => user.toJson(),
           );
@@ -99,7 +118,10 @@ class FirebaseFirestoreServices {
   }) async {
     AlbumOrganization? fetchedOrganization;
     try {
-      final ref = db.collection("organizations").doc("$orgId").withConverter(
+      final ref = firestoreInstance
+          .collection("organizations")
+          .doc("$orgId")
+          .withConverter(
             fromFirestore: AlbumOrganization.fromFirestore,
             toFirestore: (AlbumOrganization organization, _) =>
                 organization.toJson(),
@@ -124,11 +146,12 @@ class FirebaseFirestoreServices {
   Future<String?> createOrganization(
       {required AlbumOrganization newOrganization}) async {
     try {
-      final ref = db.collection("organizations").doc().withConverter(
-            fromFirestore: AlbumOrganization.fromFirestore,
-            toFirestore: (AlbumOrganization organization, _) =>
-                organization.toJson(),
-          );
+      final ref =
+          firestoreInstance.collection("organizations").doc().withConverter(
+                fromFirestore: AlbumOrganization.fromFirestore,
+                toFirestore: (AlbumOrganization organization, _) =>
+                    organization.toJson(),
+              );
       await ref.set(newOrganization);
       if (kDebugMode) {
         print('New organization added = ${ref.id}');
@@ -157,7 +180,10 @@ class FirebaseFirestoreServices {
   Future<void> updateOrganizationIdInCreator(
       {required String currentUserId, required String organizationId}) async {
     try {
-      final ref = db.collection("users").doc(currentUserId).withConverter(
+      final ref = firestoreInstance
+          .collection("users")
+          .doc(currentUserId)
+          .withConverter(
             fromFirestore: AlbumOrganization.fromFirestore,
             toFirestore: (AlbumOrganization organization, _) =>
                 organization.toJson(),

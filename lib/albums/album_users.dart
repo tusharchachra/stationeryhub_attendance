@@ -3,16 +3,16 @@ import 'package:stationeryhub_attendance/albums/enum_user_type.dart';
 
 class AlbumUsers {
   String? uid;
-  final UserType? userType;
-  final String name;
-  final String phoneNum;
-  final String? organizationId;
+  UserType? userType;
+  String? name;
+  String? phoneNum;
+  String? organizationId;
 
   AlbumUsers({
     this.uid,
     this.userType,
-    required this.name,
-    required this.phoneNum,
+    this.name,
+    this.phoneNum,
     this.organizationId,
   });
 
