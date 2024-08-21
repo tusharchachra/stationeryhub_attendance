@@ -3,23 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:stationeryhub_attendance/albums/album_users.dart';
 import 'package:stationeryhub_attendance/helpers/size_config.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_home.dart';
-import 'package:stationeryhub_attendance/screens/screen_otp.dart';
+import 'package:stationeryhub_attendance/screens/screen_otp_old.dart';
 import 'package:stationeryhub_attendance/services/firebase_login_services.dart';
 
 import '../form_fields/form_field_button.dart';
 import '../form_fields/form_field_phone_num.dart';
 import '../services/firebase_firestore_services.dart';
 
-class ScreenLogin extends StatefulWidget {
-  const ScreenLogin({
+class ScreenLoginOld extends StatefulWidget {
+  const ScreenLoginOld({
     super.key,
   });
 
   @override
-  State<ScreenLogin> createState() => _ScreenLoginState();
+  State<ScreenLoginOld> createState() => _ScreenLoginOldState();
 }
 
-class _ScreenLoginState extends State<ScreenLogin> {
+class _ScreenLoginOldState extends State<ScreenLoginOld> {
   TextEditingController phoneNumController = TextEditingController();
   bool isPhoneNumValid = false;
   //Map<String?, dynamic>? fetchedUser;
@@ -143,7 +143,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
         });
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => OTPScreen(
+            builder: (context) => OTPScreenOld(
               phoneNum: phoneNumController.text.trim(),
               isNewUser: registeredUser == null ? true : false,
               /*registeredUser: registeredUser!,*/

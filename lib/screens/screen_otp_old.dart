@@ -13,8 +13,8 @@ import 'package:stationeryhub_attendance/services/firebase_login_services.dart';
 import '../services/firebase_firestore_services.dart';
 import '../services/shared_prefs_services.dart';
 
-class OTPScreen extends StatefulWidget {
-  const OTPScreen({
+class OTPScreenOld extends StatefulWidget {
+  const OTPScreenOld({
     super.key,
     required this.phoneNum,
     required this.isNewUser,
@@ -24,10 +24,10 @@ class OTPScreen extends StatefulWidget {
   final bool isNewUser;
 
   @override
-  State<OTPScreen> createState() => _OTPScreenState();
+  State<OTPScreenOld> createState() => _OTPScreenOldState();
 }
 
-class _OTPScreenState extends State<OTPScreen> {
+class _OTPScreenOldState extends State<OTPScreenOld> {
   TextEditingController otpController = TextEditingController();
   //Map<String?, dynamic>? fetchedUser;
   AlbumUsers? registeredUser;

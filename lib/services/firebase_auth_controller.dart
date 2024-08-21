@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:stationeryhub_attendance/screens/screen_login_new.dart';
+import 'package:stationeryhub_attendance/screens/login_screen.dart';
 
 import '../screens/screen_admin_dashboard.dart';
 
@@ -23,7 +23,7 @@ class FirebaseAuthController extends GetxController {
 
   _initialScreen(User? user) {
     if (user == null) {
-      Get.offAll(() => ScreenLoginNew());
+      Get.offAll(() => LoginScreen());
     } else {
       Get.offAll(() => AdminDashboardScreen());
     }

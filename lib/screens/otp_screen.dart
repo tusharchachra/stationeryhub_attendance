@@ -9,11 +9,11 @@ import 'package:stationeryhub_attendance/services/firebase_firestore_controller.
 
 import '../helpers/constants.dart';
 import '../scaffold/scaffold_onboarding.dart';
-import '../services/screen_login_controller.dart';
+import '../services/login_screen_controller.dart';
 
-class ScreenLoginNew extends StatelessWidget {
-  const ScreenLoginNew({super.key});
-  static ScreenLoginNewController loginController = Get.find();
+class OtpScreen extends StatelessWidget {
+  const OtpScreen({super.key});
+  static LoginScreenController loginController = Get.find();
   static FirebaseAuthController authController = Get.find();
   static FirebaseFirestoreController firestoreController = Get.find();
   @override
@@ -53,7 +53,7 @@ class ScreenLoginNew extends StatelessWidget {
                         child: Padding(
                           padding: EdgeInsets.all(20.0).w,
                           child: Icon(
-                            Icons.phone,
+                            Icons.sms,
                             color: colourPrimary,
                           ),
                         ),

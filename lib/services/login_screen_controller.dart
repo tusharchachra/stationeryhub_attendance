@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stationeryhub_attendance/screens/screen_otp.dart';
+import 'package:stationeryhub_attendance/screens/screen_otp_old.dart';
 
 import 'firebase_auth_controller.dart';
 import 'firebase_firestore_controller.dart';
 
-class ScreenLoginNewController extends GetxController {
+class LoginScreenController extends GetxController {
   final formKey = GlobalKey<FormState>();
   //Rx<TextEditingController> phoneNumController = TextEditingController().obs;
   RxBool isPhoneNumValid = false.obs;
@@ -63,7 +63,7 @@ class ScreenLoginNewController extends GetxController {
         print('code sent');
 
         ///TODO: change navigation route cancellation
-        Get.to(() => OTPScreen(
+        Get.to(() => OTPScreenOld(
             phoneNum: phoneNum.value,
             isNewUser:
                 firestoreController.registeredUser == null ? true : false));

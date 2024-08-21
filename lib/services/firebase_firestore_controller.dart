@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:stationeryhub_attendance/services/screen_login_controller.dart';
+import 'package:stationeryhub_attendance/services/login_screen_controller.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
 import '../albums/album_organizations.dart';
@@ -12,7 +12,7 @@ import 'firebase_auth_controller.dart';
 class FirebaseFirestoreController extends GetxController {
   static FirebaseFirestoreController firestoreController = Get.find();
   static FirebaseAuthController authController = Get.find();
-  static ScreenLoginNewController loginController = Get.find();
+  static LoginScreenController loginController = Get.find();
   Rx<AlbumUsers?>? registeredUser = AlbumUsers().obs;
   final FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
 
