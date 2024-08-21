@@ -10,6 +10,7 @@ import 'package:stationeryhub_attendance/services/firebase_firestore_controller.
 import '../helpers/constants.dart';
 import '../scaffold/scaffold_onboarding.dart';
 import '../services/login_screen_controller.dart';
+import 'otp_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -97,7 +98,10 @@ class LoginScreen extends StatelessWidget {
                           }
                           if (firestoreController.registeredUser?.value?.uid !=
                               null) {
-                            await loginController.loginUser();
+                            Get.to(() => OtpScreen(
+                                /*isNewUser:
+                firestoreController.registeredUser == null ? true : false*/
+                                ));
                           } else {
                             if (kDebugMode) {
                               print('User not registered');
@@ -147,7 +151,12 @@ class LoginScreen extends StatelessWidget {
               height: 56.h,
               buttonText: 'Create new organization',
               onTapAction: () {
-                loginController.loginUser();
+                ///TODO: change navigation route cancellation
+                Get.to(() => OtpScreen(
+                    /*isNewUser:
+                firestoreController.registeredUser == null ? true : false*/
+                    ));
+                // loginController.loginUser();
               },
             ),
             FormFieldButton1(

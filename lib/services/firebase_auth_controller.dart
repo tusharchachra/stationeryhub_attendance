@@ -33,7 +33,7 @@ class FirebaseAuthController extends GetxController {
     /*required BuildContext context,*/
     required String phoneNum,
     required String otp,
-    required Function onCodeSentAction,
+    Function? onCodeSentAction,
   }) async {
     if (kDebugMode) {
       print('signing in');
@@ -56,7 +56,7 @@ class FirebaseAuthController extends GetxController {
           if (kDebugMode) {
             print('Verification code sent to $phoneNum');
           }
-          onCodeSentAction();
+          onCodeSentAction!();
           /* Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (context) =>
                   OtpScreen(phoneNumber: phoneNum, onSubmit: () {})));*/

@@ -27,7 +27,7 @@ class FormFieldPhoneNum extends StatelessWidget {
       maxLength: 10,
       cursorColor: colourTextLight,
       decoration: const InputDecoration()
-          .applyDefaults(Theme.of(context).inputDecorationTheme)
+          .applyDefaults(Get.theme.inputDecorationTheme)
           .copyWith(
             counterText: '',
             prefix: Text('+91-', style: Get.textTheme.displayMedium!),

@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stationeryhub_attendance/screens/screen_otp_old.dart';
 
+import '../screens/otp_screen.dart';
 import 'firebase_auth_controller.dart';
 import 'firebase_firestore_controller.dart';
 
@@ -56,17 +56,19 @@ class LoginScreenController extends GetxController {
 
   Future<void> loginUser() async {
     isLoading.value = true;
+
     await authController.signInPhone(
       phoneNum: phoneNum.value,
       otp: '',
       onCodeSentAction: () async {
         print('code sent');
+        isLoading.value = false;
 
         ///TODO: change navigation route cancellation
-        Get.to(() => OTPScreenOld(
-            phoneNum: phoneNum.value,
-            isNewUser:
-                firestoreController.registeredUser == null ? true : false));
+        Get.to(() => OtpScreen(
+            /*isNewUser:
+                firestoreController.registeredUser == null ? true : false*/
+            ));
         /*setState(() {
           isLoading = true;
         });

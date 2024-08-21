@@ -12,6 +12,7 @@ import 'package:stationeryhub_attendance/screens/screen_splash.dart';
 import 'package:stationeryhub_attendance/services/firebase_auth_controller.dart';
 import 'package:stationeryhub_attendance/services/firebase_firestore_controller.dart';
 import 'package:stationeryhub_attendance/services/login_screen_controller.dart';
+import 'package:stationeryhub_attendance/services/otp_screen_controller.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
 import 'firebase_options.dart';
@@ -45,6 +46,7 @@ Future<void> registerControllers() async {
   Get.put(FirebaseAuthController());
   Get.put(FirebaseFirestoreController());
   Get.put(LoginScreenController());
+  Get.put(OtpScreenController());
 }
 
 class StationeryHubAttendance extends StatelessWidget {

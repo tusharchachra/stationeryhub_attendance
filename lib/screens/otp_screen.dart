@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/form_fields/form_field_button1.dart';
+import 'package:stationeryhub_attendance/form_fields/form_field_otp.dart';
 import 'package:stationeryhub_attendance/form_fields/form_field_phone_num.dart';
 import 'package:stationeryhub_attendance/services/firebase_auth_controller.dart';
 import 'package:stationeryhub_attendance/services/firebase_firestore_controller.dart';
@@ -21,7 +22,7 @@ class OtpScreen extends StatelessWidget {
     return ScaffoldOnboarding(
       bodyWidget: Center(
         child: Form(
-          key: loginController.formKey,
+          /* key: OtpScreenController.formKey,*/
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -51,33 +52,30 @@ class OtpScreen extends StatelessWidget {
                       child: FittedBox(
                         fit: BoxFit.fill,
                         child: Padding(
-                          padding: EdgeInsets.all(20.0).w,
-                          child: Icon(
-                            Icons.sms,
+                          padding: const EdgeInsets.all(20.0).w,
+                          child: const Icon(
+                            Icons.sms_rounded,
                             color: colourPrimary,
                           ),
                         ),
                       ),
                     ),
                     Text(
-                      'Enter your phone number',
+                      'Enter the OTP',
                       style: Get.textTheme.displayLarge,
                     ),
+                    Text(
+                      'Received on ${loginController.phoneNum.value.substring(0, 1)}******${loginController.phoneNum.value.substring(7, loginController.phoneNum.value.length)}',
+                      style: Get.textTheme.displayMedium,
+                    ),
+                    Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12.w),
+                        child: FormFieldOtp()),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
                       child: FormFieldPhoneNum(
                         focusNode: loginController.focusNode,
-                        /* phoneNumController:
-                                controller.phoneNumController.value,*/
-                        onChangedAction: (value) {
-                          /*if (controller.formKey.currentState!.validate() &&
-                                controller.isPhoneNumValid != true) {
-                              isPhoneNumValid.value = true;
-                            } else {
-                              isPhoneNumValid.value = false;
-                            }
-                            print(isPhoneNumValid);*/
-                        },
+                        onChangedAction: (value) {},
                         validatorPhoneNum: (value) {
                           return loginController.validatePhoneNum(value);
                         },
@@ -91,7 +89,7 @@ class OtpScreen extends StatelessWidget {
                   ? SizedBox(
                       width: 25.w,
                       height: 25.h,
-                      child: CircularProgressIndicator(),
+                      child: const CircularProgressIndicator(),
                     )
                   : FormFieldButton1(
                       width: 384.w,
@@ -101,13 +99,10 @@ class OtpScreen extends StatelessWidget {
                         loginController.focusNode.unfocus();
                         if (loginController.isPhoneNumValid.value) {
                           await loginController.onLogin();
-                          //check if user exists
-                          //FirebaseFirestoreServices firestoreServices = FirebaseFirestoreServices();
-
-                          /*registeredUser = await firestoreServices.getUser(
-          phoneNum: phoneNumController.text.trim());*/
-                          print(
-                              'registered user= ${firestoreController.registeredUser}');
+                          if (kDebugMode) {
+                            print(
+                                'registered user= ${firestoreController.registeredUser}');
+                          }
                           if (firestoreController.registeredUser?.value?.uid !=
                               null) {
                             await loginController.loginUser();
@@ -121,28 +116,7 @@ class OtpScreen extends StatelessWidget {
                                 backgroundColor: Colors.white);
                           }
                         }
-                      }
-
-                      /*if (isPhoneNumValid) {
-                      isLoading = true;
-
-                      //check if user exists
-                      FirebaseFirestoreServices firestoreServices =
-                          FirebaseFirestoreServices();
-                      registeredUser = await firestoreServices.getUser(
-                          phoneNum: phoneNumController.text.trim());
-                      print('registered user= $registeredUser');
-                      if (registeredUser != null) {
-                        await loginUser();
-                      } else {
-                        if (kDebugMode) {
-                          print('User not registered');
-                        }
-                        //show dialog to register the new user or cancel
-                        buildShowAdaptiveDialog();
-                      }
-                    }*/
-                      ,
+                      },
                     ))
             ],
           ),
@@ -152,7 +126,7 @@ class OtpScreen extends StatelessWidget {
   }
 
   Widget buildBottomSheet() {
-    return Container(
+    return SizedBox(
       height: 0.5.sh,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 20.h),
