@@ -98,6 +98,7 @@ class ScreenLoginNew extends StatelessWidget {
                       height: 56.h,
                       buttonText: 'Continue',
                       onTapAction: () async {
+                        loginController.focusNode.unfocus();
                         if (loginController.isPhoneNumValid.value) {
                           await loginController.onLogin();
                           //check if user exists

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stationeryhub_attendance/albums/album_users.dart';
 import 'package:stationeryhub_attendance/screens/screen_otp.dart';
 
 import 'firebase_auth_controller.dart';
@@ -45,7 +44,13 @@ class ScreenLoginNewController extends GetxController {
     print('isLoading=$isLoading');
     (formKey.currentState!.validate());
     var temp = await (firestoreController.getUser(phoneNum: phoneNum.value));
-    firestoreController.registeredUser?.update(Rx<AlbumUsers?>(temp));
+    firestoreController.registeredUser?.update((user) {
+      user?.phoneNum = temp?.phoneNum;
+      user?.uid = temp?.uid;
+      user?.name = temp?.name;
+      user?.userType = temp?.userType;
+      user?.organizationId = temp?.organizationId;
+    });
     isLoading.value = false;
   }
 

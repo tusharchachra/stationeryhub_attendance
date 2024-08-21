@@ -10,8 +10,8 @@ import '../albums/enum_user_type.dart';
 import 'firebase_auth_controller.dart';
 
 class FirebaseFirestoreController extends GetxController {
-  static FirebaseFirestoreController firestoreControllerInstance = Get.find();
-  static FirebaseAuthController authControllerInstance = Get.find();
+  static FirebaseFirestoreController firestoreController = Get.find();
+  static FirebaseAuthController authController = Get.find();
   static ScreenLoginNewController loginController = Get.find();
   Rx<AlbumUsers?>? registeredUser = AlbumUsers().obs;
   final FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
@@ -32,7 +32,6 @@ class FirebaseFirestoreController extends GetxController {
     required String phoneNum,
     GetOptions? getOptions,
   }) async {
-    print(phoneNum);
     AlbumUsers? tempUser;
     try {
       final ref = firestoreInstance
