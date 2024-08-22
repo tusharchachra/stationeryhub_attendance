@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:stationeryhub_attendance/helpers/constants.dart';
 
 class OtpBox extends StatefulWidget {
   final FocusNode? focusNodePrevious;
@@ -9,13 +10,14 @@ class OtpBox extends StatefulWidget {
   final TextEditingController textController;
   final Function? onTextChanged;
 
-  const OtpBox(
-      {super.key,
-      required this.focusNodePrevious,
-      required this.focusNodeCurrent,
-      required this.focusNodeNext,
-      required this.textController,
-      this.onTextChanged});
+  const OtpBox({
+    super.key,
+    required this.focusNodePrevious,
+    required this.focusNodeCurrent,
+    required this.focusNodeNext,
+    required this.textController,
+    this.onTextChanged,
+  });
 
   @override
   State<OtpBox> createState() => _OtpBoxState();
@@ -59,18 +61,15 @@ class _OtpBoxState extends State<OtpBox> {
         textAlign: TextAlign.center,
         maxLength: 1,
         style: Get.textTheme.displayMedium!,
-        decoration: const InputDecoration()
-            .applyDefaults(Get.theme.inputDecorationTheme)
-            .copyWith(
-              counterText: '',
-              /*prefixIcon: const Icon(Icons.phone),*/
-              /*prefixIconColor: Colors.white,*/
-            ),
+        decoration: InputDecoration(
+            counterText: '',
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: colourPrimary))),
         onChanged: (str) {
           setState(() {
             if (str.length == 1) {
               FocusScope.of(context).requestFocus(widget.focusNodeNext);
-            } else /*if (str.isEmpty)*/ {
+            } else if (str.isEmpty) {
               FocusScope.of(context).requestFocus(widget.focusNodePrevious);
             }
           });

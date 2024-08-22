@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/form_fields/form_field_button1.dart';
-import 'package:stationeryhub_attendance/form_fields/form_field_otp.dart';
-import 'package:stationeryhub_attendance/form_fields/form_field_phone_num.dart';
 import 'package:stationeryhub_attendance/services/firebase_auth_controller.dart';
 import 'package:stationeryhub_attendance/services/firebase_firestore_controller.dart';
 
+import '../form_fields/form_field_otp.dart';
 import '../helpers/constants.dart';
 import '../scaffold/scaffold_onboarding.dart';
 import '../services/login_screen_controller.dart';
@@ -69,17 +68,22 @@ class OtpScreen extends StatelessWidget {
                       style: Get.textTheme.displayMedium,
                     ),
                     Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12.w),
-                        child: FormFieldOtp()),
-                    Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
-                      child: FormFieldPhoneNum(
-                        focusNode: loginController.focusNode,
-                        onChangedAction: (value) {},
-                        validatorPhoneNum: (value) {
-                          return loginController.validatePhoneNum(value);
-                        },
-                      ),
+                      child: const FormFieldOtp(),
+                    ),
+                    Wrap(
+                      spacing: 5.w,
+                      children: [
+                        Text(
+                          'Not yet Received?',
+                          style: Get.textTheme.displayMedium,
+                        ),
+                        Text(
+                          'Resend',
+                          style: Get.textTheme.displayMedium
+                              ?.copyWith(color: colourPrimary),
+                        ),
+                      ],
                     ),
                   ],
                 ),

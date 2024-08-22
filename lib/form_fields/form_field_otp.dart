@@ -1,136 +1,96 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:pinput/pinput.dart';
+import 'package:stationeryhub_attendance/helpers/constants.dart';
 import 'package:stationeryhub_attendance/services/otp_screen_controller.dart';
-
-import 'otp_box.dart';
 
 class FormFieldOtp extends StatelessWidget {
   const FormFieldOtp({super.key});
 
   static OtpScreenController otpController = Get.find();
 
-  @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        /*SizedBox(
-          width: 49.w,
-          height: 46.h,
-          child: TextField(
-              enableInteractiveSelection: false,
-              controller: otpController.otpDigitController1,
-              focusNode: otpController.focusDigit1,
-              showCursor: false,
-              keyboardType: TextInputType.number,
-              textAlign: TextAlign.center,
-              maxLength: 1,
-              style: Get.textTheme.displayMedium!,
-              decoration: const InputDecoration()
-                  .applyDefaults(Get.theme.inputDecorationTheme)
-                  .copyWith(
-                    counterText: '',
-                    */ /*prefixIcon: const Icon(Icons.phone),*/ /*
-                    */ /*prefixIconColor: Colors.white,*/ /*
-                  ),
-              onChanged: (str) {
-                onChangedAction(str: str, focusNext: otpController.focusDigit2);
-              }),
-        ),
-        SizedBox(
-          width: 49.w,
-          height: 46.h,
-          child: TextField(
-              enableInteractiveSelection: false,
-              controller: otpController.otpDigitController2,
-              focusNode: otpController.focusDigit2,
-              showCursor: false,
-              keyboardType: TextInputType.number,
-              textAlign: TextAlign.center,
-              maxLength: 1,
-              style: Get.textTheme.displayMedium!,
-              decoration: const InputDecoration()
-                  .applyDefaults(Get.theme.inputDecorationTheme)
-                  .copyWith(
-                    counterText: '',
-                    */ /*prefixIcon: const Icon(Icons.phone),*/ /*
-                    */ /*prefixIconColor: Colors.white,*/ /*
-                  ),
-              onChanged: (str) {
-                onChangedAction(
-                    str: str,
-                    focusNext: otpController.focusDigit3,
-                    focusPrev: otpController.focusDigit1);
-              }),
-        ),
-        SizedBox(
-          width: 49.w,
-          height: 46.h,
-          child: TextField(
-              enableInteractiveSelection: false,
-              controller: otpController.otpDigitController3,
-              focusNode: otpController.focusDigit3,
-              showCursor: false,
-              keyboardType: TextInputType.number,
-              textAlign: TextAlign.center,
-              maxLength: 1,
-              style: Get.textTheme.displayMedium!,
-              decoration: const InputDecoration()
-                  .applyDefaults(Get.theme.inputDecorationTheme)
-                  .copyWith(
-                    counterText: '',
-                    */ /*prefixIcon: const Icon(Icons.phone),*/ /*
-                    */ /*prefixIconColor: Colors.white,*/ /*
-                  ),
-              onChanged: (str) {
-                onChangedAction(
-                    str: str,
-                    focusNext: otpController.focusDigit4,
-                    focusPrev: otpController.focusDigit2);
-              }),
-        ),*/
-        OtpBox(
-            focusNodePrevious: null,
-            focusNodeCurrent: otpController.focusDigit1,
-            focusNodeNext: otpController.focusDigit2,
-            textController: otpController.otpDigitController1),
-        OtpBox(
-            focusNodePrevious: otpController.focusDigit1,
-            focusNodeCurrent: otpController.focusDigit2,
-            focusNodeNext: otpController.focusDigit3,
-            textController: otpController.otpDigitController2),
-        OtpBox(
-            focusNodePrevious: otpController.focusDigit2,
-            focusNodeCurrent: otpController.focusDigit3,
-            focusNodeNext: otpController.focusDigit4,
-            textController: otpController.otpDigitController3),
-        /* OtpBox(
-            focusNodePrevious: otpController.focusDigit3,
-            focusNodeCurrent: otpController.focusDigit4,
-            focusNodeNext: otpController.focusDigit5,
-            textController: otpController.otpDigitController4),*/
-        /*OtpBox(
-            focusNodePrevious: otpController.focusDigit4,
-            focusNodeCurrent: otpController.focusDigit5,
-            focusNodeNext: otpController.focusDigit6,
-            textController: otpController.otpDigitController5),*/
-        /*OtpBox(
-            focusNodePrevious: otpController.focusDigit5,
-            focusNodeCurrent: otpController.focusDigit6,
-            focusNodeNext: null,
-            textController: otpController.otpDigitController6),*/
-      ],
+    const focusedBorderColor = Color.fromRGBO(23, 171, 144, 1);
+    const fillColor = Color.fromRGBO(243, 246, 249, 0);
+    const borderColor = Color.fromRGBO(23, 171, 144, 0.4);
+
+    final defaultPinTheme = PinTheme(
+      width: 49.w,
+      height: 46.h,
+      textStyle: Get.textTheme.displayMedium,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(7.5.r),
+        border: Border.all(color: colourOtpBoxBorder),
+      ),
     );
-  }
 
-  void onChangedAction(
-      {required String str, FocusNode? focusNext, FocusNode? focusPrev}) {
-    if (str.length == 1) {
-      Get.focusScope?.requestFocus(focusNext);
-    } else if (str.isEmpty) {
-      Get.focusScope?.requestFocus(focusPrev);
-    }
-
-    //if (widget.onTextChanged != null) widget.onTextChanged!();
+    /// Optionally you can use form to validate the Pinput
+    return Form(
+      key: otpController.formKeyOtp,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Directionality(
+            // Specify direction if desired
+            textDirection: TextDirection.ltr,
+            child: Pinput(
+              // You can pass your own SmsRetriever implementation based on any package
+              // in this example we are using the SmartAuth
+              //smsRetriever: smsRetriever,
+              length: 6,
+              showCursor: false,
+              controller: otpController.otpDigitController,
+              focusNode: otpController.focusDigit,
+              defaultPinTheme: defaultPinTheme,
+              separatorBuilder: (index) => SizedBox(width: 3.w),
+              /*validator: (value) {
+                return value!.length < 6 ? null : 'Incorrect OTP';
+              },*/
+              hapticFeedbackType: HapticFeedbackType.lightImpact,
+              onCompleted: (pin) {
+                debugPrint('onCompleted: $pin');
+              },
+              onChanged: (value) {
+                debugPrint('onChanged: $value');
+              },
+              /*cursor: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 9),
+                    width: 22,
+                    height: 1,
+                    color: focusedBorderColor,
+                  ),
+                ],
+              ),*/
+              focusedPinTheme: defaultPinTheme.copyWith(
+                decoration: defaultPinTheme.decoration!.copyWith(
+                  border: Border.all(color: colourPrimary),
+                ),
+              ),
+              /* submittedPinTheme: defaultPinTheme.copyWith(
+                decoration: defaultPinTheme.decoration!.copyWith(
+                  color: fillColor,
+                  borderRadius: BorderRadius.circular(19),
+                  border: Border.all(color: focusedBorderColor),
+                ),
+              ),*/
+              errorPinTheme: defaultPinTheme.copyBorderWith(
+                border: Border.all(color: Colors.redAccent),
+              ),
+            ),
+          ),
+          /*TextButton(
+            onPressed: () {
+              otpController.focusDigit1.unfocus();
+              otpController.formKeyOtp.currentState!.validate();
+            },
+            child: const Text('Validate'),
+          ),*/
+        ],
+      ),
+    );
   }
 }
