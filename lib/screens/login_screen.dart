@@ -10,6 +10,7 @@ import 'package:stationeryhub_attendance/services/firebase_firestore_controller.
 import '../helpers/constants.dart';
 import '../scaffold/scaffold_onboarding.dart';
 import '../services/login_screen_controller.dart';
+import '../services/otp_screen_controller.dart';
 import 'otp_screen.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -17,6 +18,8 @@ class LoginScreen extends StatelessWidget {
   static LoginScreenController loginController = Get.find();
   static FirebaseAuthController authController = Get.find();
   static FirebaseFirestoreController firestoreController = Get.find();
+  static OtpScreenController otpController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return ScaffoldOnboarding(
@@ -91,20 +94,23 @@ class LoginScreen extends StatelessWidget {
                       onTapAction: () async {
                         loginController.focusNode.unfocus();
                         if (loginController.isPhoneNumValid.value) {
-                          await loginController.onLogin();
+                          await loginController.updateRegisteredUser();
                           if (kDebugMode) {
                             print(
                                 'registered user= ${firestoreController.registeredUser}');
                           }
                           if (firestoreController.registeredUser?.value?.uid !=
                               null) {
-                            Get.to(() => OtpScreen(
-                                /*isNewUser:
-                firestoreController.registeredUser == null ? true : false*/
-                                ));
+                            otpController.startTimer();
+
+                            ///TODO:send otp
+                            /*authController.signInPhone(
+                                phoneNum: loginController.phoneNum.value,
+                                otp: otpController.otp.value);*/
+                            Get.to(() => OtpScreen());
                           } else {
                             if (kDebugMode) {
-                              print('User not registered');
+                              print(authController.firebaseMessage);
                             }
                             //show dialog to register the new user or cancel
                             // buildShowAdaptiveDialog();

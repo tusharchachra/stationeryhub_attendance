@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../screens/otp_screen.dart';
 import 'firebase_auth_controller.dart';
 import 'firebase_firestore_controller.dart';
+import 'otp_screen_controller.dart';
 
 class LoginScreenController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -16,6 +17,7 @@ class LoginScreenController extends GetxController {
   final FocusNode focusNode = FocusNode();
   static FirebaseAuthController authController = Get.find();
   static FirebaseFirestoreController firestoreController = Get.find();
+  static OtpScreenController otpController = Get.find();
 
   validatePhoneNum(String? value) {
     /*if (value == '7808814341') {
@@ -38,7 +40,7 @@ class LoginScreenController extends GetxController {
     }
   }
 
-  Future onLogin() async {
+  Future updateRegisteredUser() async {
     isLoading.value = true;
     // update();
     print('isLoading=$isLoading');
@@ -59,7 +61,7 @@ class LoginScreenController extends GetxController {
 
     await authController.signInPhone(
       phoneNum: phoneNum.value,
-      otp: '',
+      otp: otpController.otp.value,
       onCodeSentAction: () async {
         print('code sent');
         isLoading.value = false;

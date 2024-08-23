@@ -69,9 +69,10 @@ class FirebaseFirestoreController extends GetxController {
         }
         return tempUser;
       });*/
-    } on Exception catch (e) {
+    } on FirebaseException catch (e) {
       // TODO
       if (kDebugMode) {
+        print(e.code);
         print('Error:${e.toString()}');
       }
     }
@@ -215,6 +216,14 @@ class FirebaseFirestoreController extends GetxController {
       if (kDebugMode) {
         print('Error:${e.toString()}');
       }
+    }
+  }
+
+  String? _getFirestoreErrorMsg(FirebaseException e) {
+    if (e.code == 'unavailable') {
+      return 'No interent';
+    } else {
+      return e.message;
     }
   }
 }

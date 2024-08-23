@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -18,6 +20,14 @@ class OtpScreenController extends GetxController {
   RxBool isLoading = false.obs;
   RxString otp = ''.obs;
   RxString error = ''.obs;
+  RxInt countdownDuration = 5.obs;
+  RxBool isTimerRunning = true.obs;
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+  }
 
   @override
   void dispose() {
@@ -44,5 +54,23 @@ class OtpScreenController extends GetxController {
       isOtpValid = true;
     }
     return error.value;
+  }
+
+  void startTimer() {
+    countdownDuration = 5.obs;
+    isTimerRunning.value = true;
+    Timer.periodic(
+      const Duration(seconds: 1),
+      (Timer timer) {
+        if (countdownDuration.value == 1) {
+          timer.cancel();
+          isTimerRunning.value = false;
+        } else {
+          countdownDuration--;
+        }
+        print(countdownDuration);
+      },
+    );
+    //print(_start);
   }
 }

@@ -11,10 +11,6 @@ class FormFieldOtp extends StatelessWidget {
   static OtpScreenController otpController = Get.find();
 
   Widget build(BuildContext context) {
-    const focusedBorderColor = Color.fromRGBO(23, 171, 144, 1);
-    const fillColor = Color.fromRGBO(243, 246, 249, 0);
-    const borderColor = Color.fromRGBO(23, 171, 144, 0.4);
-
     final defaultPinTheme = PinTheme(
       width: 49.w,
       height: 46.h,
@@ -49,6 +45,7 @@ class FormFieldOtp extends StatelessWidget {
               },*/
               hapticFeedbackType: HapticFeedbackType.lightImpact,
               onCompleted: (pin) {
+                otpController.otp = RxString(pin);
                 debugPrint('onCompleted: $pin');
               },
               onChanged: (value) {

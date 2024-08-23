@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -10,12 +9,15 @@ import '../form_fields/form_field_otp.dart';
 import '../helpers/constants.dart';
 import '../scaffold/scaffold_onboarding.dart';
 import '../services/login_screen_controller.dart';
+import '../services/otp_screen_controller.dart';
 
 class OtpScreen extends StatelessWidget {
   const OtpScreen({super.key});
   static LoginScreenController loginController = Get.find();
   static FirebaseAuthController authController = Get.find();
   static FirebaseFirestoreController firestoreController = Get.find();
+  static OtpScreenController otpController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return ScaffoldOnboarding(
@@ -71,19 +73,27 @@ class OtpScreen extends StatelessWidget {
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
                       child: const FormFieldOtp(),
                     ),
-                    Wrap(
-                      spacing: 5.w,
-                      children: [
-                        Text(
-                          'Not yet Received?',
-                          style: Get.textTheme.displayMedium,
-                        ),
-                        Text(
-                          'Resend',
-                          style: Get.textTheme.displayMedium
-                              ?.copyWith(color: colourPrimary),
-                        ),
-                      ],
+                    Obx(
+                      () => Wrap(
+                        spacing: 5.w,
+                        alignment: WrapAlignment.center,
+                        children: [
+                          Text(
+                            'Not yet Received?',
+                            style: Get.textTheme.displayMedium,
+                          ),
+                          otpController.isTimerRunning.value == true
+                              ? Text(
+                                  '${otpController.countdownDuration} sec',
+                                  style: Get.textTheme.displayMedium,
+                                )
+                              : Text(
+                                  'Resend',
+                                  style: Get.textTheme.displayMedium
+                                      ?.copyWith(color: colourPrimary),
+                                ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -99,28 +109,7 @@ class OtpScreen extends StatelessWidget {
                       width: 384.w,
                       height: 56.h,
                       buttonText: 'Continue',
-                      onTapAction: () async {
-                        loginController.focusNode.unfocus();
-                        if (loginController.isPhoneNumValid.value) {
-                          await loginController.onLogin();
-                          if (kDebugMode) {
-                            print(
-                                'registered user= ${firestoreController.registeredUser}');
-                          }
-                          if (firestoreController.registeredUser?.value?.uid !=
-                              null) {
-                            await loginController.loginUser();
-                          } else {
-                            if (kDebugMode) {
-                              print('User not registered');
-                            }
-                            //show dialog to register the new user or cancel
-                            // buildShowAdaptiveDialog();
-                            Get.bottomSheet(buildBottomSheet(),
-                                backgroundColor: Colors.white);
-                          }
-                        }
-                      },
+                      onTapAction: () async {},
                     ))
             ],
           ),
