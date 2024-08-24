@@ -1,8 +1,4 @@
-import 'dart:async';
-import 'dart:io' show File, Platform;
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 
 class FirebaseLoginServices {
   FirebaseLoginServices._privateConstructor();
@@ -15,8 +11,8 @@ class FirebaseLoginServices {
   late User user;
   String verificationId = '111111';
 
-  Future<String> signInPhone({
-    /*required BuildContext context,*/
+  /* Future<String> signInPhone({
+    */ /*required BuildContext context,*/ /*
     required String phoneNum,
     required String otp,
     required Function onCodeSentAction,
@@ -43,9 +39,9 @@ class FirebaseLoginServices {
             print('Verification code sent to $phoneNum');
           }
           onCodeSentAction();
-          /* Navigator.of(context).pushReplacement(MaterialPageRoute(
+          */ /* Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (context) =>
-                  OtpScreen(phoneNumber: phoneNum, onSubmit: () {})));*/
+                  OtpScreen(phoneNumber: phoneNum, onSubmit: () {})));*/ /*
         },
         codeAutoRetrievalTimeout: (String verId) {},
       );
@@ -57,16 +53,16 @@ class FirebaseLoginServices {
     }
 
     return firebaseMessage;
-  }
+  }*/
 
-  Future signIn({required AuthCredential credential}) async {
+  /*Future signIn({required AuthCredential credential}) async {
     UserCredential? userCredential;
     try {
       userCredential = await auth.signInWithCredential(credential);
       user = userCredential.user!;
       FirebaseAuth.instance.currentUser!.reload();
     } on FirebaseAuthException {
-      /* firebaseMessage = kErrorOtp;*/
+      */ /* firebaseMessage = kErrorOtp;*/ /*
       // print(e.code);
     }
     if (userCredential != null) {
@@ -75,8 +71,8 @@ class FirebaseLoginServices {
       return firebaseMessage;
     }
   }
-
-  Future signOutUser() async {
+*/
+  /*Future signOutUser() async {
     try {
       await FirebaseAuth.instance.signOut();
       // FirebaseAuth.instance.currentUser!.reload();
@@ -85,7 +81,7 @@ class FirebaseLoginServices {
         print(e);
       }
     }
-  }
+  }*/
 
   String getAuthErrorMsg(FirebaseAuthException e) {
     if (e.code == 'user-not-found') {

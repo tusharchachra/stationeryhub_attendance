@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/form_fields/form_field_button1.dart';
 import 'package:stationeryhub_attendance/services/firebase_auth_controller.dart';
+import 'package:stationeryhub_attendance/services/firebase_error_controller.dart';
 import 'package:stationeryhub_attendance/services/firebase_firestore_controller.dart';
 
 import '../form_fields/form_field_otp.dart';
@@ -17,6 +18,7 @@ class OtpScreen extends StatelessWidget {
   static FirebaseAuthController authController = Get.find();
   static FirebaseFirestoreController firestoreController = Get.find();
   static OtpScreenController otpController = Get.find();
+  static FirebaseErrorController errorController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -87,10 +89,20 @@ class OtpScreen extends StatelessWidget {
                                   '${otpController.countdownDuration} sec',
                                   style: Get.textTheme.displayMedium,
                                 )
-                              : Text(
-                                  'Resend',
-                                  style: Get.textTheme.displayMedium
-                                      ?.copyWith(color: colourPrimary),
+                              : GestureDetector(
+                                  onTap: () {
+                                    otpController.startTimer();
+                                    authController.signInPhone(
+                                      phoneNum: loginController.phoneNum.value,
+                                      otp: otpController.otp.value,
+                                      forceResend: 1,
+                                    );
+                                  },
+                                  child: Text(
+                                    'Resend',
+                                    style: Get.textTheme.displayMedium!
+                                        .copyWith(color: colourPrimary),
+                                  ),
                                 ),
                         ],
                       ),
@@ -109,7 +121,28 @@ class OtpScreen extends StatelessWidget {
                       width: 384.w,
                       height: 56.h,
                       buttonText: 'Continue',
-                      onTapAction: () async {},
+                      onTapAction: () async {
+                        if (errorController.errorMsg.isNotEmpty) {
+                          Get.snackbar(
+                            '',
+                            errorController.errorMsg.value,
+                            snackPosition: SnackPosition.BOTTOM,
+                            colorText: colourTextDark,
+                          );
+                        } else {
+                          ///TODO:login
+                          authController.signIn(
+                              credential: authController.credential.value);
+                          if (errorController.errorMsg.isNotEmpty) {
+                            Get.snackbar(
+                              '',
+                              errorController.errorMsg.value,
+                              snackPosition: SnackPosition.BOTTOM,
+                              colorText: colourTextDark,
+                            );
+                          }
+                        }
+                      },
                     ))
             ],
           ),

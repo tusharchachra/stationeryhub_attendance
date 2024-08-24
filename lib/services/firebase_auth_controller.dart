@@ -4,14 +4,20 @@ import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/screens/login_screen.dart';
 
 import '../screens/screen_admin_dashboard.dart';
+import 'firebase_error_controller.dart';
+import 'otp_screen_controller.dart';
 
 class FirebaseAuthController extends GetxController {
-  static FirebaseAuthController authControllerInstance = Get.find();
+  static FirebaseAuthController authController = Get.find();
+  static FirebaseErrorController errorController = Get.find();
+  static OtpScreenController otpController = Get.find();
+
   late Rx<User?> firebaseUser;
+  late Rx<PhoneAuthCredential> credential;
   FirebaseAuth authInstance = FirebaseAuth.instance;
 
   String firebaseMessage = '';
-  String verificationId = '111111';
+  String enteredOtp = '111111';
 
   @override
   void onReady() {
@@ -34,6 +40,7 @@ class FirebaseAuthController extends GetxController {
     required String phoneNum,
     required String otp,
     Function? onCodeSentAction,
+    int? forceResend,
   }) async {
     if (kDebugMode) {
       print('signing in');
@@ -42,46 +49,52 @@ class FirebaseAuthController extends GetxController {
       await authInstance.verifyPhoneNumber(
         timeout: const Duration(seconds: 10),
         phoneNumber: '+91$phoneNum',
+        forceResendingToken: forceResend ?? 0,
         verificationCompleted: (PhoneAuthCredential credential) async {
           //Android only - auto read sms
           if (GetPlatform.isAndroid) {
-            await _signIn(credential: credential);
+            await signIn(credential: credential);
           }
         },
-        verificationFailed: (FirebaseAuthException e) {
-          firebaseMessage = e.toString();
+        verificationFailed: (FirebaseException e) {
+          errorController.getErrorMsg(e);
         },
         codeSent: (String verId, int? resendToken) async {
-          verificationId = verId;
           if (kDebugMode) {
             print('Verification code sent to $phoneNum');
           }
-          onCodeSentAction!();
+          // Create a PhoneAuthCredential with the code
+          credential = Rx<PhoneAuthCredential>(PhoneAuthProvider.credential(
+              verificationId: verId, smsCode: otp));
+          // Sign the user in (or link) with the credential
+          await signIn(credential: credential.value);
+          //onCodeSentAction();
           /* Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (context) =>
                   OtpScreen(phoneNumber: phoneNum, onSubmit: () {})));*/
         },
         codeAutoRetrievalTimeout: (String verId) {},
       );
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseException catch (e) {
       if (kDebugMode) {
         print('Error:${e.code}');
       }
-      firebaseMessage = _getAuthErrorMsg(e);
+      errorController.getErrorMsg(e);
     }
 
     return firebaseMessage;
   }
 
-  Future _signIn({required AuthCredential credential}) async {
+  Future signIn({required AuthCredential credential}) async {
     UserCredential? userCredential;
     try {
       userCredential = await authInstance.signInWithCredential(credential);
       firebaseUser = Rx<User>(userCredential.user!);
       authInstance.currentUser!.reload();
-    } on FirebaseAuthException {
+    } on FirebaseException catch (e) {
       /* firebaseMessage = kErrorOtp;*/
       // print(e.code);
+      errorController.getErrorMsg(e);
     }
     if (userCredential != null) {
       return 'success';
@@ -98,30 +111,6 @@ class FirebaseAuthController extends GetxController {
       if (kDebugMode) {
         print(e);
       }
-    }
-  }
-
-  String _getAuthErrorMsg(FirebaseAuthException e) {
-    if (e.code == 'user-not-found') {
-      return 'User not registered. Please sign up';
-    } else if (e.code == 'internal-error') {
-      return 'Something went wrong. Please try again after some time';
-    } else if (e.code == 'invalid-argument') {
-      return ('Invalid data');
-    } else if (e.code == 'invalid-credential') {
-      return 'Invalid credentials';
-    } else if (e.code == 'unknown') {
-      return 'Invalid credentials';
-    } else if (e.code == 'wrong-password') {
-      return ('Invalid email-password combination');
-    } else if (e.code == 'email-already-in-use') {
-      return ('User already exists. Please sign in');
-    } else if (e.code == 'invalid-email') {
-      return ('Invalid email');
-    } else if (e.code == 'requires-recent-login') {
-      return ('This operation is sensitive and requires recent authentication. Log in again before retrying this request.');
-    } else {
-      return 'Something went wrong. Please try again after some time';
     }
   }
 }

@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:stationeryhub_attendance/albums/album_users.dart';
 import 'package:stationeryhub_attendance/helpers/size_config.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_home.dart';
-import 'package:stationeryhub_attendance/screens/screen_otp_old.dart';
-import 'package:stationeryhub_attendance/services/firebase_login_services.dart';
 
 import '../form_fields/form_field_button.dart';
 import '../form_fields/form_field_phone_num.dart';
@@ -134,7 +132,7 @@ class _ScreenLoginOldState extends State<ScreenLoginOld> {
   }
 
   Future<void> loginUser() async {
-    await FirebaseLoginServices.firebaseInstance.signInPhone(
+    /*await FirebaseLoginServices.firebaseInstance.signInPhone(
       phoneNum: phoneNumController.text.trim(),
       otp: '',
       onCodeSentAction: () async {
@@ -146,12 +144,12 @@ class _ScreenLoginOldState extends State<ScreenLoginOld> {
             builder: (context) => OTPScreenOld(
               phoneNum: phoneNumController.text.trim(),
               isNewUser: registeredUser == null ? true : false,
-              /*registeredUser: registeredUser!,*/
+              */ /*registeredUser: registeredUser!,*/ /*
             ),
           ),
         );
       },
-    );
+    );*/
     setState(() {
       isLoading = false;
     });

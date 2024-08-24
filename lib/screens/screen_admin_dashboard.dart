@@ -7,7 +7,6 @@ import 'package:stationeryhub_attendance/scaffold/scaffold_home.dart';
 import 'package:stationeryhub_attendance/screens/screen_mark_attendance.dart';
 import 'package:stationeryhub_attendance/screens/screen_new_organization.dart';
 import 'package:stationeryhub_attendance/screens/screen_new_user_for_organization.dart';
-import 'package:stationeryhub_attendance/services/firebase_login_services.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
@@ -99,7 +98,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               height: 10,
               buttonText: 'Logout',
               onTapAction: () {
-                FirebaseLoginServices.firebaseInstance.signOutUser();
+                //FirebaseLoginServices.firebaseInstance.signOutUser();
               },
               buttonDecoration: const BoxDecoration(),
               textStyle: const TextStyle())
@@ -126,7 +125,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             height: 10,
             buttonText: 'Logout',
             onTapAction: () {
-              FirebaseLoginServices.firebaseInstance.signOutUser();
+              //FirebaseLoginServices.firebaseInstance.signOutUser();
             },
             buttonDecoration: const BoxDecoration(),
             textStyle: const TextStyle())

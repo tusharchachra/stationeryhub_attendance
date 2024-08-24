@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/form_fields/form_field_button1.dart';
 import 'package:stationeryhub_attendance/form_fields/form_field_phone_num.dart';
 import 'package:stationeryhub_attendance/services/firebase_auth_controller.dart';
+import 'package:stationeryhub_attendance/services/firebase_error_controller.dart';
 import 'package:stationeryhub_attendance/services/firebase_firestore_controller.dart';
 
 import '../helpers/constants.dart';
@@ -19,9 +20,11 @@ class LoginScreen extends StatelessWidget {
   static FirebaseAuthController authController = Get.find();
   static FirebaseFirestoreController firestoreController = Get.find();
   static OtpScreenController otpController = Get.find();
+  static FirebaseErrorController errorController = Get.find();
 
   @override
   Widget build(BuildContext context) {
+    errorController.resetValues();
     return ScaffoldOnboarding(
       bodyWidget: Center(
         child: Form(
@@ -104,11 +107,13 @@ class LoginScreen extends StatelessWidget {
                             otpController.startTimer();
 
                             ///TODO:send otp
-                            /*authController.signInPhone(
+                            authController.signInPhone(
                                 phoneNum: loginController.phoneNum.value,
-                                otp: otpController.otp.value);*/
+                                otp: otpController.otp.value,
+                                onCodeSentAction: () {});
                             Get.to(() => OtpScreen());
                           } else {
+                            //print(errorController.errorMsg);
                             if (kDebugMode) {
                               print(authController.firebaseMessage);
                             }
@@ -130,52 +135,81 @@ class LoginScreen extends StatelessWidget {
   Widget buildBottomSheet() {
     return SizedBox(
       height: 0.5.sh,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 20.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'User not found',
-              style: Get.textTheme.displayLarge,
-              textAlign: TextAlign.center,
-            ),
-            Text(
-              'If you are an employee, request your organization to grant access.',
-              style: Get.textTheme.displayMedium,
-              textAlign: TextAlign.center,
-            ),
-            Text(
-              'Or',
-              style: Get.textTheme.displayMedium,
-              textAlign: TextAlign.center,
-            ),
-            FormFieldButton1(
-              width: 384.w,
-              height: 56.h,
-              buttonText: 'Create new organization',
-              onTapAction: () {
-                ///TODO: change navigation route cancellation
-                Get.to(() => OtpScreen(
-                    /*isNewUser:
+      child: errorController.errorMsg.value != ''
+          ? Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 20.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Something went wrong',
+                    style: Get.textTheme.displayLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    errorController.errorMsg.value,
+                    style: Get.textTheme.displayMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                  FormFieldButton1(
+                    width: 384.w,
+                    height: 56.h,
+                    buttonText: 'Close',
+                    onTapAction: () {
+                      Get.back();
+                    },
+                  ),
+                ],
+              ),
+            )
+          : Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 20.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'User not found',
+                    style: Get.textTheme.displayLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    'If you are an employee, request your organization to grant access.',
+                    style: Get.textTheme.displayMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    'Or',
+                    style: Get.textTheme.displayMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                  FormFieldButton1(
+                    width: 384.w,
+                    height: 56.h,
+                    buttonText: 'Create new organization',
+                    onTapAction: () {
+                      ///TODO: change navigation route cancellation
+                      Get.to(() => OtpScreen(
+                          /*isNewUser:
                 firestoreController.registeredUser == null ? true : false*/
-                    ));
-                // loginController.loginUser();
-              },
+                          ));
+                      // loginController.loginUser();
+                    },
+                  ),
+                  FormFieldButton1(
+                    width: 384.w,
+                    height: 56.h,
+                    buttonText: 'Cancel',
+                    onTapAction: () {
+                      Get.back();
+                    },
+                  ),
+                ],
+              ),
             ),
-            FormFieldButton1(
-              width: 384.w,
-              height: 56.h,
-              buttonText: 'Cancel',
-              onTapAction: () {
-                Get.back();
-              },
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

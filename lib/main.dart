@@ -8,11 +8,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/helpers/size_config.dart';
 import 'package:stationeryhub_attendance/helpers/theme.dart';
+import 'package:stationeryhub_attendance/helpers/utils.dart';
 import 'package:stationeryhub_attendance/screens/screen_splash.dart';
-import 'package:stationeryhub_attendance/services/firebase_auth_controller.dart';
-import 'package:stationeryhub_attendance/services/firebase_firestore_controller.dart';
-import 'package:stationeryhub_attendance/services/login_screen_controller.dart';
-import 'package:stationeryhub_attendance/services/otp_screen_controller.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
 import 'firebase_options.dart';
@@ -31,7 +28,8 @@ void main() async {
   /* .then((value) {
     return Get.put(FirebaseAuthController());
   });*/
-  await registerControllers();
+  UtilsController utilsController = UtilsController.instance;
+  await utilsController.registerControllers();
   await FirebaseAppCheck.instance.activate(
     androidProvider: AndroidProvider.debug,
     appleProvider: AppleProvider.debug,
@@ -40,13 +38,6 @@ void main() async {
   final cameras = await availableCameras();
   // await ScreenUtil.ensureScreenSize();
   runApp(const StationeryHubAttendance());
-}
-
-Future<void> registerControllers() async {
-  Get.put(FirebaseAuthController());
-  Get.put(FirebaseFirestoreController());
-  Get.put(LoginScreenController());
-  Get.put(OtpScreenController());
 }
 
 class StationeryHubAttendance extends StatelessWidget {

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:stationeryhub_attendance/helpers/constants.dart';
 
 import 'firebase_auth_controller.dart';
 import 'login_screen_controller.dart';
@@ -20,7 +21,7 @@ class OtpScreenController extends GetxController {
   RxBool isLoading = false.obs;
   RxString otp = ''.obs;
   RxString error = ''.obs;
-  RxInt countdownDuration = 5.obs;
+  RxInt countdownDuration = otpResendTime.obs;
   RxBool isTimerRunning = true.obs;
 
   @override

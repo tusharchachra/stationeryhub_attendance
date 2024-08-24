@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:stationeryhub_attendance/albums/album_users.dart';
@@ -8,7 +7,6 @@ import 'package:stationeryhub_attendance/form_fields/form_field_button.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_home.dart';
 import 'package:stationeryhub_attendance/screens/screen_admin_dashboard.dart';
 import 'package:stationeryhub_attendance/screens/screen_mark_attendance.dart';
-import 'package:stationeryhub_attendance/services/firebase_login_services.dart';
 
 import '../services/firebase_firestore_services.dart';
 import '../services/shared_prefs_services.dart';
@@ -55,11 +53,11 @@ class _OTPScreenOldState extends State<OTPScreenOld> {
                   isLoading = true;
                 });
                 //sign in user
-                funcMsg = await FirebaseLoginServices.firebaseInstance.signIn(
+                /*funcMsg = await FirebaseLoginServices.firebaseInstance.signIn(
                     credential: PhoneAuthProvider.credential(
                         verificationId: FirebaseLoginServices
                             .firebaseInstance.verificationId,
-                        smsCode: otpController.text.trim()));
+                        smsCode: otpController.text.trim()));*/
 
                 if (funcMsg == 'success') {
                   if (kDebugMode) {

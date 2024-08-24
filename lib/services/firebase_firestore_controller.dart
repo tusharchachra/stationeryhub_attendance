@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:stationeryhub_attendance/services/firebase_error_controller.dart';
 import 'package:stationeryhub_attendance/services/login_screen_controller.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
@@ -13,6 +14,7 @@ class FirebaseFirestoreController extends GetxController {
   static FirebaseFirestoreController firestoreController = Get.find();
   static FirebaseAuthController authController = Get.find();
   static LoginScreenController loginController = Get.find();
+  static FirebaseErrorController errorController = Get.find();
   Rx<AlbumUsers?>? registeredUser = AlbumUsers().obs;
   final FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
 
@@ -71,8 +73,9 @@ class FirebaseFirestoreController extends GetxController {
       });*/
     } on FirebaseException catch (e) {
       // TODO
+      errorController.getErrorMsg(e);
+
       if (kDebugMode) {
-        print(e.code);
         print('Error:${e.toString()}');
       }
     }
@@ -216,14 +219,6 @@ class FirebaseFirestoreController extends GetxController {
       if (kDebugMode) {
         print('Error:${e.toString()}');
       }
-    }
-  }
-
-  String? _getFirestoreErrorMsg(FirebaseException e) {
-    if (e.code == 'unavailable') {
-      return 'No interent';
-    } else {
-      return e.message;
     }
   }
 }
