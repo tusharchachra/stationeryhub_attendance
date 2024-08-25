@@ -47,10 +47,12 @@ class FirebaseAuthController extends GetxController {
     }
     try {
       await authInstance.verifyPhoneNumber(
-        timeout: const Duration(seconds: 10),
         phoneNumber: '+91$phoneNum',
         forceResendingToken: forceResend ?? 0,
         verificationCompleted: (PhoneAuthCredential credential) async {
+          /*otpController.otpDigitController.value
+              .setText(credential.smsCode);*/
+
           //Android only - auto read sms
           if (GetPlatform.isAndroid) {
             await signIn(credential: credential);
@@ -93,7 +95,7 @@ class FirebaseAuthController extends GetxController {
       authInstance.currentUser!.reload();
     } on FirebaseException catch (e) {
       /* firebaseMessage = kErrorOtp;*/
-      // print(e.code);
+      print(e.code);
       errorController.getErrorMsg(e);
     }
     if (userCredential != null) {

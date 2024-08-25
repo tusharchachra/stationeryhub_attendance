@@ -72,7 +72,7 @@ class ThemeCustom {
         contentPadding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
         errorStyle: TextStyle(
           height: 0.1.h,
-          color: Colors.red,
+          color: colourError,
           fontWeight: FontWeight.normal,
           fontSize: 10.sp,
         ),

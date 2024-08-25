@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 
 class FirebaseLoginServices {
   FirebaseLoginServices._privateConstructor();
@@ -72,7 +73,7 @@ class FirebaseLoginServices {
     }
   }
 */
-  /*Future signOutUser() async {
+  Future signOutUser() async {
     try {
       await FirebaseAuth.instance.signOut();
       // FirebaseAuth.instance.currentUser!.reload();
@@ -81,7 +82,7 @@ class FirebaseLoginServices {
         print(e);
       }
     }
-  }*/
+  }
 
   String getAuthErrorMsg(FirebaseAuthException e) {
     if (e.code == 'user-not-found') {

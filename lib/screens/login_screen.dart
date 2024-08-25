@@ -96,6 +96,8 @@ class LoginScreen extends StatelessWidget {
                       buttonText: 'Continue',
                       onTapAction: () async {
                         loginController.focusNode.unfocus();
+                        loginController
+                            .formKey.currentState!.validate();
                         if (loginController.isPhoneNumValid.value) {
                           await loginController.updateRegisteredUser();
                           if (kDebugMode) {
@@ -122,7 +124,7 @@ class LoginScreen extends StatelessWidget {
                             Get.bottomSheet(buildBottomSheet(),
                                 backgroundColor: Colors.white);
                           }
-                        }
+                        } else {}
                       },
                     ))
             ],

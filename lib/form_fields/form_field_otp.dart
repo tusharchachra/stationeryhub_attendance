@@ -30,20 +30,28 @@ class FormFieldOtp extends StatelessWidget {
           Directionality(
             // Specify direction if desired
             textDirection: TextDirection.ltr,
-            child: Pinput(
+            child: (Pinput(
               // You can pass your own SmsRetriever implementation based on any package
               // in this example we are using the SmartAuth
               //smsRetriever: smsRetriever,
               length: 6,
               showCursor: false,
-              controller: otpController.otpDigitController,
+              controller: otpController.otpDigitController.value,
               focusNode: otpController.focusDigit,
               defaultPinTheme: defaultPinTheme,
               separatorBuilder: (index) => SizedBox(width: 3.w),
-              /*validator: (value) {
-                return value!.length < 6 ? null : 'Incorrect OTP';
-              },*/
+              validator: (s) {
+                /*return value!.length < 6 ? null : 'Incorrect OTP';*/
+                otpController.validateForm(s);
+                return otpController.error.value == ''
+                    ? null
+                    : otpController.error.value;
+              },
+              errorText: otpController.error.value,
               hapticFeedbackType: HapticFeedbackType.lightImpact,
+              /*validator: (s) {
+                    return otpController.validateForm(s);
+                  },*/
               onCompleted: (pin) {
                 otpController.otp = RxString(pin);
                 debugPrint('onCompleted: $pin');
@@ -75,9 +83,11 @@ class FormFieldOtp extends StatelessWidget {
                 ),
               ),*/
               errorPinTheme: defaultPinTheme.copyBorderWith(
-                border: Border.all(color: Colors.redAccent),
+                border: Border.all(color: colourError),
               ),
-            ),
+              errorTextStyle:
+                  Get.textTheme.displayMedium?.copyWith(color: colourError),
+            )),
           ),
           /*TextButton(
             onPressed: () {

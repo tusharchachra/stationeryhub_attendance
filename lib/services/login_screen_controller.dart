@@ -25,9 +25,10 @@ class LoginScreenController extends GetxController {
     } else*/
 
     phoneNum = RxString(value!.trim());
-    if (value == null) {
+    print('value=$value');
+    if (value == '') {
       isPhoneNumValid.value = false;
-      return null;
+      return 'Invalid phone number';
     } else if (value.length == 10) {
       isPhoneNumValid.value = true;
       return null;
@@ -44,7 +45,7 @@ class LoginScreenController extends GetxController {
     isLoading.value = true;
     // update();
     print('isLoading=$isLoading');
-    (formKey.currentState!.validate());
+    //(formKey.currentState!.validate());
     var temp = await (firestoreController.getUser(phoneNum: phoneNum.value));
     firestoreController.registeredUser?.update((user) {
       user?.phoneNum = temp?.phoneNum;
