@@ -17,7 +17,7 @@ class OtpScreenController extends GetxController {
   static LoginScreenController loginController = Get.find();
 
   String firebaseMessage = '';
-  bool isOtpValid = false;
+  RxBool isOtpValid = true.obs;
   RxBool isLoading = false.obs;
   RxString otp = ''.obs;
   RxString error = ''.obs;
@@ -50,10 +50,10 @@ class OtpScreenController extends GetxController {
     }
     if (otp.length < 6) {
       error = RxString('Invalid OTP');
-      isOtpValid = false;
+      isOtpValid.value = false;
     } else {
       error.value = '';
-      isOtpValid = true;
+      isOtpValid.value = true;
     }
     return error.value;
   }

@@ -22,44 +22,47 @@ class FormFieldOtp extends StatelessWidget {
     );
 
     /// Optionally you can use form to validate the Pinput
-    return Form(
-      key: otpController.formKeyOtp,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Directionality(
-            // Specify direction if desired
-            textDirection: TextDirection.ltr,
-            child: (Pinput(
-              // You can pass your own SmsRetriever implementation based on any package
-              // in this example we are using the SmartAuth
-              //smsRetriever: smsRetriever,
-              length: 6,
-              showCursor: false,
-              controller: otpController.otpDigitController.value,
-              focusNode: otpController.focusDigit,
-              defaultPinTheme: defaultPinTheme,
-              separatorBuilder: (index) => SizedBox(width: 3.w),
-              validator: (s) {
-                /*return value!.length < 6 ? null : 'Incorrect OTP';*/
-                otpController.validateForm(s);
-                return otpController.error.value == ''
-                    ? null
-                    : otpController.error.value;
-              },
-              errorText: otpController.error.value,
-              hapticFeedbackType: HapticFeedbackType.lightImpact,
-              /*validator: (s) {
+    return Obx(
+      () => Form(
+          key: otpController.formKeyOtp,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Directionality(
+                // Specify direction if desired
+                textDirection: TextDirection.ltr,
+                child: (Pinput(
+                  // You can pass your own SmsRetriever implementation based on any package
+                  // in this example we are using the SmartAuth
+                  //smsRetriever: smsRetriever,
+                  length: 6,
+                  showCursor: false,
+                  controller: otpController.otpDigitController.value,
+                  focusNode: otpController.focusDigit,
+                  defaultPinTheme: defaultPinTheme,
+                  separatorBuilder: (index) => SizedBox(width: 3.w),
+                  validator: (s) {
+                    /*return value!.length < 6 ? null : 'Incorrect OTP';*/
+                    otpController.validateForm(s);
+                    return otpController.error.value == ''
+                        ? null
+                        : otpController.error.value;
+                  },
+                  errorText: otpController.error.value,
+                  forceErrorState: !otpController.isOtpValid.value,
+                  hapticFeedbackType: HapticFeedbackType.lightImpact,
+                  /*validator: (s) {
                     return otpController.validateForm(s);
                   },*/
-              onCompleted: (pin) {
-                otpController.otp = RxString(pin);
-                debugPrint('onCompleted: $pin');
-              },
-              onChanged: (value) {
-                debugPrint('onChanged: $value');
-              },
-              /*cursor: Column(
+                  onCompleted: (pin) {
+                    otpController.otp = RxString(pin);
+                    debugPrint('onCompleted: $pin');
+                  },
+                  onChanged: (value) {
+                    otpController.isOtpValid.value = true;
+                    debugPrint('onChanged: $value');
+                  },
+                  /*cursor: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Container(
@@ -70,34 +73,34 @@ class FormFieldOtp extends StatelessWidget {
                   ),
                 ],
               ),*/
-              focusedPinTheme: defaultPinTheme.copyWith(
-                decoration: defaultPinTheme.decoration!.copyWith(
-                  border: Border.all(color: colourPrimary),
-                ),
-              ),
-              /* submittedPinTheme: defaultPinTheme.copyWith(
+                  focusedPinTheme: defaultPinTheme.copyWith(
+                    decoration: defaultPinTheme.decoration!.copyWith(
+                      border: Border.all(color: colourPrimary),
+                    ),
+                  ),
+                  /* submittedPinTheme: defaultPinTheme.copyWith(
                 decoration: defaultPinTheme.decoration!.copyWith(
                   color: fillColor,
                   borderRadius: BorderRadius.circular(19),
                   border: Border.all(color: focusedBorderColor),
                 ),
               ),*/
-              errorPinTheme: defaultPinTheme.copyBorderWith(
-                border: Border.all(color: colourError),
+                  errorPinTheme: defaultPinTheme.copyBorderWith(
+                    border: Border.all(color: colourError),
+                  ),
+                  errorTextStyle:
+                      Get.textTheme.displayMedium?.copyWith(color: colourError),
+                )),
               ),
-              errorTextStyle:
-                  Get.textTheme.displayMedium?.copyWith(color: colourError),
-            )),
-          ),
-          /*TextButton(
+              /*TextButton(
             onPressed: () {
               otpController.focusDigit1.unfocus();
               otpController.formKeyOtp.currentState!.validate();
             },
             child: const Text('Validate'),
           ),*/
-        ],
-      ),
+            ],
+          )),
     );
   }
 }

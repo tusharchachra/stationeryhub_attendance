@@ -34,6 +34,8 @@ class FirebaseErrorController extends GetxController {
           'Unable to reach the server. Please check your internet connectivity and retry after a while.';
     } else if (e.code == 'invalid-verification-code') {
       errorMsg.value = 'Invalid OTP';
+    } else if (e.code == 'channel-error') {
+      errorMsg.value = 'Invalid OTP';
     } else {
       errorMsg.value = 'Something went wrong. Please retry after a while.';
     }

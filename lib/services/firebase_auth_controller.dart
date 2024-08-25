@@ -68,6 +68,7 @@ class FirebaseAuthController extends GetxController {
           // Create a PhoneAuthCredential with the code
           credential = Rx<PhoneAuthCredential>(PhoneAuthProvider.credential(
               verificationId: verId, smsCode: otp));
+          print(credential);
           // Sign the user in (or link) with the credential
           await signIn(credential: credential.value);
           //onCodeSentAction();
@@ -89,6 +90,7 @@ class FirebaseAuthController extends GetxController {
 
   Future signIn({required AuthCredential credential}) async {
     UserCredential? userCredential;
+    print(credential);
     try {
       userCredential = await authInstance.signInWithCredential(credential);
       firebaseUser = Rx<User>(userCredential.user!);
@@ -96,8 +98,10 @@ class FirebaseAuthController extends GetxController {
     } on FirebaseException catch (e) {
       /* firebaseMessage = kErrorOtp;*/
       print(e.code);
+      print(e.message);
       errorController.getErrorMsg(e);
     }
+
     if (userCredential != null) {
       return 'success';
     } else {

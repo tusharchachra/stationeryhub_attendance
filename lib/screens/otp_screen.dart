@@ -24,6 +24,7 @@ class OtpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     otpController.otpDigitController.value.setText('');
+    otpController.isOtpValid.value = true;
     return ScaffoldOnboarding(
       bodyWidget: Center(
         child: Column(
@@ -110,7 +111,7 @@ class OtpScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20.h),
-            Obx(() => loginController.isLoading.value
+            Obx(() => otpController.isLoading.value
                 ? SizedBox(
                     width: 25.w,
                     height: 25.h,
@@ -121,28 +122,20 @@ class OtpScreen extends StatelessWidget {
                     height: 56.h,
                     buttonText: 'Continue',
                     onTapAction: () async {
-                      /* if (errorController.errorMsg.isNotEmpty) {
-                        otpController.error = errorController.errorMsg;
-                        otpController.isOtpValid = false;
-
-                        Get.snackbar(
-                          'Error',
-                          errorController.errorMsg.value,
-                          snackPosition: SnackPosition.BOTTOM,
-                          colorText: colourTextDark,
-                        );
-                      } else*/
-                      // print(otpController.formKeyOtp.currentState!.validate());
                       if (otpController.formKeyOtp.currentState!.validate()) {
                         ///TODO:login
+                        otpController.isLoading.value = true;
                         await authController.signIn(
                             credential: authController.credential.value);
+                        otpController.isLoading.value = false;
                         print('error:${errorController.errorMsg.value}');
                         //otpController.formKeyOtp
 
                         ///TODO: set error on pinput if wrong OTP is used
                         if (errorController.errorMsg.isNotEmpty) {
+                          otpController.isOtpValid.value = false;
                           otpController.error = errorController.errorMsg;
+                          //otpController.formKeyOtp.currentState.
                           // otpController.isOtpValid = false;
                           /*Get.snackbar(
                             '',
