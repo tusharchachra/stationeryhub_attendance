@@ -91,6 +91,27 @@ class OtpScreen extends StatelessWidget {
                               )
                             : GestureDetector(
                                 onTap: () {
+                                  Get.showSnackbar(
+                                    GetSnackBar(
+                                      messageText: Text(
+                                        'OTP resent successfully',
+                                        textAlign: TextAlign.center,
+                                        style: Get.textTheme.bodyMedium
+                                            ?.copyWith(color: colourTextDark),
+                                      ),
+                                      duration: const Duration(seconds: 2),
+                                      snackPosition: SnackPosition.BOTTOM,
+                                      backgroundColor: Colors.white,
+                                      boxShadows: [
+                                        BoxShadow(
+                                            color: Colors.grey,
+                                            blurRadius: 62.0.r),
+                                      ],
+                                      snackStyle: SnackStyle.FLOATING,
+                                      borderRadius: 50.r,
+                                      margin: EdgeInsets.all(10.w),
+                                    ),
+                                  );
                                   otpController.startTimer();
                                   authController.signInPhone(
                                     phoneNum: loginController.phoneNum.value,

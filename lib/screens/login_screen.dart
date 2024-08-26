@@ -98,7 +98,7 @@ class LoginScreen extends StatelessWidget {
                         loginController.isLoading.value = true;
                         loginController.focusNode.unfocus();
                         loginController.formKey.currentState!.validate();
-                        loginController.isLoading.value = true;
+                        loginController.isLoading.value = false;
                         if (loginController.isPhoneNumValid.value) {
                           await loginController.updateRegisteredUser();
                           if (kDebugMode) {
