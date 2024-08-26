@@ -40,7 +40,7 @@ class OtpScreenController extends GetxController {
   Future<void> onLogin(var otp) async {
     error.value = await authController.signInPhone(
       phoneNum: loginController.phoneNum.value,
-      otp: otp.value,
+      smsCode: otp.value,
     );
   }
 

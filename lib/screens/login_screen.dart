@@ -95,25 +95,20 @@ class LoginScreen extends StatelessWidget {
                       height: 56.h,
                       buttonText: 'Continue',
                       onTapAction: () async {
+                        loginController.isLoading.value = true;
                         loginController.focusNode.unfocus();
-                        loginController
-                            .formKey.currentState!.validate();
+                        loginController.formKey.currentState!.validate();
+                        loginController.isLoading.value = true;
                         if (loginController.isPhoneNumValid.value) {
                           await loginController.updateRegisteredUser();
                           if (kDebugMode) {
                             print(
                                 'registered user= ${firestoreController.registeredUser}');
                           }
+                          //if registered user is found in the firestore, send otp. if not, show bottom sheet to confirm usage
                           if (firestoreController.registeredUser?.value?.uid !=
                               null) {
-                            otpController.startTimer();
-
-                            ///TODO:send otp
-                            authController.signInPhone(
-                                phoneNum: loginController.phoneNum.value,
-                                otp: otpController.otp.value,
-                                onCodeSentAction: () {});
-                            Get.to(() => OtpScreen());
+                            loginProcess();
                           } else {
                             //print(errorController.errorMsg);
                             if (kDebugMode) {
@@ -124,6 +119,7 @@ class LoginScreen extends StatelessWidget {
                             Get.bottomSheet(buildBottomSheet(),
                                 backgroundColor: Colors.white);
                           }
+                          loginController.isLoading.value = false;
                         } else {}
                       },
                     ))
@@ -134,84 +130,98 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
+  void loginProcess() {
+    ///TODO:send otp
+    authController.signInPhone(
+        phoneNum: loginController.phoneNum.value,
+        smsCode: otpController.otp.value,
+        onCodeSentAction: () {});
+    otpController.startTimer();
+    Get.to(() => OtpScreen());
+  }
+
   Widget buildBottomSheet() {
     return SizedBox(
       height: 0.5.sh,
       child: errorController.errorMsg.value != ''
-          ? Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 20.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Something went wrong',
-                    style: Get.textTheme.displayLarge,
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    errorController.errorMsg.value,
-                    style: Get.textTheme.displayMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  FormFieldButton1(
-                    width: 384.w,
-                    height: 56.h,
-                    buttonText: 'Close',
-                    onTapAction: () {
-                      Get.back();
-                    },
-                  ),
-                ],
-              ),
-            )
-          : Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 20.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'User not found',
-                    style: Get.textTheme.displayLarge,
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    'If you are an employee, request your organization to grant access.',
-                    style: Get.textTheme.displayMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    'Or',
-                    style: Get.textTheme.displayMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  FormFieldButton1(
-                    width: 384.w,
-                    height: 56.h,
-                    buttonText: 'Create new organization',
-                    onTapAction: () {
-                      ///TODO: change navigation route cancellation
-                      Get.to(() => OtpScreen(
-                          /*isNewUser:
-                firestoreController.registeredUser == null ? true : false*/
-                          ));
-                      // loginController.loginUser();
-                    },
-                  ),
-                  FormFieldButton1(
-                    width: 384.w,
-                    height: 56.h,
-                    buttonText: 'Cancel',
-                    onTapAction: () {
-                      Get.back();
-                    },
-                  ),
-                ],
-              ),
-            ),
+          ? buildErrorBottomSheet()
+          : buildUserNotFoundBottomSheet(),
+    );
+  }
+
+  Padding buildUserNotFoundBottomSheet() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 20.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'User not found',
+            style: Get.textTheme.displayLarge,
+            textAlign: TextAlign.center,
+          ),
+          Text(
+            'If you are an employee, request your organization to grant access.',
+            style: Get.textTheme.displayMedium,
+            textAlign: TextAlign.center,
+          ),
+          Text(
+            'Or',
+            style: Get.textTheme.displayMedium,
+            textAlign: TextAlign.center,
+          ),
+          FormFieldButton1(
+            width: 384.w,
+            height: 56.h,
+            buttonText: 'Create new organization',
+            onTapAction: () {
+              Get.back();
+              loginProcess();
+            },
+          ),
+          FormFieldButton1(
+            width: 384.w,
+            height: 56.h,
+            buttonText: 'Cancel',
+            onTapAction: () {
+              Get.back();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Padding buildErrorBottomSheet() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 20.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Something went wrong',
+            style: Get.textTheme.displayLarge,
+            textAlign: TextAlign.center,
+          ),
+          Text(
+            errorController.errorMsg.value,
+            style: Get.textTheme.displayMedium,
+            textAlign: TextAlign.center,
+          ),
+          FormFieldButton1(
+            width: 384.w,
+            height: 56.h,
+            buttonText: 'Close',
+            onTapAction: () {
+              Get.back();
+            },
+          ),
+        ],
+      ),
     );
   }
 }

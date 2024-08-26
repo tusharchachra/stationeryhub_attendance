@@ -94,7 +94,7 @@ class OtpScreen extends StatelessWidget {
                                   otpController.startTimer();
                                   authController.signInPhone(
                                     phoneNum: loginController.phoneNum.value,
-                                    otp: otpController.otp.value,
+                                    smsCode: otpController.otp.value,
                                     forceResend: 1,
                                   );
                                 },
@@ -122,27 +122,18 @@ class OtpScreen extends StatelessWidget {
                     height: 56.h,
                     buttonText: 'Continue',
                     onTapAction: () async {
+                      otpController.isLoading.value = true;
+                      print(authController.credential);
                       if (otpController.formKeyOtp.currentState!.validate()) {
                         ///TODO:login
-                        otpController.isLoading.value = true;
                         await authController.signIn(
-                            credential: authController.credential.value);
+                            authCredential: authController.credential.value);
                         otpController.isLoading.value = false;
-                        print('error:${errorController.errorMsg.value}');
-                        //otpController.formKeyOtp
 
                         ///TODO: set error on pinput if wrong OTP is used
                         if (errorController.errorMsg.isNotEmpty) {
                           otpController.isOtpValid.value = false;
                           otpController.error = errorController.errorMsg;
-                          //otpController.formKeyOtp.currentState.
-                          // otpController.isOtpValid = false;
-                          /*Get.snackbar(
-                            '',
-                            otpController.error.value,
-                            snackPosition: SnackPosition.BOTTOM,
-                            colorText: colourTextDark,
-                          );*/
                         }
                       }
                     },

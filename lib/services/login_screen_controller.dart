@@ -21,24 +21,24 @@ class LoginScreenController extends GetxController {
 
   validatePhoneNum(String? value) {
     /*if (value == '7808814341') {
-      return null;
-    } else*/
-
+      return null;    } else*/
     phoneNum = RxString(value!.trim());
     print('value=$value');
+    String? temp;
     if (value == '') {
       isPhoneNumValid.value = false;
-      return 'Invalid phone number';
+      temp = 'Invalid phone number';
     } else if (value.length == 10) {
       isPhoneNumValid.value = true;
-      return null;
+      temp = null;
     } else if (value.length < 10) {
       isPhoneNumValid.value = false;
-      return 'Invalid phone number';
+      temp = 'Invalid phone number';
     } else {
       isPhoneNumValid.value = false;
-      return 'Unauthorised user';
+      temp = 'Unauthorised user';
     }
+    return temp;
   }
 
   Future updateRegisteredUser() async {
@@ -47,6 +47,7 @@ class LoginScreenController extends GetxController {
     print('isLoading=$isLoading');
     //(formKey.currentState!.validate());
     var temp = await (firestoreController.getUser(phoneNum: phoneNum.value));
+    // if (temp != null) {
     firestoreController.registeredUser?.update((user) {
       user?.phoneNum = temp?.phoneNum;
       user?.uid = temp?.uid;
@@ -54,6 +55,7 @@ class LoginScreenController extends GetxController {
       user?.userType = temp?.userType;
       user?.organizationId = temp?.organizationId;
     });
+    //  }
     isLoading.value = false;
   }
 
@@ -62,7 +64,7 @@ class LoginScreenController extends GetxController {
 
     await authController.signInPhone(
       phoneNum: phoneNum.value,
-      otp: otpController.otp.value,
+      smsCode: otpController.otp.value,
       onCodeSentAction: () async {
         print('code sent');
         isLoading.value = false;

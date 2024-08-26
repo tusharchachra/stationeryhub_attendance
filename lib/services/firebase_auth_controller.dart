@@ -16,8 +16,10 @@ class FirebaseAuthController extends GetxController {
   late Rx<PhoneAuthCredential> credential;
   FirebaseAuth authInstance = FirebaseAuth.instance;
 
+  RxString _verId = ''.obs;
+
   String firebaseMessage = '';
-  String enteredOtp = '111111';
+  //String enteredOtp = '111111';
 
   @override
   void onReady() {
@@ -38,7 +40,7 @@ class FirebaseAuthController extends GetxController {
   Future<String> signInPhone({
     /*required BuildContext context,*/
     required String phoneNum,
-    required String otp,
+    required String smsCode,
     Function? onCodeSentAction,
     int? forceResend,
   }) async {
@@ -49,15 +51,7 @@ class FirebaseAuthController extends GetxController {
       await authInstance.verifyPhoneNumber(
         phoneNumber: '+91$phoneNum',
         forceResendingToken: forceResend ?? 0,
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          /*otpController.otpDigitController.value
-              .setText(credential.smsCode);*/
-
-          //Android only - auto read sms
-          if (GetPlatform.isAndroid) {
-            await signIn(credential: credential);
-          }
-        },
+        verificationCompleted: (PhoneAuthCredential credential) async {},
         verificationFailed: (FirebaseException e) {
           errorController.getErrorMsg(e);
         },
@@ -65,16 +59,11 @@ class FirebaseAuthController extends GetxController {
           if (kDebugMode) {
             print('Verification code sent to $phoneNum');
           }
+          _verId.value = verId;
           // Create a PhoneAuthCredential with the code
           credential = Rx<PhoneAuthCredential>(PhoneAuthProvider.credential(
-              verificationId: verId, smsCode: otp));
-          print(credential);
-          // Sign the user in (or link) with the credential
-          await signIn(credential: credential.value);
-          //onCodeSentAction();
-          /* Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (context) =>
-                  OtpScreen(phoneNumber: phoneNum, onSubmit: () {})));*/
+              verificationId: verId, smsCode: smsCode));
+          //print(credential.value);
         },
         codeAutoRetrievalTimeout: (String verId) {},
       );
@@ -88,13 +77,17 @@ class FirebaseAuthController extends GetxController {
     return firebaseMessage;
   }
 
-  Future signIn({required AuthCredential credential}) async {
+  Future signIn({AuthCredential? authCredential}) async {
     UserCredential? userCredential;
+    // Create a PhoneAuthCredential with the code
+    credential = Rx<PhoneAuthCredential>(PhoneAuthProvider.credential(
+        verificationId: _verId.value, smsCode: otpController.otp.value));
     print(credential);
     try {
-      userCredential = await authInstance.signInWithCredential(credential);
+      userCredential =
+          await authInstance.signInWithCredential(credential.value);
       firebaseUser = Rx<User>(userCredential.user!);
-      authInstance.currentUser!.reload();
+      authInstance.currentUser?.reload();
     } on FirebaseException catch (e) {
       /* firebaseMessage = kErrorOtp;*/
       print(e.code);
