@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:stationeryhub_attendance/controllers/utils.dart';
 import 'package:stationeryhub_attendance/helpers/size_config.dart';
 import 'package:stationeryhub_attendance/helpers/theme.dart';
-import 'package:stationeryhub_attendance/helpers/utils.dart';
 import 'package:stationeryhub_attendance/screens/screen_splash.dart';
-import 'package:stationeryhub_attendance/services/shared_prefs_controller.dart';
 
+import 'controllers/shared_prefs_controller.dart';
 import 'firebase_options.dart';
 
 ///TODO:perform setup steps for iOs for google_mlkit_face_detection using steps in pub.dev

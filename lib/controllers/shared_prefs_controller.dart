@@ -47,6 +47,9 @@ class SharedPrefsController extends GetxController {
   }
 
   Future<AlbumUsers> getUserFromSharedPrefs() async {
+    if (kDebugMode) {
+      debugPrint('Fetching registered user from Shared Prefs...');
+    }
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     /*String user =
         jsonEncode(AlbumUsers.fromJson(user));*/
@@ -56,6 +59,9 @@ class SharedPrefsController extends GetxController {
 
   Future<void> storeOrganizationToSharedPrefs(
       {required AlbumOrganization organization}) async {
+    if (kDebugMode) {
+      debugPrint('Storing organization to Shared Prefs...');
+    }
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     bool result =
         await prefs.setString('organization', jsonEncode(organization));
@@ -67,6 +73,9 @@ class SharedPrefsController extends GetxController {
   }
 
   Future<AlbumOrganization> getOrganizationFromSharedPrefs() async {
+    if (kDebugMode) {
+      debugPrint('Fetching organization from Shared Prefs...');
+    }
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     /*String user =
         jsonEncode(AlbumUsers.fromJson(user));*/

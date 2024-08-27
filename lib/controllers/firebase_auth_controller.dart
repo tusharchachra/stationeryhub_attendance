@@ -1,10 +1,12 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:stationeryhub_attendance/screens/login_screen.dart';
-import 'package:stationeryhub_attendance/services/shared_prefs_controller.dart';
+import 'package:stationeryhub_attendance/controllers/shared_prefs_controller.dart';
 
 import '../screens/admin_dashboard_screen.dart';
+import '../screens/login_screen.dart';
 import 'firebase_error_controller.dart';
 import 'firebase_firestore_controller.dart';
 import 'otp_screen_controller.dart';
@@ -19,6 +21,7 @@ class FirebaseAuthController extends GetxController {
   late Rx<User?> firebaseUser;
   late Rx<PhoneAuthCredential> credential;
   FirebaseAuth authInstance = FirebaseAuth.instance;
+  RxBool isInternetConnected = false.obs;
 
   RxString _verId = ''.obs;
 
@@ -31,13 +34,32 @@ class FirebaseAuthController extends GetxController {
     firebaseUser = Rx<User?>(authInstance.currentUser);
     firebaseUser.bindStream(authInstance.userChanges());
     ever(firebaseUser, _initialScreen);
+    // _checkInternet();
+  }
+
+  _checkInternet() async {
+    Rx<List<InternetAddress>> result = Rx([]);
+    try {
+      result = Rx<List<InternetAddress>>(
+          await InternetAddress.lookup('firestore.googleapis.com'));
+      if (result.value.isNotEmpty && result.value[0].rawAddress.isNotEmpty) {
+        isInternetConnected.value = true;
+      } else {
+        isInternetConnected.value = false;
+      }
+    } on SocketException catch (_) {
+      isInternetConnected.value = false;
+    }
+    ever(
+      result,
+      (callback) => {errorController.errorMsg.value = 'No Internet'},
+    );
   }
 
   _initialScreen(User? user) {
     if (user == null) {
       Get.offAll(() => LoginScreen());
     } else {
-      //if(firestoreController.)
       Get.offAll(() => AdminDashboardScreen());
     }
   }

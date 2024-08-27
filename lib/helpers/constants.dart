@@ -6,6 +6,7 @@ Color colourIconBackground = colourPrimary.withOpacity(0.15);
 const colourTextDark = Color(0xff555555);
 const colourTextLight = Color(0xffA8A8A8);
 const colourOtpBoxBorder = Color(0xffB3ABC2);
+const colourTextFieldIcon = Color(0xff939393);
 const colourError = Colors.red;
 
 const otpResendTime = 5;

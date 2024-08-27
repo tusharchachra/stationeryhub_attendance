@@ -3,7 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
-import 'package:stationeryhub_attendance/services/otp_screen_controller.dart';
+
+import '../controllers/otp_screen_controller.dart';
 
 class FormFieldOtp extends StatelessWidget {
   const FormFieldOtp({super.key});

@@ -2,23 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:stationeryhub_attendance/albums/album_organizations.dart';
 import 'package:stationeryhub_attendance/albums/enum_subscription_type.dart';
-import 'package:stationeryhub_attendance/form_fields/form_field_button.dart';
+import 'package:stationeryhub_attendance/form_fields/form_field_button_old.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_home.dart';
-import 'package:stationeryhub_attendance/screens/screen_admin_dashboard.dart';
+import 'package:stationeryhub_attendance/screens/screen_admin_dashboard_old.dart';
 import 'package:stationeryhub_attendance/services/location_handler.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
 import '../albums/album_users.dart';
 import '../services/firebase_firestore_services.dart';
 
-class NewOrganizationScreen extends StatefulWidget {
-  const NewOrganizationScreen({super.key});
+class NewOrganizationScreenOld extends StatefulWidget {
+  const NewOrganizationScreenOld({super.key});
 
   @override
-  State<NewOrganizationScreen> createState() => _NewOrganizationScreenState();
+  State<NewOrganizationScreenOld> createState() =>
+      _NewOrganizationScreenOldState();
 }
 
-class _NewOrganizationScreenState extends State<NewOrganizationScreen> {
+class _NewOrganizationScreenOldState extends State<NewOrganizationScreenOld> {
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
   TextEditingController nameController = TextEditingController();
@@ -73,7 +74,7 @@ class _NewOrganizationScreenState extends State<NewOrganizationScreen> {
                 label: Text('Geo location'),
               ),
             ),
-            FormFieldButton(
+            FormFieldButtonOld(
                 width: 30,
                 height: 10,
                 buttonText: 'Fetch location',
@@ -98,7 +99,7 @@ class _NewOrganizationScreenState extends State<NewOrganizationScreen> {
                 },
                 buttonDecoration: BoxDecoration(),
                 textStyle: TextStyle()),
-            FormFieldButton(
+            FormFieldButtonOld(
                 width: 30,
                 height: 10,
                 buttonText: 'Submit',
@@ -143,7 +144,7 @@ class _NewOrganizationScreenState extends State<NewOrganizationScreen> {
                 },
                 buttonDecoration: BoxDecoration(color: Colors.green),
                 textStyle: TextStyle()),
-            FormFieldButton(
+            FormFieldButtonOld(
                 width: 30,
                 height: 10,
                 buttonText: 'back',

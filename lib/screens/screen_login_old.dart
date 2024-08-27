@@ -4,7 +4,7 @@ import 'package:stationeryhub_attendance/albums/album_users.dart';
 import 'package:stationeryhub_attendance/helpers/size_config.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_home.dart';
 
-import '../form_fields/form_field_button.dart';
+import '../form_fields/form_field_button_old.dart';
 import '../form_fields/form_field_phone_num.dart';
 import '../services/firebase_firestore_services.dart';
 
@@ -88,7 +88,7 @@ class _ScreenLoginOldState extends State<ScreenLoginOld> {
               ),
             ),
             SizedBox(height: SizeConfig.getSize(20)),
-            FormFieldButton(
+            FormFieldButtonOld(
               buttonText: 'Submit',
               height: 10,
               width: 30,
@@ -161,7 +161,7 @@ class _ScreenLoginOldState extends State<ScreenLoginOld> {
         builder: (context) {
           return AlertDialog(
             actions: [
-              FormFieldButton(
+              FormFieldButtonOld(
                 width: 30,
                 height: 10,
                 buttonText: 'Yes',
@@ -176,7 +176,7 @@ class _ScreenLoginOldState extends State<ScreenLoginOld> {
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(10.0))),
               ),
-              FormFieldButton(
+              FormFieldButtonOld(
                 width: 30,
                 height: 10,
                 buttonText: 'Cancel',

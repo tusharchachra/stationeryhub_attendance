@@ -4,7 +4,7 @@ import 'package:stationeryhub_attendance/albums/album_users.dart';
 import 'package:stationeryhub_attendance/albums/enum_user_type.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
-import '../form_fields/form_field_button.dart';
+import '../form_fields/form_field_button_old.dart';
 import '../scaffold/scaffold_home.dart';
 import '../services/firebase_firestore_services.dart';
 
@@ -77,7 +77,7 @@ class _NewUserForOrganizationScreenState
                     userTypeList.map<DropdownMenuEntry<String>>((String value) {
                   return DropdownMenuEntry<String>(value: value, label: value);
                 }).toList()),
-            FormFieldButton(
+            FormFieldButtonOld(
                 width: 30,
                 height: 10,
                 buttonText: 'Submit',
@@ -122,7 +122,7 @@ class _NewUserForOrganizationScreenState
                 },
                 buttonDecoration: BoxDecoration(color: Colors.green),
                 textStyle: TextStyle()),
-            FormFieldButton(
+            FormFieldButtonOld(
                 width: 30,
                 height: 10,
                 buttonText: 'back',

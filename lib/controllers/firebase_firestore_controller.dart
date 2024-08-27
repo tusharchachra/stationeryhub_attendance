@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:stationeryhub_attendance/services/firebase_error_controller.dart';
-import 'package:stationeryhub_attendance/services/login_screen_controller.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
 import '../albums/album_organizations.dart';
 import '../albums/album_users.dart';
 import '../albums/enum_user_type.dart';
-import 'firebase_auth_controller.dart';
+import '../controllers/firebase_auth_controller.dart';
+import 'firebase_error_controller.dart';
+import 'login_screen_controller.dart';
 
 class FirebaseFirestoreController extends GetxController {
   static FirebaseFirestoreController firestoreController = Get.find();
@@ -16,14 +16,13 @@ class FirebaseFirestoreController extends GetxController {
   static LoginScreenController loginController = Get.find();
   static FirebaseErrorController errorController = Get.find();
   Rx<AlbumUsers?>? registeredUser = AlbumUsers().obs;
+  Rx<AlbumOrganization>? registeredOrganization = AlbumOrganization().obs;
   final FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
 
   @override
   Future onReady() async {
     super.onReady();
-    if (kDebugMode) {
-      debugPrint('Fetching registered user details from firestore...');
-    }
+
     var tempUser =
         await getUser(phoneNum: loginController.phoneNum.value ?? '');
     if (kDebugMode) {
@@ -42,6 +41,9 @@ class FirebaseFirestoreController extends GetxController {
     GetOptions? getOptions,
   }) async {
     AlbumUsers? tempUser;
+    if (kDebugMode) {
+      debugPrint('Fetching registered user details from firestore...');
+    }
     try {
       final ref = firestoreInstance
           .collection("users")
@@ -128,6 +130,9 @@ class FirebaseFirestoreController extends GetxController {
     GetOptions? getOptions,
   }) async {
     AlbumOrganization? fetchedOrganization;
+    if (kDebugMode) {
+      debugPrint('Fetching organization details from firestore...');
+    }
     try {
       final ref = firestoreInstance
           .collection("organizations")
@@ -156,6 +161,9 @@ class FirebaseFirestoreController extends GetxController {
   //create new organisation and add org id to users table against the particular user
   Future<String?> createOrganization(
       {required AlbumOrganization newOrganization}) async {
+    if (kDebugMode) {
+      debugPrint('Creating new Organization...');
+    }
     try {
       final ref =
           firestoreInstance.collection("organizations").doc().withConverter(
@@ -165,10 +173,17 @@ class FirebaseFirestoreController extends GetxController {
               );
       await ref.set(newOrganization);
       if (kDebugMode) {
-        print('New organization added = ${ref.id}');
+        debugPrint('New organization added = ${ref.id}');
       }
       AlbumOrganization? insertedOrganization =
           await getOrganization(orgId: ref.id);
+      //Storing
+      registeredOrganization?.update((org) {
+        org?.id = insertedOrganization?.id;
+        org?.name = insertedOrganization?.name;
+        org?.address = insertedOrganization?.address;
+      });
+
       if (kDebugMode) {
         print('inserted organization=$insertedOrganization');
       }
@@ -181,6 +196,7 @@ class FirebaseFirestoreController extends GetxController {
     } on Exception catch (e) {
       // TODO
       if (kDebugMode) {
+        //  errorController.getErrorMsg(e);
         print('Error:${e.toString()}');
       }
     }
@@ -190,6 +206,9 @@ class FirebaseFirestoreController extends GetxController {
   //update OrganizationId to the user's/creator's profile
   Future<void> updateOrganizationIdInCreator(
       {required String currentUserId, required String organizationId}) async {
+    if (kDebugMode) {
+      debugPrint('Updating org Id to uers\' profile on firestore...');
+    }
     try {
       final ref = firestoreInstance
           .collection("users")
@@ -210,11 +229,10 @@ class FirebaseFirestoreController extends GetxController {
               .getUserFromSharedPrefs();
           // currentUser = await getUser(phoneNum: currentUser!.phoneNum);
           if (kDebugMode) {
-            print(
-                'Updated user details:$currentUser.\n Storing to Shared prefs');
+            print('Updated user details:$currentUser');
           }
-          await SharedPrefsServices.sharedPrefsInstance
-              .storeUserToSharedPrefs(user: currentUser!);
+          /* await SharedPrefsServices.sharedPrefsInstance
+              .storeUserToSharedPrefs(user: currentUser!);*/
         },
         onError: (e) {
           if (kDebugMode) {

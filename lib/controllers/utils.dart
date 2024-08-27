@@ -1,11 +1,12 @@
 import 'package:get/get.dart';
-import 'package:stationeryhub_attendance/services/firebase_auth_controller.dart';
-import 'package:stationeryhub_attendance/services/firebase_firestore_controller.dart';
-import 'package:stationeryhub_attendance/services/login_screen_controller.dart';
-import 'package:stationeryhub_attendance/services/shared_prefs_controller.dart';
+import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
+import 'package:stationeryhub_attendance/controllers/new_organization_screen_controller.dart';
 
-import '../services/firebase_error_controller.dart';
-import '../services/otp_screen_controller.dart';
+import 'firebase_error_controller.dart';
+import 'firebase_firestore_controller.dart';
+import 'login_screen_controller.dart';
+import 'otp_screen_controller.dart';
+import 'shared_prefs_controller.dart';
 
 class UtilsController {
   UtilsController._privateConstructor();
@@ -19,5 +20,6 @@ class UtilsController {
     Get.put(OtpScreenController());
     Get.put(FirebaseErrorController());
     Get.put(SharedPrefsController());
+    Get.put(NewOrganizationScreenController());
   }
 }

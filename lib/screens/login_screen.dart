@@ -2,16 +2,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:stationeryhub_attendance/form_fields/form_field_button1.dart';
+import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
+import 'package:stationeryhub_attendance/form_fields/form_field_button.dart';
 import 'package:stationeryhub_attendance/form_fields/form_field_phone_num.dart';
-import 'package:stationeryhub_attendance/services/firebase_auth_controller.dart';
-import 'package:stationeryhub_attendance/services/firebase_error_controller.dart';
-import 'package:stationeryhub_attendance/services/firebase_firestore_controller.dart';
 
+import '../controllers/firebase_error_controller.dart';
+import '../controllers/firebase_firestore_controller.dart';
+import '../controllers/login_screen_controller.dart';
+import '../controllers/otp_screen_controller.dart';
 import '../helpers/constants.dart';
 import '../scaffold/scaffold_onboarding.dart';
-import '../services/login_screen_controller.dart';
-import '../services/otp_screen_controller.dart';
 import 'otp_screen.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -90,7 +90,7 @@ class LoginScreen extends StatelessWidget {
                       height: 25.h,
                       child: const CircularProgressIndicator(),
                     )
-                  : FormFieldButton1(
+                  : FormFieldButton(
                       width: 384.w,
                       height: 56.h,
                       buttonText: 'Continue',
@@ -172,7 +172,7 @@ class LoginScreen extends StatelessWidget {
             style: Get.textTheme.displayMedium,
             textAlign: TextAlign.center,
           ),
-          FormFieldButton1(
+          FormFieldButton(
             width: 384.w,
             height: 56.h,
             buttonText: 'Create new organization',
@@ -181,7 +181,7 @@ class LoginScreen extends StatelessWidget {
               loginProcess();
             },
           ),
-          FormFieldButton1(
+          FormFieldButton(
             width: 384.w,
             height: 56.h,
             buttonText: 'Cancel',
@@ -212,7 +212,7 @@ class LoginScreen extends StatelessWidget {
             style: Get.textTheme.displayMedium,
             textAlign: TextAlign.center,
           ),
-          FormFieldButton1(
+          FormFieldButton(
             width: 384.w,
             height: 56.h,
             buttonText: 'Close',

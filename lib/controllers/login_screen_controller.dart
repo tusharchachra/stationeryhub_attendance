@@ -1,10 +1,11 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../controllers/firebase_auth_controller.dart';
 import '../screens/otp_screen.dart';
-import 'firebase_auth_controller.dart';
 import 'firebase_firestore_controller.dart';
 import 'otp_screen_controller.dart';
 
@@ -44,12 +45,16 @@ class LoginScreenController extends GetxController {
   Future updateRegisteredUser() async {
     isLoading.value = true;
     // update();
-    print('isLoading=$isLoading');
+    if (kDebugMode) {
+      print('isLoading=$isLoading');
+    }
     //(formKey.currentState!.validate());
     var temp = await (firestoreController.getUser(phoneNum: phoneNum.value));
     if (temp == null) {
       otpController.isNewUser.value = true;
-      print('New user');
+      if (kDebugMode) {
+        print('New user');
+      }
     }
     // if (temp != null) {
     firestoreController.registeredUser?.update((user) {

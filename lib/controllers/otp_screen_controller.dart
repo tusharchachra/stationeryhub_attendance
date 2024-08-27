@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 
-import 'firebase_auth_controller.dart';
+import '../controllers/firebase_auth_controller.dart';
 import 'login_screen_controller.dart';
 
 class OtpScreenController extends GetxController {

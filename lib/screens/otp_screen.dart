@@ -3,18 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
-import 'package:stationeryhub_attendance/albums/enum_user_type.dart';
-import 'package:stationeryhub_attendance/form_fields/form_field_button1.dart';
-import 'package:stationeryhub_attendance/services/firebase_auth_controller.dart';
-import 'package:stationeryhub_attendance/services/firebase_error_controller.dart';
-import 'package:stationeryhub_attendance/services/firebase_firestore_controller.dart';
-import 'package:stationeryhub_attendance/services/shared_prefs_controller.dart';
 
+import '../albums/album_organizations.dart';
+import '../albums/enum_user_type.dart';
+import '../controllers/firebase_auth_controller.dart';
+import '../controllers/firebase_error_controller.dart';
+import '../controllers/firebase_firestore_controller.dart';
+import '../controllers/login_screen_controller.dart';
+import '../controllers/otp_screen_controller.dart';
+import '../controllers/shared_prefs_controller.dart';
+import '../form_fields/form_field_button.dart';
 import '../form_fields/form_field_otp.dart';
 import '../helpers/constants.dart';
 import '../scaffold/scaffold_onboarding.dart';
-import '../services/login_screen_controller.dart';
-import '../services/otp_screen_controller.dart';
 
 class OtpScreen extends StatelessWidget {
   const OtpScreen({super.key});
@@ -143,7 +144,7 @@ class OtpScreen extends StatelessWidget {
                       height: 25.h,
                       child: const CircularProgressIndicator(),
                     )
-                  : FormFieldButton1(
+                  : FormFieldButton(
                       width: 384.w,
                       height: 56.h,
                       buttonText: 'Continue',
@@ -163,16 +164,28 @@ class OtpScreen extends StatelessWidget {
                               phoneNum: loginController.phoneNum.value,
                               userType: UserType.admin,
                             );
+                            otpController.isNewUser.value = false;
                           }
                           //fetch registered user details from firestore
                           await firestoreController.onReady();
-                          //Store registered user to shared prefs
+                          //Fetch from firestore and Store registered user to shared prefs
                           final registeredUser =
                               firestoreController.registeredUser;
                           if (registeredUser != null) {
                             await sharedPrefsController.storeUserToSharedPrefs(
                                 user: registeredUser.value);
                           }
+
+                          //fetch organization from firestore
+                          AlbumOrganization? newOrganization =
+                              await firestoreController.getOrganization(
+                                  user: registeredUser?.value);
+                          await sharedPrefsController
+                              .storeOrganizationToSharedPrefs(
+                                  organization: newOrganization!);
+                          firestoreController.registeredOrganization?.value =
+                              newOrganization;
+
                           otpController.isLoading.value = false;
 
                           ///TODO: set error on pinput if wrong OTP is used
