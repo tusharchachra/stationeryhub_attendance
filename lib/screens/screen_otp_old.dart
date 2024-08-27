@@ -90,7 +90,7 @@ class _OTPScreenOldState extends State<OTPScreenOld> {
                   if (registeredUser!.userType == UserType.admin) {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                          builder: (context) => AdminDashboardScreen()),
+                          builder: (context) => AdminDashboardScreenOld()),
                     );
                   } else {
                     if (registeredUser!.userType == UserType.employee) {

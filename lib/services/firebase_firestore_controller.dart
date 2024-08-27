@@ -19,10 +19,16 @@ class FirebaseFirestoreController extends GetxController {
   final FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
 
   @override
-  void onReady() async {
+  Future onReady() async {
     super.onReady();
+    if (kDebugMode) {
+      debugPrint('Fetching registered user details from firestore...');
+    }
     var tempUser =
         await getUser(phoneNum: loginController.phoneNum.value ?? '');
+    if (kDebugMode) {
+      debugPrint('Updating registered user...');
+    }
     registeredUser?.update((user) {
       user?.phoneNum = tempUser?.phoneNum;
       user?.name = tempUser?.name;
@@ -30,6 +36,7 @@ class FirebaseFirestoreController extends GetxController {
     //registeredUser?.value = tempUser;
   }
 
+  //return user data from firestore
   Future<AlbumUsers?> getUser({
     required String phoneNum,
     GetOptions? getOptions,
@@ -88,6 +95,9 @@ class FirebaseFirestoreController extends GetxController {
       required UserType userType,
       String? name,
       String? orgId}) async {
+    if (kDebugMode) {
+      debugPrint('Storing new user to firestore...');
+    }
     try {
       final ref = firestoreInstance.collection("users").doc().withConverter(
             fromFirestore: AlbumUsers.fromFirestore,
@@ -101,12 +111,10 @@ class FirebaseFirestoreController extends GetxController {
           organizationId: orgId);
       await ref.set(tempUser);
       if (kDebugMode) {
-        print('New user Id added = ${ref.id}');
+        debugPrint('New user Id added = ${ref.id}');
       }
-
-      // return ref.id;
-    } on Exception catch (e) {
-      // TODO
+    } on FirebaseException catch (e) {
+      errorController.getErrorMsg(e);
       if (kDebugMode) {
         print('Error:${e.toString()}');
       }

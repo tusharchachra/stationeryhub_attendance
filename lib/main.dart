@@ -10,7 +10,7 @@ import 'package:stationeryhub_attendance/helpers/size_config.dart';
 import 'package:stationeryhub_attendance/helpers/theme.dart';
 import 'package:stationeryhub_attendance/helpers/utils.dart';
 import 'package:stationeryhub_attendance/screens/screen_splash.dart';
-import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
+import 'package:stationeryhub_attendance/services/shared_prefs_controller.dart';
 
 import 'firebase_options.dart';
 
@@ -34,7 +34,9 @@ void main() async {
     androidProvider: AndroidProvider.debug,
     appleProvider: AppleProvider.debug,
   );
-  await SharedPrefsServices.sharedPrefsInstance.clearSharedPrefs();
+  SharedPrefsController sharedPrefsController = Get.find();
+  await sharedPrefsController.clearSharedPrefs();
+  //await SharedPrefsServices.sharedPrefsInstance.clearSharedPrefs();
   final cameras = await availableCameras();
   // await ScreenUtil.ensureScreenSize();
   runApp(const StationeryHubAttendance());

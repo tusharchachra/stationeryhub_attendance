@@ -1,11 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
+import 'package:stationeryhub_attendance/albums/enum_user_type.dart';
 import 'package:stationeryhub_attendance/form_fields/form_field_button1.dart';
 import 'package:stationeryhub_attendance/services/firebase_auth_controller.dart';
 import 'package:stationeryhub_attendance/services/firebase_error_controller.dart';
 import 'package:stationeryhub_attendance/services/firebase_firestore_controller.dart';
+import 'package:stationeryhub_attendance/services/shared_prefs_controller.dart';
 
 import '../form_fields/form_field_otp.dart';
 import '../helpers/constants.dart';
@@ -20,6 +23,7 @@ class OtpScreen extends StatelessWidget {
   static FirebaseFirestoreController firestoreController = Get.find();
   static OtpScreenController otpController = Get.find();
   static FirebaseErrorController errorController = Get.find();
+  static SharedPrefsController sharedPrefsController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -132,80 +136,54 @@ class OtpScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20.h),
-            Obx(() => otpController.isLoading.value
-                ? SizedBox(
-                    width: 25.w,
-                    height: 25.h,
-                    child: const CircularProgressIndicator(),
-                  )
-                : FormFieldButton1(
-                    width: 384.w,
-                    height: 56.h,
-                    buttonText: 'Continue',
-                    onTapAction: () async {
-                      otpController.isLoading.value = true;
-                      print(authController.credential);
-                      if (otpController.formKeyOtp.currentState!.validate()) {
-                        ///TODO:login
-                        await authController.signIn(
-                            authCredential: authController.credential.value);
-                        otpController.isLoading.value = false;
-
-                        ///TODO: set error on pinput if wrong OTP is used
-                        if (errorController.errorMsg.isNotEmpty) {
-                          otpController.isOtpValid.value = false;
-                          otpController.error = errorController.errorMsg;
+            Obx(
+              () => otpController.isLoading.value
+                  ? SizedBox(
+                      width: 25.w,
+                      height: 25.h,
+                      child: const CircularProgressIndicator(),
+                    )
+                  : FormFieldButton1(
+                      width: 384.w,
+                      height: 56.h,
+                      buttonText: 'Continue',
+                      onTapAction: () async {
+                        otpController.isLoading.value = true;
+                        if (kDebugMode) {
+                          debugPrint(
+                              'PhoneAuthCredential=${authController.credential.toString()}');
                         }
-                      }
-                    },
-                  ))
-          ],
-        ),
-      ),
-    );
-  }
+                        if (otpController.formKeyOtp.currentState!.validate()) {
+                          //user sign in
+                          await authController.signIn(
+                              authCredential: authController.credential.value);
+                          //store user to firestore
+                          if (otpController.isNewUser.isTrue) {
+                            await firestoreController.addNewUser(
+                              phoneNum: loginController.phoneNum.value,
+                              userType: UserType.admin,
+                            );
+                          }
+                          //fetch registered user details from firestore
+                          await firestoreController.onReady();
+                          //Store registered user to shared prefs
+                          final registeredUser =
+                              firestoreController.registeredUser;
+                          if (registeredUser != null) {
+                            await sharedPrefsController.storeUserToSharedPrefs(
+                                user: registeredUser.value);
+                          }
+                          otpController.isLoading.value = false;
 
-  Widget buildBottomSheet() {
-    return SizedBox(
-      height: 0.5.sh,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 20.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'User not found',
-              style: Get.textTheme.displayLarge,
-              textAlign: TextAlign.center,
-            ),
-            Text(
-              'If you are an employee, request your organization to grant access.',
-              style: Get.textTheme.displayMedium,
-              textAlign: TextAlign.center,
-            ),
-            Text(
-              'Or',
-              style: Get.textTheme.displayMedium,
-              textAlign: TextAlign.center,
-            ),
-            FormFieldButton1(
-              width: 384.w,
-              height: 56.h,
-              buttonText: 'Create new organization',
-              onTapAction: () {
-                loginController.loginUser();
-              },
-            ),
-            FormFieldButton1(
-              width: 384.w,
-              height: 56.h,
-              buttonText: 'Cancel',
-              onTapAction: () {
-                Get.back();
-              },
-            ),
+                          ///TODO: set error on pinput if wrong OTP is used
+                          if (errorController.errorMsg.isNotEmpty) {
+                            otpController.isOtpValid.value = false;
+                            otpController.error = errorController.errorMsg;
+                          }
+                        }
+                      },
+                    ),
+            )
           ],
         ),
       ),

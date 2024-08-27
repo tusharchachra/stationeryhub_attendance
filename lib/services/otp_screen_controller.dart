@@ -23,6 +23,7 @@ class OtpScreenController extends GetxController {
   RxString error = ''.obs;
   RxInt countdownDuration = otpResendTime.obs;
   RxBool isTimerRunning = true.obs;
+  RxBool isNewUser = false.obs;
 
   @override
   void onInit() {

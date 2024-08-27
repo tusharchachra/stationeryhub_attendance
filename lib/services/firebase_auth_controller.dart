@@ -2,15 +2,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/screens/login_screen.dart';
+import 'package:stationeryhub_attendance/services/shared_prefs_controller.dart';
 
-import '../screens/screen_admin_dashboard.dart';
+import '../screens/admin_dashboard_screen.dart';
 import 'firebase_error_controller.dart';
+import 'firebase_firestore_controller.dart';
 import 'otp_screen_controller.dart';
 
 class FirebaseAuthController extends GetxController {
   static FirebaseAuthController authController = Get.find();
   static FirebaseErrorController errorController = Get.find();
   static OtpScreenController otpController = Get.find();
+  static SharedPrefsController sharedPrefsController = Get.find();
+  static FirebaseFirestoreController firestoreController = Get.find();
 
   late Rx<User?> firebaseUser;
   late Rx<PhoneAuthCredential> credential;
@@ -33,6 +37,7 @@ class FirebaseAuthController extends GetxController {
     if (user == null) {
       Get.offAll(() => LoginScreen());
     } else {
+      //if(firestoreController.)
       Get.offAll(() => AdminDashboardScreen());
     }
   }
@@ -78,6 +83,9 @@ class FirebaseAuthController extends GetxController {
   }
 
   Future signIn({AuthCredential? authCredential}) async {
+    if (kDebugMode) {
+      debugPrint('Signing in...');
+    }
     UserCredential? userCredential;
     // Create a PhoneAuthCredential with the code
     credential = Rx<PhoneAuthCredential>(PhoneAuthProvider.credential(
