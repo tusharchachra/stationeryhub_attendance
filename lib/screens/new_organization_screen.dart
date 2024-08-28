@@ -1,11 +1,9 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/albums/album_users.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 import 'package:stationeryhub_attendance/controllers/new_organization_screen_controller.dart';
-import 'package:stationeryhub_attendance/controllers/shared_prefs_controller.dart';
 import 'package:stationeryhub_attendance/form_fields/form_field_text.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_onboarding.dart';
 import 'package:stationeryhub_attendance/screens/admin_dashboard_screen.dart';
@@ -21,7 +19,7 @@ class NewOrganizationScreen extends StatelessWidget {
   static NewOrganizationScreenController newOrganizationScreenController =
       Get.find();
   static FirebaseFirestoreController firestoreController = Get.find();
-  static SharedPrefsController sharedPrefsController = Get.find();
+  //static SharedPrefsController sharedPrefsController = Get.find();
   static FirebaseErrorController errorController = Get.find();
 
   @override
@@ -133,34 +131,37 @@ class NewOrganizationScreen extends StatelessWidget {
                                     newOrganization: newOrganization);
 
                             //fetch user from shared prefs
-                            AlbumUsers? currentUser =
+                            /* AlbumUsers? currentUser =
                                 await sharedPrefsController
-                                    .getUserFromSharedPrefs();
+                                    .getUserFromSharedPrefs();*/
 
                             //inserting the newOrganizationId to the user's profile on firestore
                             await firestoreController
                                 .updateOrganizationIdInCreator(
-                                    currentUserId: currentUser.uid!,
+                                    currentUserId: firestoreController
+                                        .registeredUser!.value!.uid!,
                                     organizationId: insertedOrganizationId!);
 
                             //fetch user from firestore
-                            currentUser = await firestoreController.getUser(
-                                phoneNum: currentUser.phoneNum!);
+                            AlbumUsers? currentUser =
+                                await firestoreController.getUser(
+                                    phoneNum: firestoreController
+                                        .registeredUser!.value!.phoneNum!);
 
                             //fetch organization from firestore
                             newOrganization = await firestoreController
                                 .getOrganization(orgId: insertedOrganizationId);
 
                             //update user details in shared prefs
-                            await sharedPrefsController.storeUserToSharedPrefs(
-                                user: currentUser);
+                            /*  await sharedPrefsController.storeUserToSharedPrefs(
+                                user: currentUser);*/
 
                             //store org details to shred prefs
-                            await sharedPrefsController
+                            /* await sharedPrefsController
                                 .storeOrganizationToSharedPrefs(
-                                    organization: newOrganization!);
+                                    organization: newOrganization!);*/
 
-                            if (kDebugMode) {
+                            /* if (kDebugMode) {
                               print('From shared prefs:');
                               var temp = await sharedPrefsController
                                   .getOrganizationFromSharedPrefs();
@@ -168,7 +169,7 @@ class NewOrganizationScreen extends StatelessWidget {
                               var temp1 = await sharedPrefsController
                                   .getUserFromSharedPrefs();
                               print(temp1.toString());
-                            }
+                            }*/
                           }
                           newOrganizationScreenController.isLoading.value =
                               false;

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:stationeryhub_attendance/controllers/shared_prefs_controller.dart';
 
 import '../screens/admin_dashboard_screen.dart';
 import '../screens/login_screen.dart';
@@ -15,7 +14,7 @@ class FirebaseAuthController extends GetxController {
   static FirebaseAuthController authController = Get.find();
   static FirebaseErrorController errorController = Get.find();
   static OtpScreenController otpController = Get.find();
-  static SharedPrefsController sharedPrefsController = Get.find();
+  //static SharedPrefsController sharedPrefsController = Get.find();
   static FirebaseFirestoreController firestoreController = Get.find();
 
   late Rx<User?> firebaseUser;

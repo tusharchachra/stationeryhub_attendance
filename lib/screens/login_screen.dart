@@ -6,6 +6,7 @@ import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.da
 import 'package:stationeryhub_attendance/form_fields/form_field_button.dart';
 import 'package:stationeryhub_attendance/form_fields/form_field_phone_num.dart';
 
+import '../albums/album_users.dart';
 import '../controllers/firebase_error_controller.dart';
 import '../controllers/firebase_firestore_controller.dart';
 import '../controllers/login_screen_controller.dart';
@@ -100,16 +101,25 @@ class LoginScreen extends StatelessWidget {
                         loginController.formKey.currentState!.validate();
                         loginController.isLoading.value = false;
                         if (loginController.isPhoneNumValid.value) {
-                          await loginController.updateRegisteredUser();
+                          /* await loginController.updateRegisteredUser();
                           if (kDebugMode) {
                             print(
                                 'registered user= ${firestoreController.registeredUser}');
-                          }
+                          }*/
                           //if registered user is found in the firestore, send otp. if not, show bottom sheet to confirm usage
-                          if (firestoreController.registeredUser?.value?.uid !=
+                          AlbumUsers? tempUser =
+                              await firestoreController.getUser(
+                                  phoneNum: loginController.phoneNum.value);
+                          print(tempUser);
+                          if (tempUser != null) {
+                            loginProcess();
+                            otpController.isNewUser.value = true;
+                          }
+                          /* if (firestoreController.registeredUser?.value?.uid !=
                               null) {
                             loginProcess();
-                          } else {
+                          } */
+                          else {
                             //print(errorController.errorMsg);
                             if (kDebugMode) {
                               print(authController.firebaseMessage);

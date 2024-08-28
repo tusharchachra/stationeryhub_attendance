@@ -4,14 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 
-import '../albums/album_organizations.dart';
 import '../albums/enum_user_type.dart';
 import '../controllers/firebase_auth_controller.dart';
 import '../controllers/firebase_error_controller.dart';
 import '../controllers/firebase_firestore_controller.dart';
 import '../controllers/login_screen_controller.dart';
 import '../controllers/otp_screen_controller.dart';
-import '../controllers/shared_prefs_controller.dart';
 import '../form_fields/form_field_button.dart';
 import '../form_fields/form_field_otp.dart';
 import '../helpers/constants.dart';
@@ -24,7 +22,7 @@ class OtpScreen extends StatelessWidget {
   static FirebaseFirestoreController firestoreController = Get.find();
   static OtpScreenController otpController = Get.find();
   static FirebaseErrorController errorController = Get.find();
-  static SharedPrefsController sharedPrefsController = Get.find();
+  //static SharedPrefsController sharedPrefsController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -171,21 +169,23 @@ class OtpScreen extends StatelessWidget {
                           //Fetch from firestore and Store registered user to shared prefs
                           final registeredUser =
                               firestoreController.registeredUser;
-                          if (registeredUser != null) {
+                          /*if (registeredUser != null) {
                             await sharedPrefsController.storeUserToSharedPrefs(
                                 user: registeredUser.value);
-                          }
+                          }*/
 
                           //fetch organization from firestore
-                          AlbumOrganization? newOrganization =
+                          /*AlbumOrganization? newOrganization =
                               await firestoreController.getOrganization(
                                   user: registeredUser?.value);
-                          await sharedPrefsController
-                              .storeOrganizationToSharedPrefs(
-                                  organization: newOrganization!);
-                          firestoreController.registeredOrganization?.value =
-                              newOrganization;
+                          if (newOrganization != null) {
+                            await sharedPrefsController
+                                .storeOrganizationToSharedPrefs(
+                                    organization: newOrganization);
 
+                            firestoreController.registeredOrganization?.value =
+                                newOrganization;
+                          }*/
                           otpController.isLoading.value = false;
 
                           ///TODO: set error on pinput if wrong OTP is used

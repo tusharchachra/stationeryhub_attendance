@@ -11,7 +11,6 @@ import 'package:stationeryhub_attendance/helpers/size_config.dart';
 import 'package:stationeryhub_attendance/helpers/theme.dart';
 import 'package:stationeryhub_attendance/screens/screen_splash.dart';
 
-import 'controllers/shared_prefs_controller.dart';
 import 'firebase_options.dart';
 
 ///TODO:perform setup steps for iOs for google_mlkit_face_detection using steps in pub.dev
@@ -34,8 +33,8 @@ void main() async {
     androidProvider: AndroidProvider.debug,
     appleProvider: AppleProvider.debug,
   );
-  SharedPrefsController sharedPrefsController = Get.find();
-  await sharedPrefsController.clearSharedPrefs();
+  //SharedPrefsController sharedPrefsController = Get.find();
+  //await sharedPrefsController.clearSharedPrefs();
   //await SharedPrefsServices.sharedPrefsInstance.clearSharedPrefs();
   final cameras = await availableCameras();
   // await ScreenUtil.ensureScreenSize();

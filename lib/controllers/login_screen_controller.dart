@@ -50,6 +50,7 @@ class LoginScreenController extends GetxController {
     }
     //(formKey.currentState!.validate());
     var temp = await (firestoreController.getUser(phoneNum: phoneNum.value));
+    // print(temp);
     if (temp == null) {
       otpController.isNewUser.value = true;
       if (kDebugMode) {

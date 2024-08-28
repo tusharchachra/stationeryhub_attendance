@@ -23,7 +23,15 @@ class FirebaseFirestoreController extends GetxController {
   Future onReady() async {
     super.onReady();
 
-    var tempUser =
+    super.onReady();
+    registeredUser = Rx<AlbumUsers?>(AlbumUsers());
+    registeredUser?.bindStream(
+        getUserForStreamBiding(phoneNum: loginController.phoneNum.value));
+    ever(registeredUser!, (val) {
+      print('registered listener');
+    });
+
+    /* var tempUser =
         await getUser(phoneNum: loginController.phoneNum.value ?? '');
     if (kDebugMode) {
       debugPrint('Updating registered user...');
@@ -31,8 +39,28 @@ class FirebaseFirestoreController extends GetxController {
     registeredUser?.update((user) {
       user?.phoneNum = tempUser?.phoneNum;
       user?.name = tempUser?.name;
-    });
+    });*/
     //registeredUser?.value = tempUser;
+  }
+
+  Stream<AlbumUsers> getUserForStreamBiding({
+    required String phoneNum,
+  }) {
+    print('binding stream for $phoneNum');
+    var x = firestoreInstance
+        .collection("users")
+        .where('phoneNum', isEqualTo: phoneNum)
+        /*.withConverter(
+          fromFirestore: AlbumUsers.fromFirestore,
+          toFirestore: (AlbumUsers user, _) => user.toJson(),
+        )*/
+        .snapshots()
+        .map((snapshot) {
+      print(snapshot.docs);
+      return AlbumUsers.fromFirestore(snapshot.docs[0], null);
+    });
+    print(x);
+    return x;
   }
 
   //return user data from firestore
@@ -52,15 +80,14 @@ class FirebaseFirestoreController extends GetxController {
             fromFirestore: AlbumUsers.fromFirestore,
             toFirestore: (AlbumUsers user, _) => user.toJson(),
           );
+
       final docSnap =
           await ref.get(getOptions ?? const GetOptions(source: Source.server));
       if (docSnap.docs.isNotEmpty) {
         tempUser = docSnap.docs[0].data();
         tempUser.setUid(docSnap.docs[0].id);
-        //  return {'user': tempUser, 'userId': docSnap.docs[0].id};
-      } else {
-        //return {'user': tempUser, 'userId': '0'};
-      }
+      } else {}
+      print(tempUser);
       return tempUser;
 /*
       await db
