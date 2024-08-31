@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -28,6 +27,7 @@ class OtpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     otpController.otpDigitController.value.setText('');
     otpController.isOtpValid.value = true;
+    otpController.isLoading.value = false;
     return ScaffoldOnboarding(
       bodyWidget: Center(
         child: Column(
@@ -148,10 +148,10 @@ class OtpScreen extends StatelessWidget {
                       buttonText: 'Continue',
                       onTapAction: () async {
                         otpController.isLoading.value = true;
-                        if (kDebugMode) {
+                        /*if (kDebugMode) {
                           debugPrint(
                               'PhoneAuthCredential=${authController.credential.toString()}');
-                        }
+                        }*/
                         if (otpController.formKeyOtp.currentState!.validate()) {
                           //user sign in
                           await authController.signIn(
@@ -164,11 +164,10 @@ class OtpScreen extends StatelessWidget {
                             );
                             otpController.isNewUser.value = false;
                           }
-                          //fetch registered user details from firestore
-                          await firestoreController.onReady();
+
                           //Fetch from firestore and Store registered user to shared prefs
-                          final registeredUser =
-                              firestoreController.registeredUser;
+                          /*final registeredUser =
+                              firestoreController.registeredUser;*/
                           /*if (registeredUser != null) {
                             await sharedPrefsController.storeUserToSharedPrefs(
                                 user: registeredUser.value);

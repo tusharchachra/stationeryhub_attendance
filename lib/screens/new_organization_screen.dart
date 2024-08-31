@@ -139,7 +139,7 @@ class NewOrganizationScreen extends StatelessWidget {
                             await firestoreController
                                 .updateOrganizationIdInCreator(
                                     currentUserId: firestoreController
-                                        .registeredUser!.value!.uid!,
+                                        .registeredUser!.value!.firebaseId!,
                                     organizationId: insertedOrganizationId!);
 
                             //fetch user from firestore

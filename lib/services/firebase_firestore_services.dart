@@ -27,7 +27,7 @@ class FirebaseFirestoreServices {
           await ref.get(getOptions ?? const GetOptions(source: Source.server));
       if (docSnap.docs.isNotEmpty) {
         tempUser = docSnap.docs[0].data();
-        tempUser.setUid(docSnap.docs[0].id);
+        //  tempUser.setUid(docSnap.docs[0].id);
         //  return {'user': tempUser, 'userId': docSnap.docs[0].id};
       } else {
         //return {'user': tempUser, 'userId': '0'};
@@ -72,7 +72,7 @@ class FirebaseFirestoreServices {
             toFirestore: (AlbumUsers user, _) => user.toJson(),
           );
       AlbumUsers tempUser = AlbumUsers(
-          uid: ref.id,
+          firebaseId: ref.id,
           userType: userType,
           name: name ?? '',
           phoneNum: phoneNum,

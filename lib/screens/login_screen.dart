@@ -26,6 +26,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     errorController.resetValues();
+    otpController.isNewUser.value = false;
     return ScaffoldOnboarding(
       bodyWidget: Center(
         child: Form(
@@ -113,7 +114,7 @@ class LoginScreen extends StatelessWidget {
                           print(tempUser);
                           if (tempUser != null) {
                             loginProcess();
-                            otpController.isNewUser.value = true;
+                            otpController.isNewUser.value = false;
                           }
                           /* if (firestoreController.registeredUser?.value?.uid !=
                               null) {
@@ -124,6 +125,7 @@ class LoginScreen extends StatelessWidget {
                             if (kDebugMode) {
                               print(authController.firebaseMessage);
                             }
+                            otpController.isNewUser.value = true;
                             //show dialog to register the new user or cancel
                             // buildShowAdaptiveDialog();
                             Get.bottomSheet(buildBottomSheet(),

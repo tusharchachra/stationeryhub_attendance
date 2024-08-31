@@ -60,7 +60,7 @@ class LoginScreenController extends GetxController {
     // if (temp != null) {
     firestoreController.registeredUser?.update((user) {
       user?.phoneNum = temp?.phoneNum;
-      user?.uid = temp?.uid;
+      user?.firebaseId = temp?.firebaseId;
       user?.name = temp?.name;
       user?.userType = temp?.userType;
       user?.organizationId = temp?.organizationId;

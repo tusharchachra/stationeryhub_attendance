@@ -25,11 +25,13 @@ class FirebaseFirestoreController extends GetxController {
 
     super.onReady();
     registeredUser = Rx<AlbumUsers?>(AlbumUsers());
-    registeredUser?.bindStream(
+    //Attaching listener to user
+    firestoreController.attachUserListener();
+    /*registeredUser?.bindStream(
         getUserForStreamBiding(phoneNum: loginController.phoneNum.value));
     ever(registeredUser!, (val) {
       print('registered listener');
-    });
+    });*/
 
     /* var tempUser =
         await getUser(phoneNum: loginController.phoneNum.value ?? '');
@@ -43,24 +45,37 @@ class FirebaseFirestoreController extends GetxController {
     //registeredUser?.value = tempUser;
   }
 
-  Stream<AlbumUsers> getUserForStreamBiding({
-    required String phoneNum,
+  void attachUserListener({
+    String? phoneNum,
   }) {
-    print('binding stream for $phoneNum');
-    var x = firestoreInstance
-        .collection("users")
-        .where('phoneNum', isEqualTo: phoneNum)
-        /*.withConverter(
+    if (kDebugMode) {
+      debugPrint(
+          'Attaching listener for firebase user = ${authController.firebaseUser.value?.uid}');
+    }
+    firestoreInstance
+            .collection("users")
+            .where('firebaseId',
+                isEqualTo: authController.firebaseUser.value?.uid)
+            /*.withConverter(
           fromFirestore: AlbumUsers.fromFirestore,
           toFirestore: (AlbumUsers user, _) => user.toJson(),
         )*/
-        .snapshots()
-        .map((snapshot) {
-      print(snapshot.docs);
-      return AlbumUsers.fromFirestore(snapshot.docs[0], null);
-    });
-    print(x);
-    return x;
+            .snapshots()
+            .listen((event) {
+      if (kDebugMode) {
+        print('user data changed');
+      }
+      print(event.docs[0].data());
+      registeredUser?.value = AlbumUsers.fromJson(event.docs[0].data());
+    })
+        /* .map((snapshot) {
+      print(snapshot);
+      x = AlbumUsers.fromFirestore(snapshot, null);
+      // return AlbumUsers.fromFirestore(snapshot.docs[0], null);
+    })*/
+        ;
+
+        print(registeredUser);
   }
 
   //return user data from firestore
@@ -85,7 +100,7 @@ class FirebaseFirestoreController extends GetxController {
           await ref.get(getOptions ?? const GetOptions(source: Source.server));
       if (docSnap.docs.isNotEmpty) {
         tempUser = docSnap.docs[0].data();
-        tempUser.setUid(docSnap.docs[0].id);
+        //tempUser.setUid(authController.firebaseUser.value!.uid);
       } else {}
       print(tempUser);
       return tempUser;
@@ -133,7 +148,7 @@ class FirebaseFirestoreController extends GetxController {
             toFirestore: (AlbumUsers user, _) => user.toJson(),
           );
       AlbumUsers tempUser = AlbumUsers(
-          uid: ref.id,
+          firebaseId: authController.firebaseUser.value?.uid,
           userType: userType,
           name: name ?? '',
           phoneNum: phoneNum,

@@ -116,7 +116,7 @@ class _NewOrganizationScreenOldState extends State<NewOrganizationScreenOld> {
                       geoLocationLat: currentPosition?.latitude,
                       geoLocationLong: currentPosition?.longitude,
                       createdOn: DateTime.now(),
-                      createdBy: currentUser!.uid!,
+                      createdBy: currentUser!.firebaseId!,
                       subscription: SubscriptionType.gold,
                     );
 
@@ -124,7 +124,7 @@ class _NewOrganizationScreenOldState extends State<NewOrganizationScreenOld> {
                         .createOrganization(newOrganization: newOrganization);
                     //inserting the newOrganizationId to the user's profile
                     await firestoreServices.updateOrganizationIdInCreator(
-                        currentUserId: currentUser!.uid!,
+                        currentUserId: currentUser!.firebaseId!,
                         organizationId: insertedOrganizationId!);
 
                     /*AlbumOrganization? insertedOrganization =
