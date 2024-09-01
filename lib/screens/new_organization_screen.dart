@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:stationeryhub_attendance/albums/album_users.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 import 'package:stationeryhub_attendance/controllers/new_organization_screen_controller.dart';
 import 'package:stationeryhub_attendance/form_fields/form_field_text.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_onboarding.dart';
 import 'package:stationeryhub_attendance/screens/admin_dashboard_screen.dart';
 
-import '../albums/album_organizations.dart';
 import '../controllers/firebase_error_controller.dart';
 import '../form_fields/form_field_button.dart';
 import '../helpers/constants.dart';
+import '../models/organizations_model.dart';
 
 class NewOrganizationScreen extends StatelessWidget {
   const NewOrganizationScreen({super.key});
@@ -73,6 +72,8 @@ class NewOrganizationScreen extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
                       child: FormFieldText(
+                        textController: newOrganizationScreenController
+                            .nameController.value,
                         prefixIcon: const Icon(Icons.business),
                         hintText: 'Organization name',
                         validator: (value) {
@@ -84,7 +85,9 @@ class NewOrganizationScreen extends StatelessWidget {
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
-                      child: const FormFieldText(
+                      child: FormFieldText(
+                        textController: newOrganizationScreenController
+                            .addressController.value,
                         hintText: 'Address',
                         prefixIcon: Icon(Icons.location_on_outlined),
                         isMultiLine: true,
@@ -135,22 +138,15 @@ class NewOrganizationScreen extends StatelessWidget {
                                 await sharedPrefsController
                                     .getUserFromSharedPrefs();*/
 
-                            //inserting the newOrganizationId to the user's profile on firestore
-                            await firestoreController
-                                .updateOrganizationIdInCreator(
-                                    currentUserId: firestoreController
-                                        .registeredUser!.value!.firebaseId!,
-                                    organizationId: insertedOrganizationId!);
-
                             //fetch user from firestore
-                            AlbumUsers? currentUser =
+                            /*AlbumUsers? currentUser =
                                 await firestoreController.getUser(
                                     phoneNum: firestoreController
-                                        .registeredUser!.value!.phoneNum!);
+                                        .registeredUser!.value!.phoneNum!);*/
 
                             //fetch organization from firestore
-                            newOrganization = await firestoreController
-                                .getOrganization(orgId: insertedOrganizationId);
+                            /*newOrganization = await firestoreController
+                                .getOrganization(orgId: insertedOrganizationId);*/
 
                             //update user details in shared prefs
                             /*  await sharedPrefsController.storeUserToSharedPrefs(

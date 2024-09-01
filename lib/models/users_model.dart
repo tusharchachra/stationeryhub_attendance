@@ -1,15 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:stationeryhub_attendance/albums/enum_user_type.dart';
+
+import './user_type_enum.dart';
 
 class AlbumUsers {
-  String? firebaseId;
+  String? firebaseUserId;
   UserType? userType;
   String? name;
   String? phoneNum;
   String? organizationId;
+  String? userId;
 
   AlbumUsers({
-    this.firebaseId,
+    this.firebaseUserId,
+    this.userId,
     this.userType,
     this.name,
     this.phoneNum,
@@ -22,7 +25,8 @@ class AlbumUsers {
   ) {
     final data = snapshot.data();
     return AlbumUsers(
-        firebaseId: data?['firebaseId'],
+        firebaseUserId: data?['firebaseUserId'],
+        userId: data?['userId'],
         name: data?['name'],
         userType: UserType.values.byName(data!['userType']),
         phoneNum: data['phoneNum'],
@@ -30,9 +34,11 @@ class AlbumUsers {
   }
 
   AlbumUsers.fromJson(Map<String, dynamic> json)
-      : firebaseId = json['firebaseId'].toString() == ''
+      : firebaseUserId = json['firebaseUserId'].toString() == ''
             ? ''
-            : json['firebaseId'].toString(),
+            : json['firebaseUserId'].toString(),
+        userId =
+            json['userId'].toString() == '' ? '' : json['userId'].toString(),
         name = json['name'].toString() == '' ? '' : json['name'].toString(),
         //json returns "UserType.admin" hence splitting the string to get the exact enum
         userType = UserType.values.byName(json['userType']),
@@ -44,7 +50,8 @@ class AlbumUsers {
             : json['organizationId'].toString();
 
   Map<String, dynamic> toJson() => {
-        'firebaseId': firebaseId ?? 'null',
+        'firebaseUserId': firebaseUserId ?? 'null',
+        'userId': userId ?? 'null',
         'userType': userType?.name,
         'name': name,
         'phoneNum': phoneNum,
@@ -52,7 +59,7 @@ class AlbumUsers {
       };
 
   /*void setUid(String id) {
-    firebaseId = id;
+    firebaseUserId = id;
   }*/
 
   @override

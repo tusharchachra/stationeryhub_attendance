@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:stationeryhub_attendance/albums/album_organizations.dart';
-import 'package:stationeryhub_attendance/albums/album_users.dart';
-import 'package:stationeryhub_attendance/albums/enum_user_type.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
+
+import '../models/organizations_model.dart';
+import '../models/user_type_enum.dart';
+import '../models/users_model.dart';
 
 class FirebaseFirestoreServices {
   final FirebaseFirestore db = FirebaseFirestore.instance;
@@ -72,7 +73,7 @@ class FirebaseFirestoreServices {
             toFirestore: (AlbumUsers user, _) => user.toJson(),
           );
       AlbumUsers tempUser = AlbumUsers(
-          firebaseId: ref.id,
+          firebaseUserId: ref.id,
           userType: userType,
           name: name ?? '',
           phoneNum: phoneNum,

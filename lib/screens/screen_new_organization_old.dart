@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:stationeryhub_attendance/albums/album_organizations.dart';
-import 'package:stationeryhub_attendance/albums/enum_subscription_type.dart';
 import 'package:stationeryhub_attendance/form_fields/form_field_button_old.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_home.dart';
 import 'package:stationeryhub_attendance/screens/screen_admin_dashboard_old.dart';
 import 'package:stationeryhub_attendance/services/location_handler.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
-import '../albums/album_users.dart';
+import '../models/organizations_model.dart';
+import '../models/subscription_type_enum.dart';
+import '../models/users_model.dart';
 import '../services/firebase_firestore_services.dart';
 
 class NewOrganizationScreenOld extends StatefulWidget {
@@ -116,7 +116,7 @@ class _NewOrganizationScreenOldState extends State<NewOrganizationScreenOld> {
                       geoLocationLat: currentPosition?.latitude,
                       geoLocationLong: currentPosition?.longitude,
                       createdOn: DateTime.now(),
-                      createdBy: currentUser!.firebaseId!,
+                      createdBy: currentUser!.firebaseUserId!,
                       subscription: SubscriptionType.gold,
                     );
 
@@ -124,7 +124,7 @@ class _NewOrganizationScreenOldState extends State<NewOrganizationScreenOld> {
                         .createOrganization(newOrganization: newOrganization);
                     //inserting the newOrganizationId to the user's profile
                     await firestoreServices.updateOrganizationIdInCreator(
-                        currentUserId: currentUser!.firebaseId!,
+                        currentUserId: currentUser!.firebaseUserId!,
                         organizationId: insertedOrganizationId!);
 
                     /*AlbumOrganization? insertedOrganization =

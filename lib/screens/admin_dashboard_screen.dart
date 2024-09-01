@@ -1,6 +1,7 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
 
 import '../controllers/firebase_firestore_controller.dart';
 import '../form_fields/form_field_button.dart';
@@ -12,6 +13,7 @@ class AdminDashboardScreen extends StatelessWidget {
   const AdminDashboardScreen({super.key});
 
   static FirebaseFirestoreController firestoreController = Get.find();
+  static FirebaseAuthController authController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +73,12 @@ class AdminDashboardScreen extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        Obx(
+          () => Text(
+            'Hello ${firestoreController.registeredUser?.value?.name}',
+            style: Get.textTheme.displayLarge,
+          ),
+        ),
         Text(
           'Set up new organization',
           style: Get.textTheme.displayMedium,
@@ -85,14 +93,20 @@ class AdminDashboardScreen extends StatelessWidget {
                   builder: (context) => const NewOrganizationScreen()));*/
           },
         ),
-        FormFieldButton(
-          width: 384.w,
-          height: 56.h,
-          buttonText: 'Logout',
-          onTapAction: () {
-            FirebaseLoginServices.firebaseInstance.signOutUser();
-          },
-        )
+        authController.isSigningOut.isTrue
+            ? SizedBox(
+                width: 25.w,
+                height: 25.h,
+                child: const CircularProgressIndicator(),
+              )
+            : FormFieldButton(
+                width: 384.w,
+                height: 56.h,
+                buttonText: 'Logout',
+                onTapAction: () {
+                  FirebaseLoginServices.firebaseInstance.signOutUser();
+                },
+              )
       ],
     );
   }

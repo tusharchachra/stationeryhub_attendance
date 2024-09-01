@@ -9,6 +9,8 @@ class NewOrganizationScreenController extends GetxController {
   Rx<TextEditingController> addressController = TextEditingController().obs;
   Rx<TextEditingController> nameController = TextEditingController().obs;
 
+
+
   validateName(String? value) {
     String? temp;
     if (value == '') {

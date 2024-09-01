@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:stationeryhub_attendance/albums/album_users.dart';
-import 'package:stationeryhub_attendance/albums/enum_user_type.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
 import '../form_fields/form_field_button_old.dart';
+import '../models/user_type_enum.dart';
+import '../models/users_model.dart';
 import '../scaffold/scaffold_home.dart';
 import '../services/firebase_firestore_services.dart';
 

@@ -21,6 +21,7 @@ class FirebaseAuthController extends GetxController {
   late Rx<PhoneAuthCredential> credential;
   FirebaseAuth authInstance = FirebaseAuth.instance;
   RxBool isInternetConnected = false.obs;
+  RxBool isSigningOut = false.obs;
 
   RxString _verId = ''.obs;
 
@@ -132,6 +133,11 @@ class FirebaseAuthController extends GetxController {
   }
 
   Future signOutUser() async {
+    if (kDebugMode) {
+      debugPrint('Signing out...');
+    }
+    isSigningOut.value = true;
+
     try {
       await authInstance.signOut();
       // auth.currentUser!.reload();
@@ -140,5 +146,6 @@ class FirebaseAuthController extends GetxController {
         print(e);
       }
     }
+    isSigningOut.value = false;
   }
 }

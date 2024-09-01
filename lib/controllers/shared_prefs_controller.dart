@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../albums/album_organizations.dart';
-import '../albums/album_users.dart';
+import '../models/organizations_model.dart';
+import '../models/users_model.dart';
 
 class SharedPrefsController extends GetxController {
   static SharedPrefsController sharedPrefsController = Get.find();

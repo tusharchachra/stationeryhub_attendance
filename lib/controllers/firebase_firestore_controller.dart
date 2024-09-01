@@ -3,10 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
-import '../albums/album_organizations.dart';
-import '../albums/album_users.dart';
-import '../albums/enum_user_type.dart';
 import '../controllers/firebase_auth_controller.dart';
+import '../models/organizations_model.dart';
+import '../models/user_type_enum.dart';
+import '../models/users_model.dart';
 import 'firebase_error_controller.dart';
 import 'login_screen_controller.dart';
 
@@ -75,7 +75,7 @@ class FirebaseFirestoreController extends GetxController {
     })*/
         ;
 
-        print(registeredUser);
+    print(registeredUser);
   }
 
   //return user data from firestore
@@ -148,7 +148,92 @@ class FirebaseFirestoreController extends GetxController {
             toFirestore: (AlbumUsers user, _) => user.toJson(),
           );
       AlbumUsers tempUser = AlbumUsers(
-          firebaseId: authController.firebaseUser.value?.uid,
+          firebaseUserId: authController.firebaseUser.value?.uid,
+          userId: '',
+          userType: userType,
+          name: name ?? '',
+          phoneNum: phoneNum,
+          organizationId: orgId);
+      await ref.set(tempUser);
+      if (kDebugMode) {
+        debugPrint('New user Id added = ${ref.id}');
+      }
+      //update userId of the user
+      await firestoreController.updateUser(user: AlbumUsers(userId: ref.id));
+    } on FirebaseException catch (e) {
+      errorController.getErrorMsg(e);
+      if (kDebugMode) {
+        print('Error:${e.toString()}');
+      }
+    }
+  }
+
+  //update user details
+  Future<void> updateUser({required AlbumUsers user}) async {
+    if (kDebugMode) {
+      debugPrint('Updating user details in firestore...');
+    }
+    try {
+      final ref =
+          firestoreInstance.collection("users").doc(user.userId).withConverter(
+                fromFirestore: AlbumUsers.fromFirestore,
+                toFirestore: (AlbumUsers user, _) => user.toJson(),
+              );
+      /*AlbumUsers tempUser = AlbumUsers(
+          firebaseUserId: authController.firebaseUser.value?.uid,
+          userId: '',
+          userType: userType,
+          name: name ?? '',
+          phoneNum: phoneNum,
+          organizationId: orgId);*/
+      if (user.firebaseUserId != null) {
+        await ref.update({'firebaseUserId': '${user.firebaseUserId}'});
+      }
+      if (user.userId != null) {
+        await ref.update({'userId': '${user.userId}'});
+      }
+      if (user.name != null) {
+        await ref.update({'name': '${user.name}'});
+      }
+      if (user.phoneNum != null) {
+        await ref.update({'phoneNum': '${user.phoneNum}'});
+      }
+      if (user.organizationId != null) {
+        await ref.update({'organizationId': '${user.organizationId}'});
+      }
+      if (user.userType != null) {
+        await ref.update({'userType': '${user.userType}'});
+      }
+
+      if (kDebugMode) {
+        debugPrint('User details updated');
+      }
+    } on FirebaseException catch (e) {
+      errorController.getErrorMsg(e);
+      if (kDebugMode) {
+        print('Error:${e.toString()}');
+      }
+    }
+  }
+
+  //update user
+/*  Future<void> updateUser(
+      {required String phoneNum,
+        required UserType userType,
+        String? name,
+        String? userId,
+        String? orgId}) async {
+    if (kDebugMode) {
+      debugPrint('Storing new user to firestore...');
+    }
+    try {
+      final ref = firestoreInstance.collection("users").doc().withConverter(
+        fromFirestore: AlbumUsers.fromFirestore,
+        toFirestore: (AlbumUsers user, _) => user.toJson(),
+      );
+      AlbumUsers tempUser = AlbumUsers(
+          firebaseUserId: authController.firebaseUser.value?.uid,
+          userId: '',
           userType: userType,
           name: name ?? '',
           phoneNum: phoneNum,
@@ -163,7 +248,7 @@ class FirebaseFirestoreController extends GetxController {
         print('Error:${e.toString()}');
       }
     }
-  }
+  }*/
 
   //get organization details based on phone number of the user
   Future<AlbumOrganization?> getOrganization({
@@ -206,6 +291,7 @@ class FirebaseFirestoreController extends GetxController {
     if (kDebugMode) {
       debugPrint('Creating new Organization...');
     }
+    print(newOrganization);
     try {
       final ref =
           firestoreInstance.collection("organizations").doc().withConverter(
@@ -226,13 +312,22 @@ class FirebaseFirestoreController extends GetxController {
         org?.address = insertedOrganization?.address;
       });
 
+      //inserting the newOrganizationId to the user's profile on firestore
+      await updateUser(
+          user: AlbumUsers(
+              userId: registeredUser?.value?.userId, organizationId: ref.id));
+      /*await firestoreController.updateOrganizationIdInCreator(
+          currentUserId:
+              firestoreController.registeredUser!.value!.firebaseUserId!,
+          organizationId: ref.id);*/
+
       if (kDebugMode) {
         print('inserted organization=$insertedOrganization');
       }
-      if (insertedOrganization != null) {
+      /*  if (insertedOrganization != null) {
         await SharedPrefsServices.sharedPrefsInstance
             .storeOrganizationToSharedPrefs(organization: insertedOrganization);
-      }
+      }*/
 
       return ref.id;
     } on Exception catch (e) {

@@ -6,12 +6,12 @@ import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.da
 import 'package:stationeryhub_attendance/form_fields/form_field_button.dart';
 import 'package:stationeryhub_attendance/form_fields/form_field_phone_num.dart';
 
-import '../albums/album_users.dart';
 import '../controllers/firebase_error_controller.dart';
 import '../controllers/firebase_firestore_controller.dart';
 import '../controllers/login_screen_controller.dart';
 import '../controllers/otp_screen_controller.dart';
 import '../helpers/constants.dart';
+import '../models/users_model.dart';
 import '../scaffold/scaffold_onboarding.dart';
 import 'otp_screen.dart';
 

@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:stationeryhub_attendance/albums/album_users.dart';
 import 'package:stationeryhub_attendance/helpers/size_config.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_home.dart';
 
 import '../form_fields/form_field_button_old.dart';
 import '../form_fields/form_field_phone_num.dart';
+import '../models/users_model.dart';
 import '../services/firebase_firestore_services.dart';
 
 class ScreenLoginOld extends StatefulWidget {

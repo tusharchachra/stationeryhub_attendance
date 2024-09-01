@@ -1,17 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:stationeryhub_attendance/albums/album_organizations.dart';
-import 'package:stationeryhub_attendance/albums/album_users.dart';
-import 'package:stationeryhub_attendance/form_fields/form_field_button_old.dart';
-import 'package:stationeryhub_attendance/scaffold/scaffold_home.dart';
-import 'package:stationeryhub_attendance/screens/screen_mark_attendance.dart';
-import 'package:stationeryhub_attendance/screens/screen_new_organization_old.dart';
-import 'package:stationeryhub_attendance/screens/screen_new_user_for_organization.dart';
-import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
 import '../form_fields/form_field_button.dart';
+import '../form_fields/form_field_button_old.dart';
+import '../models/organizations_model.dart';
+import '../models/users_model.dart';
+import '../scaffold/scaffold_home.dart';
 import '../services/firebase_login_services.dart';
+import '../services/shared_prefs_services.dart';
+import 'screen_mark_attendance.dart';
+import 'screen_new_organization_old.dart';
+import 'screen_new_user_for_organization.dart';
 
 class AdminDashboardScreenOld extends StatefulWidget {
   const AdminDashboardScreenOld({super.key});

@@ -1,25 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class AlbumEmployeeAttendanceUsers {
+class EmployeeAttendanceUsersModel {
   final int userId;
   final String name;
   final int phoneNum;
   final bool isAuthorised;
   final String accessLevel;
 
-  AlbumEmployeeAttendanceUsers(
+  EmployeeAttendanceUsersModel(
       {required this.userId,
       required this.name,
       required this.phoneNum,
       required this.isAuthorised,
       required this.accessLevel});
 
-  factory AlbumEmployeeAttendanceUsers.fromFirestore(
+  factory EmployeeAttendanceUsersModel.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
     SnapshotOptions? options,
   ) {
     final data = snapshot.data();
-    return AlbumEmployeeAttendanceUsers(
+    return EmployeeAttendanceUsersModel(
         userId: data?['user_id'],
         name: data?['name'],
         phoneNum: data?['phone_num'],

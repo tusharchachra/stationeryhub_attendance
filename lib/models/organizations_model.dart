@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'enum_subscription_type.dart';
+import 'subscription_type_enum.dart';
 
 class AlbumOrganization {
   String? id;
