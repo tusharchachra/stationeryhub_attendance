@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
@@ -11,6 +12,9 @@ class ThemeCustom {
       useMaterial3: true,
       fontFamily: GoogleFonts.poppins().fontFamily,
       appBarTheme: AppBarTheme(
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: colourStatusBar,
+        ),
         titleTextStyle: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: SizeConfig.getSize(5),

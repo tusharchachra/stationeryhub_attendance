@@ -8,5 +8,6 @@ const colourTextLight = Color(0xffA8A8A8);
 const colourOtpBoxBorder = Color(0xffB3ABC2);
 const colourTextFieldIcon = Color(0xff939393);
 const colourError = Colors.red;
+const colourStatusBar = Color(0xff284EAD);
 
 const otpResendTime = 5;

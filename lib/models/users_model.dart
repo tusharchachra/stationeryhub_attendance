@@ -39,7 +39,8 @@ class AlbumUsers {
             : json['firebaseUserId'].toString(),
         userId =
             json['userId'].toString() == '' ? '' : json['userId'].toString(),
-        name = json['name'].toString() == '' ? '' : json['name'].toString(),
+        name =
+            json['name'].toString() == '' ? 'Guest' : json['name'].toString(),
         //json returns "UserType.admin" hence splitting the string to get the exact enum
         userType = UserType.values.byName(json['userType']),
         phoneNum = json['phoneNum'].toString() == ''

@@ -3,10 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
+import 'package:stationeryhub_attendance/helpers/constants.dart';
 
 import '../controllers/firebase_firestore_controller.dart';
 import '../form_fields/form_field_button.dart';
-import '../scaffold/scaffold_home.dart';
 import '../services/firebase_login_services.dart';
 import 'new_organization_screen.dart';
 
@@ -24,15 +24,29 @@ class AdminDashboardScreen extends StatelessWidget {
       Get.to(NewOrganizationScreen());
     }*/
     {
-      return (ScaffoldHome(
-          bodyWidget: Obx(() => firestoreController.isLoading.value == true
-              ? Center(child: CircularProgressIndicator())
-              : firestoreController.registeredOrganization?.value?.id == null
-                  ? buildNewOrganizationMessage()
-                  : buildDashboard()),
-          isLoading: false,
-          pageTitle: 'admin dashboard'));
+      return Obx(() => firestoreController.isLoading.value == true
+          ? Center(child: CircularProgressIndicator())
+          : firestoreController.registeredOrganization?.value?.id == null
+              ? buildNewOrganizationMessage()
+              : buildDashboard1());
     }
+  }
+
+  Widget buildDashboard1() {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: colourPrimary,
+        title: Column(
+          children: [
+            Text(firestoreController.registeredUser?.value?.name ?? 'Guest'),
+            Text(firestoreController.registeredUser?.value?.name ?? 'Guest'),
+          ],
+        ),
+        actions: [
+          Text(firestoreController.registeredUser?.value?.name ?? 'Guest')
+        ],
+      ),
+    );
   }
 
   Column buildDashboard() {
