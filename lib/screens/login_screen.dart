@@ -111,7 +111,6 @@ class LoginScreen extends StatelessWidget {
                           AlbumUsers? tempUser =
                               await firestoreController.getUser(
                                   phoneNum: loginController.phoneNum.value);
-                          print(tempUser);
                           if (tempUser != null) {
                             loginProcess();
                             otpController.isNewUser.value = false;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
 
 import '../controllers/firebase_firestore_controller.dart';
@@ -14,21 +15,23 @@ class AdminDashboardScreen extends StatelessWidget {
 
   static FirebaseFirestoreController firestoreController = Get.find();
   static FirebaseAuthController authController = Get.find();
+  static AdminDashboardScreenController adminDashboardScreenController =
+      Get.find();
 
   @override
   Widget build(BuildContext context) {
-    print('Organization=${firestoreController.registeredOrganization}');
     /* if (firestoreController.registeredOrganization?.value.id == null) {
       Get.to(NewOrganizationScreen());
     }*/
     {
-      return ScaffoldHome(
-          bodyWidget:
-              firestoreController.registeredOrganization?.value.id == null
+      return (ScaffoldHome(
+          bodyWidget: Obx(() => firestoreController.isLoading.value == true
+              ? Center(child: CircularProgressIndicator())
+              : firestoreController.registeredOrganization?.value?.id == null
                   ? buildNewOrganizationMessage()
-                  : buildDashboard(),
+                  : buildDashboard()),
           isLoading: false,
-          pageTitle: 'admin dashboard');
+          pageTitle: 'admin dashboard'));
     }
   }
 
@@ -36,6 +39,10 @@ class AdminDashboardScreen extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        Text(
+          firestoreController.registeredOrganization?.value?.name ?? '',
+          style: Get.textTheme.displayLarge,
+        ),
         FormFieldButton(
           width: 100.w,
           height: 30.h,
@@ -57,14 +64,17 @@ class AdminDashboardScreen extends StatelessWidget {
               );*/
           },
         ),
-        FormFieldButton(
-          width: 100.w,
-          height: 30.h,
-          buttonText: 'Logout',
-          onTapAction: () {
-            //FirebaseLoginServices.firebaseInstance.signOutUser();
-          },
-        )
+        authController.isSigningOut.isTrue
+            ? CircularProgressIndicator()
+            : FormFieldButton(
+                width: 100.w,
+                height: 30.h,
+                buttonText: 'Logout',
+                onTapAction: () {
+                  authController.signOutUser();
+                  //FirebaseLoginServices.firebaseInstance.signOutUser();
+                },
+              )
       ],
     );
   }
