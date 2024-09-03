@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/controllers/utils.dart';
-import 'package:stationeryhub_attendance/helpers/size_config.dart';
 import 'package:stationeryhub_attendance/helpers/theme.dart';
 import 'package:stationeryhub_attendance/screens/screen_splash.dart';
 
@@ -57,7 +56,7 @@ class StationeryHubAttendance extends StatelessWidget {
     );*/
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
+    // SizeConfig().init(context);
     /* ScreenUtil.init(context,
         designSize: const Size(460, 932),
         minTextAdapt: true,
@@ -67,6 +66,8 @@ class StationeryHubAttendance extends StatelessWidget {
       designSize: const Size(460, 932),
       minTextAdapt: true,
       splitScreenMode: true,
+      enableScaleText: () => true,
+      enableScaleWH: () => true,
       builder: (_, child) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
@@ -74,11 +75,12 @@ class StationeryHubAttendance extends StatelessWidget {
           home: child,
         );
       },
-      child: ScreenSplash(),
+      child: SplashScreen(),
     );
   }
 }
 
+/*
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -90,3 +92,4 @@ class HomePage extends StatelessWidget {
     return ScreenSplash();
   }
 }
+*/

@@ -3,15 +3,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
+import 'package:stationeryhub_attendance/form_fields/admin_dashboard_box.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
+import 'package:stationeryhub_attendance/screens/screen_splash.dart';
 
 import '../controllers/firebase_firestore_controller.dart';
 import '../form_fields/form_field_button.dart';
 import '../services/firebase_login_services.dart';
 import 'new_organization_screen.dart';
 
-class AdminDashboardScreen extends StatelessWidget {
+class AdminDashboardScreen extends GetView {
   const AdminDashboardScreen({super.key});
 
   static FirebaseFirestoreController firestoreController = Get.find();
@@ -25,12 +27,20 @@ class AdminDashboardScreen extends StatelessWidget {
       Get.to(NewOrganizationScreen());
     }*/
     {
-      return Obx(() => firestoreController.isLoading.value == true
-          ? Center(child: CircularProgressIndicator())
-          : firestoreController.registeredOrganization?.value?.id == null
-              ? buildNewOrganizationMessage()
-              : buildDashboard1());
+      return Obx(
+        () => firestoreController.isLoading.value == true
+            ? const SplashScreen()
+            : firestoreController.registeredOrganization?.value?.id == null
+                ? buildNewOrganizationMessage()
+                /* : firestoreController.isLoading.value == true
+                  ? buildDashboardLoading()*/
+                : buildDashboard1(),
+      );
     }
+  }
+
+  Widget buildDashboardLoading() {
+    return Container();
   }
 
   Widget buildDashboard1() {
@@ -50,7 +60,6 @@ class AdminDashboardScreen extends StatelessWidget {
       pageSubtitle:
           '\n${firestoreController.registeredUser?.value?.userType?.name.capitalizeFirst}'
               .toString(),
-      bodyWidget: Container(),
       isLoading: false,
       appBarActions: [
         IconButton(
@@ -59,6 +68,44 @@ class AdminDashboardScreen extends StatelessWidget {
           color: Colors.white,
         )
       ],
+      bodyWidget: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              AdminDashboardBox(
+                colour: colourStatusBar,
+                title: 'Total employees',
+                subTitle: '45',
+              ),
+              AdminDashboardBox(
+                colour: colourDashboardBox1,
+                title: 'Total working hours',
+                subTitle: '45',
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              AdminDashboardBox(
+                colour: colourDashboardBox2,
+                title: 'Present',
+                subTitle: '45',
+                supportingText: '12%',
+              ),
+              AdminDashboardBox(
+                colour: colourDashboardBox3,
+                title: 'Absent',
+                subTitle: '45',
+                supportingText: '12%',
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 

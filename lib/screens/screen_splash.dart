@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 
 import '../helpers/constants.dart';
 
-class ScreenSplash extends GetWidget {
-  const ScreenSplash({super.key});
+class SplashScreen extends GetWidget {
+  const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loading_overlay/loading_overlay.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
-
-import '../helpers/size_config.dart';
 
 class ScaffoldDashboard extends StatelessWidget {
   final Widget bodyWidget;
@@ -42,40 +39,17 @@ class ScaffoldDashboard extends StatelessWidget {
             ),
           ]),
     );
-    return SafeArea(
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        backgroundColor: colourScaffoldBackground,
-        appBar: AppBar(
-          systemOverlayStyle: Get.theme.appBarTheme.systemOverlayStyle,
-          backgroundColor: colourPrimary,
-          leading: leadingWidget,
-          title: title,
-          actions: appBarActions ?? [],
-        ),
-        body: Container(
-          width: SizeConfig.screenWidth,
-          height: SizeConfig.screenHeight,
-          decoration: scaffoldDecoration,
-          child: LoadingOverlay(
-            progressIndicator: const Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(),
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    'Loading...',
-                  ),
-                )
-              ],
-            ),
-            isLoading: isLoading,
-            child: bodyWidget,
-          ),
-        ),
-        bottomNavigationBar: bottomNavigationBar,
+
+    return Scaffold(
+      backgroundColor: colourScaffoldBackground,
+      appBar: AppBar(
+        backgroundColor: colourPrimary,
+        leading: leadingWidget,
+        title: title,
+        actions: appBarActions ?? [],
       ),
+      body: bodyWidget,
+      bottomNavigationBar: bottomNavigationBar,
     );
   }
 }

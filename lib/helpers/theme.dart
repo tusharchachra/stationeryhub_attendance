@@ -13,7 +13,7 @@ class ThemeCustom {
       fontFamily: GoogleFonts.poppins().fontFamily,
       appBarTheme: AppBarTheme(
         toolbarHeight: 71.h,
-        systemOverlayStyle: SystemUiOverlayStyle(
+        systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: colourStatusBar,
         ),
         titleTextStyle: TextStyle(
@@ -28,6 +28,11 @@ class ThemeCustom {
       ),
       iconTheme: const IconThemeData(color: colourPrimary),
       textTheme: TextTheme(
+        headlineLarge: TextStyle(
+          color: Colors.white,
+          fontSize: 20.sp,
+          fontWeight: FontWeight.w500,
+        ),
         displayLarge: TextStyle(
           color: colourTextDark,
           fontSize: 20.sp,
@@ -45,17 +50,17 @@ class ThemeCustom {
         ),
         bodyLarge: TextStyle(
           color: Colors.white,
-          fontSize: SizeConfig.getSize(4),
-          fontWeight: FontWeight.bold,
+          fontSize: 14.sp,
+          fontWeight: FontWeight.w500,
         ),
         bodyMedium: TextStyle(
           color: Colors.white,
-          fontSize: 14.sp,
+          fontSize: 12.sp,
           fontWeight: FontWeight.w500,
         ),
         bodySmall: TextStyle(
           color: Colors.white,
-          fontSize: 12.sp,
+          fontSize: 10.sp,
           fontWeight: FontWeight.w400,
         ),
       ),
