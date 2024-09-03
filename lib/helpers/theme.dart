@@ -12,6 +12,7 @@ class ThemeCustom {
       useMaterial3: true,
       fontFamily: GoogleFonts.poppins().fontFamily,
       appBarTheme: AppBarTheme(
+        toolbarHeight: 71.h,
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: colourStatusBar,
         ),
@@ -49,13 +50,13 @@ class ThemeCustom {
         ),
         bodyMedium: TextStyle(
           color: Colors.white,
-          fontSize: SizeConfig.getSize(3),
-          fontWeight: FontWeight.bold,
+          fontSize: 14.sp,
+          fontWeight: FontWeight.w500,
         ),
         bodySmall: TextStyle(
           color: Colors.white,
-          fontSize: SizeConfig.getSize(3),
-          fontWeight: FontWeight.normal,
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w400,
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(

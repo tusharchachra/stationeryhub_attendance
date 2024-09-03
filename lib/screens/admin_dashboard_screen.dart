@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
+import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
 
 import '../controllers/firebase_firestore_controller.dart';
 import '../form_fields/form_field_button.dart';
@@ -33,19 +34,31 @@ class AdminDashboardScreen extends StatelessWidget {
   }
 
   Widget buildDashboard1() {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: colourPrimary,
-        title: Column(
-          children: [
-            Text(firestoreController.registeredUser?.value?.name ?? 'Guest'),
-            Text(firestoreController.registeredUser?.value?.name ?? 'Guest'),
-          ],
+    return ScaffoldDashboard(
+      leadingWidget: Padding(
+        padding: EdgeInsets.fromLTRB(12.w, 13.h, 0, 13.h),
+        child: CircleAvatar(
+          maxRadius: 22.r,
+          backgroundColor: colourProfilePicIconBackground,
+          child: const Icon(
+            Icons.person,
+            color: Colors.white,
+          ),
         ),
-        actions: [
-          Text(firestoreController.registeredUser?.value?.name ?? 'Guest')
-        ],
       ),
+      pageTitle: firestoreController.registeredUser?.value?.name ?? 'Guest',
+      pageSubtitle:
+          '\n${firestoreController.registeredUser?.value?.userType?.name.capitalizeFirst}'
+              .toString(),
+      bodyWidget: Container(),
+      isLoading: false,
+      appBarActions: [
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.more_vert),
+          color: Colors.white,
+        )
+      ],
     );
   }
 

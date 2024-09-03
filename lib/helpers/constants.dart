@@ -9,5 +9,7 @@ const colourOtpBoxBorder = Color(0xffB3ABC2);
 const colourTextFieldIcon = Color(0xff939393);
 const colourError = Colors.red;
 const colourStatusBar = Color(0xff284EAD);
+const colourProfilePicIconBackground = Color(0xffC1CFEE);
+const colourScaffoldBackground = Color(0xffF8F8F8);
 
 const otpResendTime = 5;
