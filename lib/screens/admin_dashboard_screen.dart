@@ -13,7 +13,7 @@ import '../form_fields/form_field_button.dart';
 import '../services/firebase_login_services.dart';
 import 'new_organization_screen.dart';
 
-class AdminDashboardScreen extends GetView {
+class AdminDashboardScreen extends StatelessWidget {
   const AdminDashboardScreen({super.key});
 
   static FirebaseFirestoreController firestoreController = Get.find();
