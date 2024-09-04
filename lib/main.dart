@@ -56,31 +56,34 @@ class StationeryHubAttendance extends StatelessWidget {
     );*/
   @override
   Widget build(BuildContext context) {
-    // SizeConfig().init(context);
     /* ScreenUtil.init(context,
         designSize: const Size(460, 932),
         minTextAdapt: true,
         splitScreenMode: true);*/
-
+    /* return MaterialApp(
+      title: 'Title',
+      theme: ThemeCustom.lightTheme,
+      home: HomePage(),
+    );*/
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return ScreenUtilInit(
       designSize: const Size(460, 932),
       minTextAdapt: true,
       splitScreenMode: true,
-      enableScaleText: () => true,
-      enableScaleWH: () => true,
+      // enableScaleText: () => true,
+      // enableScaleWH: () => true,
       builder: (_, child) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeCustom.lightTheme,
-          home: child,
+          home: SplashScreen(),
         );
       },
-      child: SplashScreen(),
+      //child: SplashScreen(),
     );
   }
 }
 
-/*
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -88,8 +91,13 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     //Set the fit size (fill in the screen size of the device in the design)
     //If the design is based on the size of the 360*690(dp)
+    ScreenUtil.init(
+      context,
+      designSize: Size(460, 932),
+      splitScreenMode: true,
+      minTextAdapt: true,
+    );
 
-    return ScreenSplash();
+    return SplashScreen();
   }
 }
-*/
