@@ -14,5 +14,6 @@ const colourScaffoldBackground = Color(0xffF8F8F8);
 const colourDashboardBox1 = Color(0xff0FA4F8);
 const colourDashboardBox2 = Color(0xff009950);
 const colourDashboardBox3 = Color(0xffE40001);
+const colourDateBoxBorder = Color(0xffEFEFEF);
 
 const otpResendTime = 5;
