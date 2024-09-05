@@ -1,14 +1,11 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class GradientProgressBar extends StatefulWidget {
   final Size size;
-  final Duration cycle;
-  final List<Color> colors;
 
   const GradientProgressBar({
+    super.key,
     required this.size,
-    required this.cycle,
-    required this.colors,
   });
 
   @override
@@ -23,7 +20,7 @@ class _FancyContainer extends State<GradientProgressBar>
   void initState() {
     super.initState();
     controller = AnimationController(
-      duration: widget.cycle,
+      duration: const Duration(seconds: 1),
       vsync: this,
     )
       ..forward()
@@ -46,24 +43,20 @@ class _FancyContainer extends State<GradientProgressBar>
     return AnimatedBuilder(
       animation: controller,
       builder: (context, _) {
-        return ClipRRect(
+        return Container(
+          /*width: widget.size.width,
+          height: widget.size.height,*/
           clipBehavior: Clip.antiAlias,
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-          child: Container(
-            /*width: widget.size.width,
-            height: widget.size.height,*/
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                tileMode: TileMode.repeated,
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                transform: SlideGradient(
-                  controller.value,
-                  widget.size.height * aspectRatio,
-                ),
-                colors: widget.colors,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              tileMode: TileMode.repeated,
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              transform: SlideGradient(
+                controller.value,
+                widget.size.height * aspectRatio,
               ),
+              colors: [Colors.black26, Colors.black12] /*_colors*/,
             ),
           ),
         );

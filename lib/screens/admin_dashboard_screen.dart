@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
 import 'package:stationeryhub_attendance/form_fields/admin_dashboard_box.dart';
@@ -48,37 +49,26 @@ class AdminDashboardScreen extends StatelessWidget {
     return ScaffoldDashboard(
       leadingWidget: Padding(
         padding: EdgeInsets.fromLTRB(12.w, 13.h, 0, 13.h),
-        child: CircleAvatar(
-          maxRadius: 22.r,
-          //backgroundColor: colourProfilePicIconBackground,
-          child: firestoreController.isLoading.value == false
-              ? ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(22.r)),
-                  child: GradientProgressBar(
-                    size: Size(200, 100),
-                    cycle: Duration(seconds: 2),
-                    colors: <Color>[
-                      Colors.transparent,
-                      Colors.grey,
-
-                      /* Colors.pink,
-                      Colors.red,
-                      Colors.yellow,
-                      Colors.green,
-                      Colors.cyan,*/
-                    ],
-                  ),
-                )
-              : const Icon(
+        child: firestoreController.isLoading.value == true
+            ? ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(22.r)),
+                child: GradientProgressBar(
+                  size: Size(22.w, 22.h),
+                ),
+              )
+            : CircleAvatar(
+                maxRadius: 22.r,
+                //backgroundColor: colourProfilePicIconBackground,
+                child: const Icon(
                   Icons.person,
                   color: Colors.white,
                 ),
-        ),
+              ),
       ),
-      pageTitle: firestoreController.registeredUser?.value?.name ?? 'Guest',
+      pageTitle: (firestoreController.registeredUser?.value?.name ?? 'Guest'),
       pageSubtitle:
-          '\n${firestoreController.registeredUser?.value?.userType?.name.capitalizeFirst}'
-              .toString(),
+          ('\n${firestoreController.registeredUser?.value?.userType?.name.capitalizeFirst}'
+              .toString()),
       isLoading: false,
       appBarActions: [
         IconButton(
@@ -95,12 +85,12 @@ class AdminDashboardScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               AdminDashboardBox(
-                colour: colourStatusBar,
+                colour: Constants.colourStatusBar,
                 title: 'Total employees',
                 subTitle: '45',
               ),
               AdminDashboardBox(
-                colour: colourDashboardBox1,
+                colour: Constants.colourDashboardBox1,
                 title: 'Total working hours',
                 subTitle: '45',
               ),
@@ -110,13 +100,13 @@ class AdminDashboardScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               AdminDashboardBox(
-                colour: colourDashboardBox2,
+                colour: Constants.colourDashboardBox2,
                 title: 'Present',
                 subTitle: '45',
                 supportingText: '12%',
               ),
               AdminDashboardBox(
-                colour: colourDashboardBox3,
+                colour: Constants.colourDashboardBox3,
                 title: 'Absent',
                 subTitle: '45',
                 supportingText: '12%',
@@ -124,42 +114,88 @@ class AdminDashboardScreen extends StatelessWidget {
             ],
           ),
           SizedBox(height: 10.h),
+          GestureDetector(
+            onTap: () async {},
+            child: Text(
+              '${DateFormat.MMMM().format(adminDashboardScreenController.selectedDate.value)},${DateFormat.y().format(adminDashboardScreenController.selectedDate.value)}',
+              style: Get.textTheme.displayLarge,
+            ),
+          ),
+          SizedBox(height: 10.h),
           CarouselSlider(
               disableGesture: false,
               carouselController:
                   adminDashboardScreenController.dateCarouselController.value,
               options: CarouselOptions(
+                initialPage:
+                    adminDashboardScreenController.selectedDate.value.day - 1,
                 height: 80.h,
+                enableInfiniteScroll: false,
                 viewportFraction: 0.25.w,
                 onPageChanged: (index, reason) {
-                  adminDashboardScreenController.currentDate = index;
+                  //adminDashboardScreenController.selectedDate = index;
                 },
               ),
-              items: [1, 2, 3, 4, 5]
-                  .map((item) => Container(
+              items: adminDashboardScreenController
+                  .getCurrentMonthDates(
+                month: adminDashboardScreenController.selectedDate.value.month,
+                year: adminDashboardScreenController.selectedDate.value.year,
+              )
+                  .map(
+                (item) {
+                  return Builder(builder: (BuildContext context) {
+                    return GestureDetector(
+                      onTap: () {
+                        if (item.compareTo(DateTime.now()) <= 0) {
+                          adminDashboardScreenController.selectedDate.value =
+                              item;
+                        }
+                      },
+                      child: Container(
                         width: 76.w,
                         height: 80.h,
+                        decoration: item.compareTo(DateTime.now()) > 0
+                            ? Constants.inactiveDateBoxDecoration
+                            : item.day ==
+                                    adminDashboardScreenController
+                                        .selectedDate.value.day
+                                ? Constants.selectedDateBoxDecoration
+                                : Constants.unselectedDateBoxDecoration,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
+                            /*Text(
+                              DateFormat.MMM().format(item),
+                              style: item.day ==
+                                      adminDashboardScreenController
+                                          .selectedDate.value.day
+                                  ? Get.textTheme.bodyLarge
+                                  : Get.textTheme.displayMedium,
+                            ),*/
                             Text(
-                              item.toString(),
-                              style: Get.textTheme.displayLarge,
+                              DateFormat.d().format(item),
+                              style: item.day ==
+                                      adminDashboardScreenController
+                                          .selectedDate.value.day
+                                  ? Get.textTheme.headlineLarge
+                                  : Get.textTheme.displayLarge,
                             ),
                             Text(
-                              'Day',
-                              style: Get.textTheme.displayMedium,
+                              DateFormat.E().format(item),
+                              style: item.day ==
+                                      adminDashboardScreenController
+                                          .selectedDate.value.day
+                                  ? Get.textTheme.bodyLarge
+                                  : Get.textTheme.displayMedium,
                             ),
                           ],
                         ),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: colourDateBoxBorder),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(14.r))),
-                      ))
-                  .toList())
+                      ),
+                    );
+                  });
+                },
+              ).toList())
         ],
       ),
     );

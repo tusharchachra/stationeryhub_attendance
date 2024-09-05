@@ -25,7 +25,7 @@ class FormFieldPhoneNum extends StatelessWidget {
       keyboardType: TextInputType.phone,
       autofocus: false,
       maxLength: 10,
-      cursorColor: colourTextLight,
+      cursorColor: Constants.colourTextLight,
       decoration: const InputDecoration()
           .applyDefaults(Get.theme.inputDecorationTheme)
           .copyWith(

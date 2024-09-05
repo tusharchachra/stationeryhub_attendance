@@ -14,7 +14,7 @@ class ThemeCustom {
       appBarTheme: AppBarTheme(
         toolbarHeight: 71.h,
         systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarColor: colourStatusBar,
+          statusBarColor: Constants.colourStatusBar,
         ),
         titleTextStyle: TextStyle(
             fontWeight: FontWeight.bold,
@@ -23,10 +23,10 @@ class ThemeCustom {
         foregroundColor: Colors.white,
       ),
       progressIndicatorTheme: const ProgressIndicatorThemeData(
-        color: colourPrimary,
+        color: Constants.colourPrimary,
         circularTrackColor: Colors.transparent,
       ),
-      iconTheme: const IconThemeData(color: colourPrimary),
+      iconTheme: const IconThemeData(color: Constants.colourPrimary),
       textTheme: TextTheme(
         headlineLarge: TextStyle(
           color: Colors.white,
@@ -34,17 +34,17 @@ class ThemeCustom {
           fontWeight: FontWeight.w500,
         ),
         displayLarge: TextStyle(
-          color: colourTextDark,
+          color: Constants.colourTextDark,
           fontSize: 20.sp,
           fontWeight: FontWeight.w400,
         ),
         displayMedium: TextStyle(
-          color: colourTextDark,
+          color: Constants.colourTextDark,
           fontSize: 14.sp,
           fontWeight: FontWeight.w400,
         ),
         displaySmall: TextStyle(
-          color: colourTextDark,
+          color: Constants.colourTextDark,
           fontSize: 10.sp,
           fontWeight: FontWeight.w100,
         ),
@@ -68,13 +68,13 @@ class ThemeCustom {
         fillColor: Colors.white,
         filled: true,
         border: OutlineInputBorder(
-          borderSide: BorderSide(color: colourTextLight),
+          borderSide: const BorderSide(color: Constants.colourTextLight),
           borderRadius: BorderRadius.all(
             Radius.circular(5.0.r),
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: colourTextLight),
+          borderSide: const BorderSide(color: Constants.colourTextLight),
           borderRadius: BorderRadius.all(
             Radius.circular(5.0.r),
           ),
@@ -82,15 +82,16 @@ class ThemeCustom {
         contentPadding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
         errorStyle: TextStyle(
           height: 0.1.h,
-          color: colourError,
+          color: Constants.colourError,
           fontWeight: FontWeight.normal,
           fontSize: 10.sp,
         ),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll(colourPrimary),
-            foregroundColor: WidgetStatePropertyAll(Colors.white),
+            backgroundColor:
+                const WidgetStatePropertyAll(Constants.colourPrimary),
+            foregroundColor: const WidgetStatePropertyAll(Colors.white),
             padding: WidgetStatePropertyAll(
               EdgeInsets.symmetric(vertical: 12.7.h),
             ),

@@ -1,19 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-const colourPrimary = Color(0xFF0055FD);
-const colourBackground = Color(0x000fffff);
-Color colourIconBackground = colourPrimary.withOpacity(0.15);
-const colourTextDark = Color(0xff555555);
-const colourTextLight = Color(0xffA8A8A8);
-const colourOtpBoxBorder = Color(0xffB3ABC2);
-const colourTextFieldIcon = Color(0xff939393);
-const colourError = Colors.red;
-const colourStatusBar = Color(0xff284EAD);
-const colourProfilePicIconBackground = Color(0xffC1CFEE);
-const colourScaffoldBackground = Color(0xffF8F8F8);
-const colourDashboardBox1 = Color(0xff0FA4F8);
-const colourDashboardBox2 = Color(0xff009950);
-const colourDashboardBox3 = Color(0xffE40001);
-const colourDateBoxBorder = Color(0xffEFEFEF);
+class Constants {
+  Constants._privateConstructor();
 
-const otpResendTime = 5;
+  static final Constants instance = Constants._privateConstructor();
+
+  static const colourPrimary = Color(0xFF0055FD);
+  static const colourBackground = Color(0x000fffff);
+  static final Color colourIconBackground =
+      const Color(0xFF0055FD).withOpacity(0.15);
+  static const colourTextDark = Color(0xff555555);
+  static const colourTextLight = Color(0xffA8A8A8);
+  static const colourOtpBoxBorder = Color(0xffB3ABC2);
+  static const colourTextFieldIcon = Color(0xff939393);
+  static const colourError = Colors.red;
+  static const colourStatusBar = Color(0xff284EAD);
+  static const colourProfilePicIconBackground = Color(0xffC1CFEE);
+  static const colourScaffoldBackground = Color(0xffF8F8F8);
+  static const colourDashboardBox1 = Color(0xff0FA4F8);
+  static const colourDashboardBox2 = Color(0xff009950);
+  static const colourDashboardBox3 = Color(0xffE40001);
+  static const colourDateBoxBorder = Color(0xffEFEFEF);
+
+  static const otpResendTime = 5;
+
+  static final unselectedDateBoxDecoration = BoxDecoration(
+    color: Colors.white,
+    border: Border.all(color: colourDateBoxBorder),
+    borderRadius: BorderRadius.all(
+      Radius.circular(14.r),
+    ),
+  );
+
+  static final selectedDateBoxDecoration = BoxDecoration(
+    color: colourPrimary,
+    border: Border.all(color: colourDateBoxBorder),
+    borderRadius: BorderRadius.all(
+      Radius.circular(14.r),
+    ),
+  );
+
+  static final inactiveDateBoxDecoration = BoxDecoration(
+    color: colourTextLight,
+    border: Border.all(color: colourDateBoxBorder),
+    borderRadius: BorderRadius.all(
+      Radius.circular(14.r),
+    ),
+  );
+}

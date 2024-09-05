@@ -51,7 +51,7 @@ class NewOrganizationScreen extends StatelessWidget {
                       width: 75.w,
                       height: 75.h,
                       decoration: BoxDecoration(
-                        color: colourIconBackground,
+                        color: Constants.colourIconBackground,
                         shape: BoxShape.circle,
                       ),
                       child: FittedBox(
@@ -60,7 +60,7 @@ class NewOrganizationScreen extends StatelessWidget {
                           padding: const EdgeInsets.all(20.0).w,
                           child: const Icon(
                             Icons.business,
-                            color: colourPrimary,
+                            color: Constants.colourPrimary,
                           ),
                         ),
                       ),
@@ -177,8 +177,8 @@ class NewOrganizationScreen extends StatelessWidget {
                                       ? errorController.errorMsg.toString()
                                       : 'New Organization created',
                                   textAlign: TextAlign.center,
-                                  style: Get.textTheme.bodyMedium
-                                      ?.copyWith(color: colourTextDark),
+                                  style: Get.textTheme.bodyMedium?.copyWith(
+                                      color: Constants.colourTextDark),
                                 ),
                                 duration: const Duration(seconds: 2),
                                 snackPosition: SnackPosition.BOTTOM,

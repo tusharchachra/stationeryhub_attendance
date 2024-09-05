@@ -64,7 +64,7 @@ class _OtpBoxState extends State<OtpBox> {
         decoration: InputDecoration(
             counterText: '',
             focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: colourPrimary))),
+                borderSide: BorderSide(color: Constants.colourPrimary))),
         onChanged: (str) {
           setState(() {
             if (str.length == 1) {

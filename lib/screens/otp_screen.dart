@@ -52,7 +52,7 @@ class OtpScreen extends StatelessWidget {
                     width: 75.w,
                     height: 75.h,
                     decoration: BoxDecoration(
-                      color: colourIconBackground,
+                      color: Constants.colourIconBackground,
                       shape: BoxShape.circle,
                     ),
                     child: FittedBox(
@@ -61,7 +61,7 @@ class OtpScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(20.0).w,
                         child: const Icon(
                           Icons.sms_rounded,
-                          color: colourPrimary,
+                          color: Constants.colourPrimary,
                         ),
                       ),
                     ),
@@ -100,7 +100,9 @@ class OtpScreen extends StatelessWidget {
                                         'OTP resent successfully',
                                         textAlign: TextAlign.center,
                                         style: Get.textTheme.bodyMedium
-                                            ?.copyWith(color: colourTextDark),
+                                            ?.copyWith(
+                                                color:
+                                                    Constants.colourTextDark),
                                       ),
                                       duration: const Duration(seconds: 2),
                                       snackPosition: SnackPosition.BOTTOM,
@@ -125,7 +127,7 @@ class OtpScreen extends StatelessWidget {
                                 child: Text(
                                   'Resend',
                                   style: Get.textTheme.displayMedium!
-                                      .copyWith(color: colourPrimary),
+                                      .copyWith(color: Constants.colourPrimary),
                                 ),
                               ),
                       ],

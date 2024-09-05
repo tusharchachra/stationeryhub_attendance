@@ -21,7 +21,7 @@ class ScaffoldOnboarding extends StatelessWidget {
               width: 460.w,
               height: 379.h,
               decoration: BoxDecoration(
-                color: colourPrimary,
+                color: Constants.colourPrimary,
                 image: const DecorationImage(
                     image: AssetImage('assets/images/map.png'),
                     fit: BoxFit.fill),

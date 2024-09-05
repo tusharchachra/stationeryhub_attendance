@@ -18,7 +18,7 @@ class FormFieldOtp extends StatelessWidget {
       textStyle: Get.textTheme.displayMedium,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(7.5.r),
-        border: Border.all(color: colourOtpBoxBorder),
+        border: Border.all(color: Constants.colourOtpBoxBorder),
       ),
     );
 
@@ -76,7 +76,7 @@ class FormFieldOtp extends StatelessWidget {
               ),*/
                   focusedPinTheme: defaultPinTheme.copyWith(
                     decoration: defaultPinTheme.decoration!.copyWith(
-                      border: Border.all(color: colourPrimary),
+                      border: Border.all(color: Constants.colourPrimary),
                     ),
                   ),
                   /* submittedPinTheme: defaultPinTheme.copyWith(
@@ -87,10 +87,10 @@ class FormFieldOtp extends StatelessWidget {
                 ),
               ),*/
                   errorPinTheme: defaultPinTheme.copyBorderWith(
-                    border: Border.all(color: colourError),
+                    border: Border.all(color: Constants.colourError),
                   ),
-                  errorTextStyle:
-                      Get.textTheme.displayMedium?.copyWith(color: colourError),
+                  errorTextStyle: Get.textTheme.displayMedium
+                      ?.copyWith(color: Constants.colourError),
                 )),
               ),
               /*TextButton(

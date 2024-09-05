@@ -27,7 +27,7 @@ class FormFieldText extends StatelessWidget {
       style: Get.textTheme.displayMedium!,
       keyboardType: TextInputType.name,
       autofocus: false,
-      cursorColor: colourTextLight,
+      cursorColor: Constants.colourTextLight,
       maxLines: isMultiLine ? 3 : 1,
       minLines: 1,
       textCapitalization: TextCapitalization.words,
@@ -37,7 +37,7 @@ class FormFieldText extends StatelessWidget {
           .copyWith(
             counterText: '',
             prefixIcon: prefixIcon,
-            prefixIconColor: colourTextFieldIcon,
+            prefixIconColor: Constants.colourTextFieldIcon,
             hintText: hintText,
           ),
       validator: validator,

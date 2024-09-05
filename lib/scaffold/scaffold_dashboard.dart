@@ -41,9 +41,9 @@ class ScaffoldDashboard extends StatelessWidget {
     );
 
     return Scaffold(
-      backgroundColor: colourScaffoldBackground,
+      backgroundColor: Constants.colourScaffoldBackground,
       appBar: AppBar(
-        backgroundColor: colourPrimary,
+        backgroundColor: Constants.colourPrimary,
         leading: leadingWidget,
         title: title,
         actions: appBarActions ?? [],

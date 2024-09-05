@@ -10,7 +10,7 @@ class SplashScreen extends GetWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: colourPrimary,
+        backgroundColor: Constants.colourPrimary,
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

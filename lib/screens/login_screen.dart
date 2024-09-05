@@ -54,7 +54,7 @@ class LoginScreen extends StatelessWidget {
                       width: 75.w,
                       height: 75.h,
                       decoration: BoxDecoration(
-                        color: colourIconBackground,
+                        color: Constants.colourIconBackground,
                         shape: BoxShape.circle,
                       ),
                       child: FittedBox(
@@ -63,7 +63,7 @@ class LoginScreen extends StatelessWidget {
                           padding: const EdgeInsets.all(20.0).w,
                           child: const Icon(
                             Icons.phone,
-                            color: colourPrimary,
+                            color: Constants.colourPrimary,
                           ),
                         ),
                       ),
