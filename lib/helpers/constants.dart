@@ -48,4 +48,28 @@ class Constants {
       Radius.circular(14.r),
     ),
   );
+
+  static final selectedYearBoxDecoration = BoxDecoration(
+    color: colourPrimary,
+    border: Border.all(color: colourDateBoxBorder),
+    borderRadius: BorderRadius.all(
+      Radius.circular(10.r),
+    ),
+  );
+
+  static final unselectedYearBoxDecoration = BoxDecoration(
+    color: Colors.white,
+    border: Border.all(color: colourDateBoxBorder),
+    borderRadius: BorderRadius.all(
+      Radius.circular(10.r),
+    ),
+  );
+
+  static final inactiveYearBoxDecoration = BoxDecoration(
+    color: colourTextLight,
+    border: Border.all(color: colourDateBoxBorder),
+    borderRadius: BorderRadius.all(
+      Radius.circular(10.r),
+    ),
+  );
 }

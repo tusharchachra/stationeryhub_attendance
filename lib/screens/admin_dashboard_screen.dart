@@ -1,8 +1,6 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
 import 'package:stationeryhub_attendance/form_fields/admin_dashboard_box.dart';
@@ -11,6 +9,7 @@ import 'package:stationeryhub_attendance/helpers/constants.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
 
 import '../controllers/firebase_firestore_controller.dart';
+import '../form_fields/date_carousel.dart';
 import '../form_fields/form_field_button.dart';
 import '../services/firebase_login_services.dart';
 import 'new_organization_screen.dart';
@@ -114,15 +113,20 @@ class AdminDashboardScreen extends StatelessWidget {
             ],
           ),
           SizedBox(height: 10.h),
-          GestureDetector(
-            onTap: () async {},
+          DateCarousel(),
+          /*  GestureDetector(
+            onTap: () async {
+              Get.dialog(SfDateRangePicker(
+                selectionMode: DateRangePickerSelectionMode.single,
+              ));
+            },
             child: Text(
               '${DateFormat.MMMM().format(adminDashboardScreenController.selectedDate.value)},${DateFormat.y().format(adminDashboardScreenController.selectedDate.value)}',
               style: Get.textTheme.displayLarge,
             ),
-          ),
+          ),*/
           SizedBox(height: 10.h),
-          CarouselSlider(
+          /*CarouselSlider(
               disableGesture: false,
               carouselController:
                   adminDashboardScreenController.dateCarouselController.value,
@@ -165,14 +169,6 @@ class AdminDashboardScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            /*Text(
-                              DateFormat.MMM().format(item),
-                              style: item.day ==
-                                      adminDashboardScreenController
-                                          .selectedDate.value.day
-                                  ? Get.textTheme.bodyLarge
-                                  : Get.textTheme.displayMedium,
-                            ),*/
                             Text(
                               DateFormat.d().format(item),
                               style: item.day ==
@@ -195,7 +191,7 @@ class AdminDashboardScreen extends StatelessWidget {
                     );
                   });
                 },
-              ).toList())
+              ).toList()),*/
         ],
       ),
     );
