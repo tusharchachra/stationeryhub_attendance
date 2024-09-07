@@ -17,11 +17,11 @@ class DateCarousel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<int> years = List<int>.generate(
+    ///TODO: change 2020 to 2023, uncomment DateTime.now().year, remove 2027
 
-        ///TODO: change 2020 to 2023, uncomment DateTime.now().year, remove 2027
-        /*DateTime.now().year*/ 2027 - 2020,
-        (i) => (i + 1) + 2020);
+    /* List<int> years = List<int>.generate(2027 - 2020, (i) => (i + 1) + 2020);*/
+    List<int> years =
+        List<int>.generate(DateTime.now().year - 2023, (i) => (i + 1) + 2023);
     List<String> months = [
       'Jan',
       'Feb',
@@ -80,6 +80,7 @@ class DateCarousel extends StatelessWidget {
         height: 30.h,
         enableInfiniteScroll: false,
         viewportFraction: 0.3.w,
+        scrollPhysics: BouncingScrollPhysics(),
         onPageChanged: (index, reason) {
           //adminDashboardScreenController.selectedDate = index;
         },
@@ -140,6 +141,7 @@ class DateCarousel extends StatelessWidget {
         height: 30.h,
         enableInfiniteScroll: false,
         viewportFraction: 0.3.w,
+        scrollPhysics: BouncingScrollPhysics(),
         onPageChanged: (index, reason) {
           //adminDashboardScreenController.selectedDate = index;
         },
@@ -210,6 +212,7 @@ class DateCarousel extends StatelessWidget {
         height: 80.h,
         enableInfiniteScroll: false,
         viewportFraction: 0.25.w,
+        scrollPhysics: BouncingScrollPhysics(),
         onPageChanged: (index, reason) {
           //adminDashboardScreenController.selectedDate = index;
         },
