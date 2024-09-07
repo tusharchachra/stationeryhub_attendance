@@ -112,7 +112,7 @@ class AdminDashboardScreen extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 10.h),
+          //SizedBox(height: 10.h),
           DateCarousel(),
           /*  GestureDetector(
             onTap: () async {

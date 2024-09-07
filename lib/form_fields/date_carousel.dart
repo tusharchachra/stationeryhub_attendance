@@ -1,5 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -18,7 +18,10 @@ class DateCarousel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<int> years = List<int>.generate(
-        /*DateTime.now().year*/ 2026 - 2020, (i) => (i + 1) + 2020);
+
+        ///TODO: change 2020 to 2023, uncomment DateTime.now().year, remove 2027
+        /*DateTime.now().year*/ 2027 - 2020,
+        (i) => (i + 1) + 2020);
     List<String> months = [
       'Jan',
       'Feb',
@@ -36,83 +39,165 @@ class DateCarousel extends StatelessWidget {
 
     return Obx(
       () => Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           //for year
-          buildYearCorousel(years),
-          //for month
-          buildMonthCarousel(months),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                  child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 10.h),
+                      color: Constants.colourDashboardBox4,
+                      child: buildYearCarousel(years))),
+              //for month
+              Expanded(
+                  child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 10.h),
+                      color: Constants.colourDashboardBox5,
+                      child: buildMonthCarousel(months))),
+            ],
+          ),
+
           //for day
           buildDayCarousel(),
           //for day
-          /*CarouselSlider(
-              disableGesture: false,
-              carouselController:
-                  adminDashboardScreenController.dateCarouselController.value,
-              options: CarouselOptions(
-                initialPage:
-                    adminDashboardScreenController.selectedDate.value.day - 1,
-                height: 80.h,
-                enableInfiniteScroll: false,
-                viewportFraction: 0.25.w,
-                onPageChanged: (index, reason) {
-                  //adminDashboardScreenController.selectedDate = index;
-                },
-              ),
-              items: adminDashboardScreenController
-                  .getCurrentMonthDates(
-                month: adminDashboardScreenController.selectedDate.value.month,
-                year: adminDashboardScreenController.selectedDate.value.year,
-              )
-                  .map(
-                (item) {
-                  return Builder(builder: (BuildContext context) {
-                    return GestureDetector(
-                      onTap: () {
-                        if (item.compareTo(DateTime.now()) <= 0) {
-                          adminDashboardScreenController.selectedDate.value =
-                              item;
-                        }
-                      },
-                      child: Container(
-                        width: 76.w,
-                        height: 80.h,
-                        decoration: item.compareTo(DateTime.now()) > 0
-                            ? Constants.inactiveDateBoxDecoration
-                            : item.day ==
-                                    adminDashboardScreenController
-                                        .selectedDate.value.day
-                                ? Constants.selectedDateBoxDecoration
-                                : Constants.unselectedDateBoxDecoration,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              DateFormat.d().format(item),
-                              style: item.day ==
-                                      adminDashboardScreenController
-                                          .selectedDate.value.day
-                                  ? Get.textTheme.headlineLarge
-                                  : Get.textTheme.displayLarge,
-                            ),
-                            Text(
-                              DateFormat.E().format(item),
-                              style: item.day ==
-                                      adminDashboardScreenController
-                                          .selectedDate.value.day
-                                  ? Get.textTheme.bodyLarge
-                                  : Get.textTheme.displayMedium,
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  });
-                },
-              ).toList()),*/
         ],
       ),
     );
+  }
+
+  CarouselSlider buildYearCarousel(List<int> years) {
+    return CarouselSlider(
+      disableGesture: false,
+      carouselController:
+          adminDashboardScreenController.yearCarouselController.value,
+      options: CarouselOptions(
+        initialPage:
+            years.indexOf(adminDashboardScreenController.selectedYear.value),
+        height: 30.h,
+        enableInfiniteScroll: false,
+        viewportFraction: 0.3.w,
+        onPageChanged: (index, reason) {
+          //adminDashboardScreenController.selectedDate = index;
+        },
+      ),
+      items: years.map(
+        (item) {
+          return Builder(builder: (BuildContext context) {
+            return GestureDetector(
+              onTap: () {
+                adminDashboardScreenController.selectedYear.value = item;
+                adminDashboardScreenController.setDate();
+              },
+              child: Container(
+                width: 50.w,
+                height: 525.h,
+                alignment: Alignment.center,
+                decoration: getYearDecoration(item),
+                child: Text(
+                  item.toString(),
+                  style:
+                      item == adminDashboardScreenController.selectedYear.value
+                          ? Get.textTheme.bodySmall
+                          : Get.textTheme.displaySmall,
+                ),
+              ),
+            );
+          });
+        },
+      ).toList(),
+    );
+  }
+
+  BoxDecoration getYearDecoration(int item) {
+    if (item > (DateTime.now().year)) {
+      return Constants.inactiveYearBoxDecoration;
+    } else {
+      if (item == adminDashboardScreenController.selectedYear.value) {
+        return Constants.selectedYearBoxDecoration;
+      } else {
+        return Constants.unselectedYearBoxDecoration;
+      }
+    }
+
+    /*return getContainerDecoration(
+        inactiveDecorationCondition: item > (DateTime.now().year),
+        selectedDecorationCondition:
+            item == adminDashboardScreenController.selectedYear.value);*/
+  }
+
+  CarouselSlider buildMonthCarousel(List<String> months) {
+    return CarouselSlider(
+      disableGesture: false,
+      carouselController:
+          adminDashboardScreenController.yearCarouselController.value,
+      options: CarouselOptions(
+        initialPage: /*months.indexOf*/
+            (adminDashboardScreenController.selectedDate.value.month) - 1,
+        height: 30.h,
+        enableInfiniteScroll: false,
+        viewportFraction: 0.3.w,
+        onPageChanged: (index, reason) {
+          //adminDashboardScreenController.selectedDate = index;
+        },
+      ),
+      items: List.generate(12, (i) => months[i]).map(
+        (item) {
+          return Builder(builder: (BuildContext context) {
+            return GestureDetector(
+              onTap: () {
+                adminDashboardScreenController.selectedMonth.value =
+                    months.indexOf(item) + 1;
+                adminDashboardScreenController.setDate();
+              },
+              child: Container(
+                width: 50.w,
+                height: 25.h,
+                alignment: Alignment.center,
+                decoration: getMonthDecoration(months, item),
+                child: Text(
+                  item.toString(),
+                  style: months.indexOf(item) ==
+                          adminDashboardScreenController.selectedMonth.value - 1
+                      ? Get.textTheme.bodySmall
+                      : Get.textTheme.displaySmall,
+                ),
+              ),
+            );
+          });
+        },
+      ).toList(),
+    );
+  }
+
+  BoxDecoration getMonthDecoration(List<String> months, String item) {
+    if (adminDashboardScreenController.selectedDate.value.year >
+        DateTime.now().year) {
+      return Constants.inactiveYearBoxDecoration;
+    } else if (adminDashboardScreenController.selectedDate.value.year ==
+            DateTime.now().year &&
+        months.indexOf(item) >= DateTime.now().month) {
+      return Constants.inactiveYearBoxDecoration;
+    } else if (months.indexOf(item) ==
+        adminDashboardScreenController.selectedMonth.value - 1) {
+      return Constants.selectedYearBoxDecoration;
+    } else {
+      return Constants.unselectedYearBoxDecoration;
+    }
+
+    /*return getContainerDecoration(
+                inactiveDecorationCondition: ((adminDashboardScreenController
+                            .selectedDate.value.year >
+                        DateTime.now().year) ||
+                    (adminDashboardScreenController.selectedDate.value.year ==
+                            DateTime.now().year &&
+                        months.indexOf(item) >= DateTime.now().month)),
+                selectedDecorationCondition: months.indexOf(item) ==
+                    adminDashboardScreenController.selectedMonth.value - 1,
+              );*/
   }
 
   CarouselSlider buildDayCarousel() {
@@ -139,27 +224,14 @@ class DateCarousel extends StatelessWidget {
           return Builder(builder: (BuildContext context) {
             return GestureDetector(
               onTap: () {
-                if (item <= (DateTime.now().day)) {
-                  adminDashboardScreenController.selectedDay.value = item;
-                  adminDashboardScreenController.selectedDate.value = DateTime(
-                      adminDashboardScreenController.selectedDate.value.year,
-                      adminDashboardScreenController.selectedDate.value.month,
-                      adminDashboardScreenController.selectedDay.value);
-                  print(
-                      'selected Date=${adminDashboardScreenController.selectedDate}');
-                }
+                adminDashboardScreenController.selectedDay.value = item;
+                adminDashboardScreenController.setDate();
               },
               child: Container(
                 width: 76.w,
                 height: 80.h,
                 alignment: Alignment.center,
-                decoration: getContainerDecoration(
-                    condition1: item > (DateTime.now().day),
-                    condition2: /* item ==
-                          adminDashboardScreenController
-                              .selectedDate.value.year,*/
-                        item ==
-                            adminDashboardScreenController.selectedDay.value),
+                decoration: getDayDecoration(item),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -190,181 +262,50 @@ class DateCarousel extends StatelessWidget {
     );
   }
 
-  CarouselSlider buildMonthCarousel(List<String> months) {
-    return CarouselSlider(
-      disableGesture: false,
-      carouselController:
-          adminDashboardScreenController.yearCarouselController.value,
-      options: CarouselOptions(
-        initialPage: /*months.indexOf*/
-            (adminDashboardScreenController.selectedDate.value.month) - 1,
-        height: 40.h,
-        enableInfiniteScroll: false,
-        viewportFraction: 0.2.w,
-        onPageChanged: (index, reason) {
-          //adminDashboardScreenController.selectedDate = index;
-        },
-      ),
-      items: List.generate(12, (i) => months[i]).map(
-        (item) {
-          return Builder(builder: (BuildContext context) {
-            return GestureDetector(
-              onTap: () {
-                if (adminDashboardScreenController.selectedDate.value.year <
-                    DateTime.now().year) {
-                  adminDashboardScreenController.selectedMonth.value =
-                      months.indexOf(item) + 1;
-                  adminDashboardScreenController.selectedDate.value = DateTime(
-                      adminDashboardScreenController.selectedDate.value.year,
-                      adminDashboardScreenController.selectedMonth.value,
-                      adminDashboardScreenController.selectedDate.value.day);
-                  print(adminDashboardScreenController.selectedDate);
-                } else if (adminDashboardScreenController
-                            .selectedDate.value.year ==
-                        DateTime.now().year &&
-                    months.indexOf(item) < DateTime.now().month) {
-                  adminDashboardScreenController.selectedMonth.value =
-                      months.indexOf(item) + 1;
-                  print(adminDashboardScreenController.selectedMonth);
-                  adminDashboardScreenController.selectedDate.value = DateTime(
-                      adminDashboardScreenController.selectedDate.value.year,
-                      adminDashboardScreenController.selectedMonth.value,
-                      adminDashboardScreenController.selectedDate.value.day);
-                  print(adminDashboardScreenController.selectedDate);
-                }
-                /*if (adminDashboardScreenController.selectedYear.value <
-                        DateTime.now().year) {
-                      if(months.indexOf(item) < DateTime.now().month) {
-                        adminDashboardScreenController.selectedMonth.value =
-                          (months.indexOf(item));
-                      }else{
+  BoxDecoration getDayDecoration(int item) {
+    if (adminDashboardScreenController.selectedDate.value.year >
+            DateTime.now().year &&
+        adminDashboardScreenController.selectedDate.value.month >
+            DateTime.now().month &&
+        item > DateTime.now().day) {
+      return Constants.inactiveYearBoxDecoration;
+    } else if (adminDashboardScreenController.selectedDate.value.year ==
+            DateTime.now().year &&
+        adminDashboardScreenController.selectedDate.value.month ==
+            DateTime.now().month &&
+        (item) > DateTime.now().day) {
+      return Constants.inactiveDateBoxDecoration;
+    } else if (item == adminDashboardScreenController.selectedDay.value) {
+      return Constants.selectedYearBoxDecoration;
+    } else {
+      return Constants.unselectedYearBoxDecoration;
+    }
 
-                      }
-                      print((months.indexOf(item)) + 1);
-
-                      adminDashboardScreenController.selectedDate.value =
-                          DateTime(
-                              adminDashboardScreenController
-                                  .selectedDate.value.year,
-                              (adminDashboardScreenController
-                                      .selectedMonth.value) +
-                                  1,
-                              adminDashboardScreenController
-                                  .selectedDate.value.day);
-                      print(
-                          'selected Date=${adminDashboardScreenController.selectedDate}');
-                    }*/
-              },
-              child: Container(
-                width: 50.w,
-                height: 25.h,
-                alignment: Alignment.center,
-                decoration: getContainerDecoration(
-                  condition1: ((adminDashboardScreenController
-                              .selectedDate.value.year >
-                          DateTime.now().year) ||
-                      (adminDashboardScreenController.selectedDate.value.year ==
+    /* return getContainerDecoration(
+                  inactiveDecorationCondition: (adminDashboardScreenController
+                                  .selectedDate.value.year >
                               DateTime.now().year &&
-                          months.indexOf(item) >=
-                              DateTime.now()
-                                  .month)) /*months.indexOf(item) >=
-                            DateTime.now()
-                                .month*/ /*&&
-                                adminDashboardScreenController
-                                        .selectedDate.value.year ==
-                                    DateTime.now().year*/
-                  ,
-                  condition2: /* item ==
                           adminDashboardScreenController
-                              .selectedDate.value.year,*/
-                      months.indexOf(item) ==
-                          adminDashboardScreenController.selectedMonth.value -
-                              1,
-                ),
-                child: Text(
-                  item.toString(),
-                  style: /*item ==
-                              adminDashboardScreenController
-                                  .selectedYear.value.year*/
-                      months.indexOf(item) ==
-                              adminDashboardScreenController
-                                      .selectedMonth.value -
-                                  1
-                          ? Get.textTheme.bodySmall
-                          : Get.textTheme.displaySmall,
-                ),
-              ),
-            );
-          });
-        },
-      ).toList(),
-    );
-  }
-
-  CarouselSlider buildYearCorousel(List<int> years) {
-    return CarouselSlider(
-      disableGesture: false,
-      carouselController:
-          adminDashboardScreenController.yearCarouselController.value,
-      items: years.map(
-        (item) {
-          return Builder(builder: (BuildContext context) {
-            return GestureDetector(
-              onTap: () {
-                if (item <= (DateTime.now().year)) {
-                  adminDashboardScreenController.selectedYear.value = item;
-
-                  adminDashboardScreenController.selectedDate.value = DateTime(
-                      adminDashboardScreenController.selectedYear.value,
-                      adminDashboardScreenController.selectedDate.value.month,
-                      adminDashboardScreenController.selectedDay.value);
-                  print(
-                      'selected Date=${adminDashboardScreenController.selectedDate}');
-                }
-              },
-              child: Container(
-                width: 50.w,
-                height: 525.h,
-                alignment: Alignment.center,
-                decoration: getContainerDecoration(
-                    condition1: item > (DateTime.now().year),
-                    condition2: /* item ==
+                                  .selectedDate.value.month >
+                              DateTime.now().month &&
+                          item > DateTime.now().day) ||
+                      (adminDashboardScreenController
+                                  .selectedDate.value.year ==
+                              DateTime.now().year &&
                           adminDashboardScreenController
-                              .selectedDate.value.year,*/
-                        item ==
-                            adminDashboardScreenController.selectedYear.value),
-                child: Text(
-                  item.toString(),
-                  style: /*item ==
-                              adminDashboardScreenController
-                                  .selectedYear.value.year*/
-                      item == adminDashboardScreenController.selectedYear.value
-                          ? Get.textTheme.bodySmall
-                          : Get.textTheme.displaySmall,
-                ),
-              ),
-            );
-          });
-        },
-      ).toList(),
-      options: CarouselOptions(
-        initialPage:
-            years.indexOf(adminDashboardScreenController.selectedYear.value),
-        height: 40.h,
-        enableInfiniteScroll: false,
-        viewportFraction: 0.2.w,
-        onPageChanged: (index, reason) {
-          //adminDashboardScreenController.selectedDate = index;
-        },
-      ),
-    );
+                                  .selectedDate.value.month ==
+                              DateTime.now().month &&
+                          (item) > DateTime.now().day),
+                  selectedDecorationCondition: item ==
+                      adminDashboardScreenController.selectedDay.value);*/
   }
 
   BoxDecoration getContainerDecoration(
-      {required bool condition1, required condition2}) {
-    return condition1
+      {required bool inactiveDecorationCondition,
+      required selectedDecorationCondition}) {
+    return inactiveDecorationCondition
         ? Constants.inactiveYearBoxDecoration
-        : condition2
+        : selectedDecorationCondition
             ? Constants.selectedYearBoxDecoration
             : Constants.unselectedYearBoxDecoration;
   }

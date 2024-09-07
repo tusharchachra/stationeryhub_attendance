@@ -21,6 +21,8 @@ class Constants {
   static const colourDashboardBox1 = Color(0xff0FA4F8);
   static const colourDashboardBox2 = Color(0xff009950);
   static const colourDashboardBox3 = Color(0xffE40001);
+  static const colourDashboardBox4 = Colors.deepOrange;
+  static const colourDashboardBox5 = Colors.tealAccent;
   static const colourDateBoxBorder = Color(0xffEFEFEF);
 
   static const otpResendTime = 5;

@@ -37,4 +37,25 @@ class AdminDashboardScreenController extends GetxController {
     }
     return days;
   }
+
+  void setDate() {
+    if (selectedYear.value > DateTime.now().year) {
+      selectedYear.value = selectedDate.value.year;
+    }
+
+    if (selectedYear.value == DateTime.now().year) {
+      if (selectedMonth.value > DateTime.now().month) {
+        selectedMonth.value = DateTime.now().month;
+        selectedDay.value = DateTime.now().day;
+      }
+      if (selectedMonth.value == DateTime.now().month) {
+        if (selectedDay.value > DateTime.now().day) {
+          selectedDay.value = DateTime.now().day;
+        }
+      }
+    }
+    selectedDate.value =
+        DateTime(selectedYear.value, selectedMonth.value, selectedDay.value);
+    print('selectedDate=$selectedDate');
+  }
 }
