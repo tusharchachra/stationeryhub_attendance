@@ -11,18 +11,18 @@ class FirebaseFirestoreServices {
   // List<AlbumUsers> usersList = [];
   //FirebaseFirestoreServices(this.db);
 
-  Future<AlbumUsers?> getUser({
+  Future<UsersModel?> getUser({
     required String phoneNum,
     GetOptions? getOptions,
   }) async {
-    AlbumUsers? tempUser;
+    UsersModel? tempUser;
     try {
       final ref = db
           .collection("users")
           .where('phoneNum', isEqualTo: phoneNum)
           .withConverter(
-            fromFirestore: AlbumUsers.fromFirestore,
-            toFirestore: (AlbumUsers user, _) => user.toJson(),
+            fromFirestore: UsersModel.fromFirestore,
+            toFirestore: (UsersModel user, _) => user.toJson(),
           );
       final docSnap =
           await ref.get(getOptions ?? const GetOptions(source: Source.server));
@@ -69,10 +69,10 @@ class FirebaseFirestoreServices {
       String? orgId}) async {
     try {
       final ref = db.collection("users").doc().withConverter(
-            fromFirestore: AlbumUsers.fromFirestore,
-            toFirestore: (AlbumUsers user, _) => user.toJson(),
+            fromFirestore: UsersModel.fromFirestore,
+            toFirestore: (UsersModel user, _) => user.toJson(),
           );
-      AlbumUsers tempUser = AlbumUsers(
+      UsersModel tempUser = UsersModel(
           firebaseUserId: ref.id,
           userType: userType,
           name: name ?? '',
@@ -93,16 +93,16 @@ class FirebaseFirestoreServices {
   }
 
   //get organization details based on phone number of the user
-  Future<AlbumOrganization?> getOrganization({
+  Future<OrganizationModel?> getOrganization({
     String? orgId,
-    AlbumUsers? user,
+    UsersModel? user,
     GetOptions? getOptions,
   }) async {
-    AlbumOrganization? fetchedOrganization;
+    OrganizationModel? fetchedOrganization;
     try {
       final ref = db.collection("organizations").doc("$orgId").withConverter(
-            fromFirestore: AlbumOrganization.fromFirestore,
-            toFirestore: (AlbumOrganization organization, _) =>
+            fromFirestore: OrganizationModel.fromFirestore,
+            toFirestore: (OrganizationModel organization, _) =>
                 organization.toJson(),
           );
       final docSnap =
@@ -123,18 +123,18 @@ class FirebaseFirestoreServices {
 
   //create new organisation and add org id to users table against the particular user
   Future<String?> createOrganization(
-      {required AlbumOrganization newOrganization}) async {
+      {required OrganizationModel newOrganization}) async {
     try {
       final ref = db.collection("organizations").doc().withConverter(
-            fromFirestore: AlbumOrganization.fromFirestore,
-            toFirestore: (AlbumOrganization organization, _) =>
+            fromFirestore: OrganizationModel.fromFirestore,
+            toFirestore: (OrganizationModel organization, _) =>
                 organization.toJson(),
           );
       await ref.set(newOrganization);
       if (kDebugMode) {
         print('New organization added = ${ref.id}');
       }
-      AlbumOrganization? insertedOrganization =
+      OrganizationModel? insertedOrganization =
           await getOrganization(orgId: ref.id);
       if (kDebugMode) {
         print('inserted organization=$insertedOrganization');
@@ -159,8 +159,8 @@ class FirebaseFirestoreServices {
       {required String currentUserId, required String organizationId}) async {
     try {
       final ref = db.collection("users").doc(currentUserId).withConverter(
-            fromFirestore: AlbumOrganization.fromFirestore,
-            toFirestore: (AlbumOrganization organization, _) =>
+            fromFirestore: OrganizationModel.fromFirestore,
+            toFirestore: (OrganizationModel organization, _) =>
                 organization.toJson(),
           );
       ref.update({"organizationId": organizationId}).then(
@@ -169,7 +169,7 @@ class FirebaseFirestoreServices {
             print(
                 "DocumentSnapshot successfully updated!\nstoring new user data to shared prefs");
           }
-          AlbumUsers? currentUser = await SharedPrefsServices
+          UsersModel? currentUser = await SharedPrefsServices
               .sharedPrefsInstance
               .getUserFromSharedPrefs();
           // currentUser = await getUser(phoneNum: currentUser!.phoneNum);

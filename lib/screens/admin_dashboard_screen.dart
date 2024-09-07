@@ -3,14 +3,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
-import 'package:stationeryhub_attendance/form_fields/admin_dashboard_box.dart';
-import 'package:stationeryhub_attendance/form_fields/gradient_progress_bar.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
+import 'package:stationeryhub_attendance/screens/new_user_screen.dart';
 
+import '../components/admin_dashboard_box.dart';
+import '../components/date_carousel.dart';
+import '../components/form_field_button.dart';
+import '../components/gradient_progress_bar.dart';
 import '../controllers/firebase_firestore_controller.dart';
-import '../form_fields/date_carousel.dart';
-import '../form_fields/form_field_button.dart';
 import '../services/firebase_login_services.dart';
 import 'new_organization_screen.dart';
 
@@ -69,13 +70,6 @@ class AdminDashboardScreen extends StatelessWidget {
           ('\n${firestoreController.registeredUser?.value?.userType?.name.capitalizeFirst}'
               .toString()),
       isLoading: false,
-      appBarActions: [
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.more_vert),
-          color: Colors.white,
-        )
-      ],
       bodyWidget: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -112,86 +106,13 @@ class AdminDashboardScreen extends StatelessWidget {
               ),
             ],
           ),
-          //SizedBox(height: 10.h),
           DateCarousel(),
-          /*  GestureDetector(
-            onTap: () async {
-              Get.dialog(SfDateRangePicker(
-                selectionMode: DateRangePickerSelectionMode.single,
-              ));
-            },
-            child: Text(
-              '${DateFormat.MMMM().format(adminDashboardScreenController.selectedDate.value)},${DateFormat.y().format(adminDashboardScreenController.selectedDate.value)}',
-              style: Get.textTheme.displayLarge,
-            ),
-          ),*/
           SizedBox(height: 10.h),
-          /*CarouselSlider(
-              disableGesture: false,
-              carouselController:
-                  adminDashboardScreenController.dateCarouselController.value,
-              options: CarouselOptions(
-                initialPage:
-                    adminDashboardScreenController.selectedDate.value.day - 1,
-                height: 80.h,
-                enableInfiniteScroll: false,
-                viewportFraction: 0.25.w,
-                onPageChanged: (index, reason) {
-                  //adminDashboardScreenController.selectedDate = index;
-                },
-              ),
-              items: adminDashboardScreenController
-                  .getCurrentMonthDates(
-                month: adminDashboardScreenController.selectedDate.value.month,
-                year: adminDashboardScreenController.selectedDate.value.year,
-              )
-                  .map(
-                (item) {
-                  return Builder(builder: (BuildContext context) {
-                    return GestureDetector(
-                      onTap: () {
-                        if (item.compareTo(DateTime.now()) <= 0) {
-                          adminDashboardScreenController.selectedDate.value =
-                              item;
-                        }
-                      },
-                      child: Container(
-                        width: 76.w,
-                        height: 80.h,
-                        decoration: item.compareTo(DateTime.now()) > 0
-                            ? Constants.inactiveDateBoxDecoration
-                            : item.day ==
-                                    adminDashboardScreenController
-                                        .selectedDate.value.day
-                                ? Constants.selectedDateBoxDecoration
-                                : Constants.unselectedDateBoxDecoration,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              DateFormat.d().format(item),
-                              style: item.day ==
-                                      adminDashboardScreenController
-                                          .selectedDate.value.day
-                                  ? Get.textTheme.headlineLarge
-                                  : Get.textTheme.displayLarge,
-                            ),
-                            Text(
-                              DateFormat.E().format(item),
-                              style: item.day ==
-                                      adminDashboardScreenController
-                                          .selectedDate.value.day
-                                  ? Get.textTheme.bodyLarge
-                                  : Get.textTheme.displayMedium,
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  });
-                },
-              ).toList()),*/
+          TextButton(
+              onPressed: () {
+                Get.to(() => NewUserScreen());
+              },
+              child: Text('Create new user')),
         ],
       ),
     );

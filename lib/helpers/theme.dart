@@ -33,6 +33,11 @@ class ThemeCustom {
           fontSize: 20.sp,
           fontWeight: FontWeight.w500,
         ),
+        titleLarge: TextStyle(
+          color: Constants.colourPrimary,
+          fontSize: 16.sp,
+          fontWeight: FontWeight.w400,
+        ),
         displayLarge: TextStyle(
           color: Constants.colourTextDark,
           fontSize: 20.sp,

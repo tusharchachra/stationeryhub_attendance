@@ -21,7 +21,7 @@ class SharedPrefsServices {
     return prefs.containsKey(key);
   }
 
-  Future<void> storeUserToSharedPrefs({required AlbumUsers user}) async {
+  Future<void> storeUserToSharedPrefs({required UsersModel user}) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     bool result = await prefs.setString('user', jsonEncode(user));
     if (result) {
@@ -31,16 +31,16 @@ class SharedPrefsServices {
     }
   }
 
-  Future<AlbumUsers> getUserFromSharedPrefs() async {
+  Future<UsersModel> getUserFromSharedPrefs() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     /*String user =
         jsonEncode(AlbumUsers.fromJson(user));*/
     var fetchedUser = prefs.getString('user');
-    return AlbumUsers.fromJson(jsonDecode(fetchedUser!));
+    return UsersModel.fromJson(jsonDecode(fetchedUser!));
   }
 
   Future<void> storeOrganizationToSharedPrefs(
-      {required AlbumOrganization organization}) async {
+      {required OrganizationModel organization}) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     bool result =
         await prefs.setString('organization', jsonEncode(organization));
@@ -51,11 +51,11 @@ class SharedPrefsServices {
     }
   }
 
-  Future<AlbumOrganization> getOrganizationFromSharedPrefs() async {
+  Future<OrganizationModel> getOrganizationFromSharedPrefs() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     /*String user =
         jsonEncode(AlbumUsers.fromJson(user));*/
     var fetchedOrganization = prefs.getString('organization');
-    return AlbumOrganization.fromJson(jsonDecode(fetchedOrganization!));
+    return OrganizationModel.fromJson(jsonDecode(fetchedOrganization!));
   }
 }

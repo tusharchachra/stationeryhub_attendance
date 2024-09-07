@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_controller.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -56,6 +57,8 @@ class AdminDashboardScreenController extends GetxController {
     }
     selectedDate.value =
         DateTime(selectedYear.value, selectedMonth.value, selectedDay.value);
-    print('selectedDate=$selectedDate');
+    if (kDebugMode) {
+      debugPrint('selectedDate=$selectedDate');
+    }
   }
 }

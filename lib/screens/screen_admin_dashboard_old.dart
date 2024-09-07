@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../form_fields/form_field_button.dart';
-import '../form_fields/form_field_button_old.dart';
+import '../components/form_field_button.dart';
+import '../components/form_field_button_old.dart';
 import '../models/organizations_model.dart';
 import '../models/users_model.dart';
 import '../scaffold/scaffold_home.dart';
@@ -11,7 +11,7 @@ import '../services/firebase_login_services.dart';
 import '../services/shared_prefs_services.dart';
 import 'screen_mark_attendance.dart';
 import 'screen_new_organization_old.dart';
-import 'screen_new_user_for_organization.dart';
+import 'screen_new_user_for_organization_old.dart';
 
 class AdminDashboardScreenOld extends StatefulWidget {
   const AdminDashboardScreenOld({super.key});
@@ -24,8 +24,8 @@ class AdminDashboardScreenOld extends StatefulWidget {
 class _AdminDashboardScreenOldState extends State<AdminDashboardScreenOld> {
   bool isLoading = false;
   //FirebaseFirestoreServices firestoreServices = FirebaseFirestoreServices();
-  AlbumUsers? user;
-  AlbumOrganization? organization;
+  UsersModel? user;
+  OrganizationModel? organization;
 
   @override
   void initState() {
@@ -80,7 +80,8 @@ class _AdminDashboardScreenOldState extends State<AdminDashboardScreenOld> {
             onTapAction: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                    builder: (context) => const NewUserForOrganizationScreen()),
+                    builder: (context) =>
+                        const NewUserForOrganizationScreenOld()),
               );
             },
           ),

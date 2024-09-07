@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import './user_type_enum.dart';
 
-class AlbumUsers {
+class UsersModel {
   String? firebaseUserId;
   UserType? userType;
   String? name;
@@ -10,7 +10,7 @@ class AlbumUsers {
   String? organizationId;
   String? userId;
 
-  AlbumUsers({
+  UsersModel({
     this.firebaseUserId,
     this.userId,
     this.userType,
@@ -19,12 +19,12 @@ class AlbumUsers {
     this.organizationId,
   });
 
-  factory AlbumUsers.fromFirestore(
+  factory UsersModel.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
     SnapshotOptions? options,
   ) {
     final data = snapshot.data();
-    return AlbumUsers(
+    return UsersModel(
         firebaseUserId: data?['firebaseUserId'],
         userId: data?['userId'],
         name: data?['name'],
@@ -33,7 +33,7 @@ class AlbumUsers {
         organizationId: data['organizationId']);
   }
 
-  AlbumUsers.fromJson(Map<String, dynamic> json)
+  UsersModel.fromJson(Map<String, dynamic> json)
       : firebaseUserId = json['firebaseUserId'].toString() == ''
             ? ''
             : json['firebaseUserId'].toString(),

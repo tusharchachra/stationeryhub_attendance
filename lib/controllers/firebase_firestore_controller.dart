@@ -15,8 +15,8 @@ class FirebaseFirestoreController extends GetxController {
   static FirebaseAuthController authController = Get.find();
   static LoginScreenController loginController = Get.find();
   static FirebaseErrorController errorController = Get.find();
-  Rx<AlbumUsers?>? registeredUser = AlbumUsers().obs;
-  Rx<AlbumOrganization?>? registeredOrganization = AlbumOrganization().obs;
+  Rx<UsersModel?>? registeredUser = UsersModel().obs;
+  Rx<OrganizationModel?>? registeredOrganization = OrganizationModel().obs;
   final FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
 
   RxBool isLoading = false.obs;
@@ -35,7 +35,7 @@ class FirebaseFirestoreController extends GetxController {
     //Attaching listener to user
     await firestoreController.attachUserListener();
 
-    AlbumOrganization? tempOrganization =
+    OrganizationModel? tempOrganization =
         await getOrganization(orgId: registeredUser?.value?.organizationId);
     if (tempOrganization != null) {
       registeredOrganization?.value = tempOrganization;
@@ -81,7 +81,7 @@ class FirebaseFirestoreController extends GetxController {
         .snapshots()
         .listen((event) {
       //print(event.docs[0].data());
-      registeredUser?.value = AlbumUsers.fromJson(event.data()!);
+      registeredUser?.value = UsersModel.fromJson(event.data()!);
       if (kDebugMode) {
         print('user data changed and synchronized');
       }
@@ -116,7 +116,7 @@ class FirebaseFirestoreController extends GetxController {
         .snapshots()
         .listen((event) {
       registeredOrganization?.value =
-          AlbumOrganization.fromJson(event.docs[0].data());
+          OrganizationModel.fromJson(event.docs[0].data());
       if (kDebugMode) {
         print('Organization data changed and synchronized');
       }
@@ -131,35 +131,35 @@ class FirebaseFirestoreController extends GetxController {
   }
 
   //return user data from firestore.
-  Future<AlbumUsers?> getUser({
+  Future<UsersModel?> getUser({
     String? phoneNum,
     String? firebaseId,
     GetOptions? getOptions,
   }) async {
     isLoading.value = true;
 
-    AlbumUsers? tempUser;
+    UsersModel? tempUser;
     if (kDebugMode) {
       debugPrint(
           'Fetching registered user details from firestore phoneNum=$phoneNum,firebaseId=$firebaseId...');
     }
-    Query<AlbumUsers> ref;
+    Query<UsersModel> ref;
     try {
       if (firebaseId == null) {
         ref = firestoreInstance
             .collection("users")
             .where('phoneNum', isEqualTo: phoneNum)
             .withConverter(
-              fromFirestore: AlbumUsers.fromFirestore,
-              toFirestore: (AlbumUsers user, _) => user.toJson(),
+              fromFirestore: UsersModel.fromFirestore,
+              toFirestore: (UsersModel user, _) => user.toJson(),
             );
       } else {
         ref = firestoreInstance
             .collection("users")
             .where('firebaseUserId', isEqualTo: firebaseId)
             .withConverter(
-              fromFirestore: AlbumUsers.fromFirestore,
-              toFirestore: (AlbumUsers user, _) => user.toJson(),
+              fromFirestore: UsersModel.fromFirestore,
+              toFirestore: (UsersModel user, _) => user.toJson(),
             );
       }
 
@@ -195,10 +195,10 @@ class FirebaseFirestoreController extends GetxController {
     }
     try {
       final ref = firestoreInstance.collection("users").doc().withConverter(
-            fromFirestore: AlbumUsers.fromFirestore,
-            toFirestore: (AlbumUsers user, _) => user.toJson(),
+            fromFirestore: UsersModel.fromFirestore,
+            toFirestore: (UsersModel user, _) => user.toJson(),
           );
-      AlbumUsers tempUser = AlbumUsers(
+      UsersModel tempUser = UsersModel(
           firebaseUserId: authController.firebaseUser.value?.uid,
           userId: '',
           userType: userType,
@@ -210,7 +210,7 @@ class FirebaseFirestoreController extends GetxController {
         debugPrint('New user Id added = ${ref.id}');
       }
       //update userId of the user
-      await firestoreController.updateUser(user: AlbumUsers(userId: ref.id));
+      await firestoreController.updateUser(user: UsersModel(userId: ref.id));
     } on FirebaseException catch (e) {
       errorController.getErrorMsg(e);
       if (kDebugMode) {
@@ -221,7 +221,7 @@ class FirebaseFirestoreController extends GetxController {
   }
 
   //update user details
-  Future<void> updateUser({required AlbumUsers user}) async {
+  Future<void> updateUser({required UsersModel user}) async {
     isLoading.value = true;
 
     if (kDebugMode) {
@@ -230,8 +230,8 @@ class FirebaseFirestoreController extends GetxController {
     try {
       final ref =
           firestoreInstance.collection("users").doc(user.userId).withConverter(
-                fromFirestore: AlbumUsers.fromFirestore,
-                toFirestore: (AlbumUsers user, _) => user.toJson(),
+                fromFirestore: UsersModel.fromFirestore,
+                toFirestore: (UsersModel user, _) => user.toJson(),
               );
       if (user.firebaseUserId != null) {
         await ref.update({'firebaseUserId': '${user.firebaseUserId}'});
@@ -265,35 +265,35 @@ class FirebaseFirestoreController extends GetxController {
   }
 
   //fetch Organization data from firestore
-  Future<AlbumOrganization?> getOrganization({
+  Future<OrganizationModel?> getOrganization({
     String? orgId,
-    AlbumUsers? user,
+    UsersModel? user,
     GetOptions? getOptions,
   }) async {
     isLoading.value = true;
 
-    AlbumOrganization? tempOrganization;
+    OrganizationModel? tempOrganization;
     if (kDebugMode) {
       debugPrint(
           'Fetching registered organization details from firestore for orgId=$orgId,user=$user...');
     }
-    Query<AlbumOrganization> ref;
+    Query<OrganizationModel> ref;
     try {
       if (orgId != null) {
         ref = firestoreInstance
             .collection("organizations")
             .where('id', isEqualTo: orgId)
             .withConverter(
-              fromFirestore: AlbumOrganization.fromFirestore,
-              toFirestore: (AlbumOrganization user, _) => user.toJson(),
+              fromFirestore: OrganizationModel.fromFirestore,
+              toFirestore: (OrganizationModel user, _) => user.toJson(),
             );
       } else {
         ref = firestoreInstance
             .collection("organizations")
             .where('id', isEqualTo: user?.organizationId)
             .withConverter(
-              fromFirestore: AlbumOrganization.fromFirestore,
-              toFirestore: (AlbumOrganization user, _) => user.toJson(),
+              fromFirestore: OrganizationModel.fromFirestore,
+              toFirestore: (OrganizationModel user, _) => user.toJson(),
             );
       }
 
@@ -369,7 +369,7 @@ class FirebaseFirestoreController extends GetxController {
 
   //create new organisation and add org id to users table against the particular user
   Future<String?> createOrganization(
-      {required AlbumOrganization newOrganization}) async {
+      {required OrganizationModel newOrganization}) async {
     isLoading.value = true;
 
     if (kDebugMode) {
@@ -378,8 +378,8 @@ class FirebaseFirestoreController extends GetxController {
     try {
       final ref =
           firestoreInstance.collection("organizations").doc().withConverter(
-                fromFirestore: AlbumOrganization.fromFirestore,
-                toFirestore: (AlbumOrganization organization, _) =>
+                fromFirestore: OrganizationModel.fromFirestore,
+                toFirestore: (OrganizationModel organization, _) =>
                     organization.toJson(),
               );
       await ref.set(newOrganization);
@@ -388,7 +388,7 @@ class FirebaseFirestoreController extends GetxController {
       }
 
       //update orgId on firestore
-      var tempOrg = AlbumOrganization(
+      var tempOrg = OrganizationModel(
           id: ref.id, createdBy: registeredUser?.value?.userId);
       await updateOrganization(organization: tempOrg);
 
@@ -404,7 +404,7 @@ class FirebaseFirestoreController extends GetxController {
 
       //inserting the newOrganizationId to the user's profile on firestore
       await updateUser(
-          user: AlbumUsers(
+          user: UsersModel(
               userId: registeredUser?.value?.userId, organizationId: ref.id));
       /*await firestoreController.updateOrganizationIdInCreator(
           currentUserId:
@@ -434,7 +434,7 @@ class FirebaseFirestoreController extends GetxController {
 
   //update organization details
   Future<void> updateOrganization(
-      {required AlbumOrganization organization}) async {
+      {required OrganizationModel organization}) async {
     isLoading.value = true;
 
     if (kDebugMode) {
@@ -445,8 +445,8 @@ class FirebaseFirestoreController extends GetxController {
           .collection("organizations")
           .doc(organization.id)
           .withConverter(
-            fromFirestore: AlbumUsers.fromFirestore,
-            toFirestore: (AlbumUsers user, _) => user.toJson(),
+            fromFirestore: UsersModel.fromFirestore,
+            toFirestore: (UsersModel user, _) => user.toJson(),
           );
       if (organization.address != null) {
         await ref.update({'address': '${organization.address}'});
@@ -499,8 +499,8 @@ class FirebaseFirestoreController extends GetxController {
           .collection("users")
           .doc(currentUserId)
           .withConverter(
-            fromFirestore: AlbumOrganization.fromFirestore,
-            toFirestore: (AlbumOrganization organization, _) =>
+            fromFirestore: OrganizationModel.fromFirestore,
+            toFirestore: (OrganizationModel organization, _) =>
                 organization.toJson(),
           );
       ref.update({"organizationId": organizationId}).then(
@@ -509,7 +509,7 @@ class FirebaseFirestoreController extends GetxController {
             print(
                 "DocumentSnapshot successfully updated!\nstoring new user data to shared prefs");
           }
-          AlbumUsers? currentUser = await SharedPrefsServices
+          UsersModel? currentUser = await SharedPrefsServices
               .sharedPrefsInstance
               .getUserFromSharedPrefs();
           // currentUser = await getUser(phoneNum: currentUser!.phoneNum);

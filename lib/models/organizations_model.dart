@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'subscription_type_enum.dart';
 
-class AlbumOrganization {
+class OrganizationModel {
   String? id;
   String? name;
   String? address;
@@ -13,7 +13,7 @@ class AlbumOrganization {
   String? createdBy;
   SubscriptionType? subscription;
 
-  AlbumOrganization({
+  OrganizationModel({
     this.id,
     this.name,
     this.address,
@@ -37,12 +37,12 @@ class AlbumOrganization {
     };
   }
 
-  factory AlbumOrganization.fromFirestore(
+  factory OrganizationModel.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
     SnapshotOptions? options,
   ) {
     final data = snapshot.data();
-    return AlbumOrganization(
+    return OrganizationModel(
         id: data?['id'],
         name: data?['name'],
         address: data?['address'],
@@ -60,7 +60,7 @@ class AlbumOrganization {
                 .byName(data['subscription'])); //converts the string to enum
   }
 
-  AlbumOrganization.fromJson(Map<String, dynamic> json)
+  OrganizationModel.fromJson(Map<String, dynamic> json)
       : id = json['id'].toString(),
         name = json['name'].toString(),
         address = json['address'].toString(),

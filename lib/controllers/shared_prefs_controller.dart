@@ -35,7 +35,7 @@ class SharedPrefsController extends GetxController {
     return prefs.containsKey(key);
   }
 
-  Future<void> storeUserToSharedPrefs({required AlbumUsers? user}) async {
+  Future<void> storeUserToSharedPrefs({required UsersModel? user}) async {
     if (kDebugMode) {
       debugPrint('Storing registered user to Shared Prefs...');
     }
@@ -46,7 +46,7 @@ class SharedPrefsController extends GetxController {
     }
   }
 
-  Future<AlbumUsers> getUserFromSharedPrefs() async {
+  Future<UsersModel> getUserFromSharedPrefs() async {
     if (kDebugMode) {
       debugPrint('Fetching registered user from Shared Prefs...');
     }
@@ -54,11 +54,11 @@ class SharedPrefsController extends GetxController {
     /*String user =
         jsonEncode(AlbumUsers.fromJson(user));*/
     var fetchedUser = prefs.getString('user');
-    return AlbumUsers.fromJson(jsonDecode(fetchedUser!));
+    return UsersModel.fromJson(jsonDecode(fetchedUser!));
   }
 
   Future<void> storeOrganizationToSharedPrefs(
-      {required AlbumOrganization organization}) async {
+      {required OrganizationModel organization}) async {
     if (kDebugMode) {
       debugPrint('Storing organization to Shared Prefs...');
     }
@@ -72,7 +72,7 @@ class SharedPrefsController extends GetxController {
     }
   }
 
-  Future<AlbumOrganization> getOrganizationFromSharedPrefs() async {
+  Future<OrganizationModel> getOrganizationFromSharedPrefs() async {
     if (kDebugMode) {
       debugPrint('Fetching organization from Shared Prefs...');
     }
@@ -80,6 +80,6 @@ class SharedPrefsController extends GetxController {
     /*String user =
         jsonEncode(AlbumUsers.fromJson(user));*/
     var fetchedOrganization = prefs.getString('organization');
-    return AlbumOrganization.fromJson(jsonDecode(fetchedOrganization!));
+    return OrganizationModel.fromJson(jsonDecode(fetchedOrganization!));
   }
 }

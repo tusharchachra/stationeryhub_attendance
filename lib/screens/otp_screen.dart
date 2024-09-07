@@ -3,13 +3,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 
+import '../components/form_field_button.dart';
+import '../components/form_field_otp.dart';
 import '../controllers/firebase_auth_controller.dart';
 import '../controllers/firebase_error_controller.dart';
 import '../controllers/firebase_firestore_controller.dart';
 import '../controllers/login_screen_controller.dart';
 import '../controllers/otp_screen_controller.dart';
-import '../form_fields/form_field_button.dart';
-import '../form_fields/form_field_otp.dart';
 import '../helpers/constants.dart';
 import '../models/user_type_enum.dart';
 import '../scaffold/scaffold_onboarding.dart';

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:stationeryhub_attendance/helpers/size_config.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_home.dart';
 
-import '../form_fields/form_field_button_old.dart';
-import '../form_fields/form_field_phone_num.dart';
+import '../components/form_field_button_old.dart';
+import '../components/form_field_phone_num.dart';
 import '../models/users_model.dart';
 import '../services/firebase_firestore_services.dart';
 
@@ -21,7 +21,7 @@ class _ScreenLoginOldState extends State<ScreenLoginOld> {
   TextEditingController phoneNumController = TextEditingController();
   bool isPhoneNumValid = false;
   //Map<String?, dynamic>? fetchedUser;
-  AlbumUsers? registeredUser;
+  UsersModel? registeredUser;
   final _formKey = GlobalKey<FormState>();
   String? errorMsg;
   bool isLoading = false;

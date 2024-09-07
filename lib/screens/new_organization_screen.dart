@@ -3,12 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 import 'package:stationeryhub_attendance/controllers/new_organization_screen_controller.dart';
-import 'package:stationeryhub_attendance/form_fields/form_field_text.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_onboarding.dart';
 import 'package:stationeryhub_attendance/screens/admin_dashboard_screen.dart';
 
+import '../components/form_field_button.dart';
+import '../components/form_field_text.dart';
 import '../controllers/firebase_error_controller.dart';
-import '../form_fields/form_field_button.dart';
 import '../helpers/constants.dart';
 import '../models/organizations_model.dart';
 
@@ -117,8 +117,8 @@ class NewOrganizationScreen extends StatelessWidget {
                             newOrganizationScreenController.isLoading.value =
                                 true;
 
-                            AlbumOrganization? newOrganization =
-                                AlbumOrganization(
+                            OrganizationModel? newOrganization =
+                                OrganizationModel(
                               name: newOrganizationScreenController
                                   .nameController.value.text
                                   .trim(),

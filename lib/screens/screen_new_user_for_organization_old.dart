@@ -2,27 +2,27 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
-import '../form_fields/form_field_button_old.dart';
+import '../components/form_field_button_old.dart';
 import '../models/user_type_enum.dart';
 import '../models/users_model.dart';
 import '../scaffold/scaffold_home.dart';
 import '../services/firebase_firestore_services.dart';
 
-class NewUserForOrganizationScreen extends StatefulWidget {
-  const NewUserForOrganizationScreen({super.key});
+class NewUserForOrganizationScreenOld extends StatefulWidget {
+  const NewUserForOrganizationScreenOld({super.key});
 
   @override
-  State<NewUserForOrganizationScreen> createState() =>
-      _NewUserForOrganizationScreenState();
+  State<NewUserForOrganizationScreenOld> createState() =>
+      _NewUserForOrganizationScreenOldState();
 }
 
-class _NewUserForOrganizationScreenState
-    extends State<NewUserForOrganizationScreen> {
+class _NewUserForOrganizationScreenOldState
+    extends State<NewUserForOrganizationScreenOld> {
   final _formKey = GlobalKey<FormState>();
   FirebaseFirestoreServices firestoreServices = FirebaseFirestoreServices();
   bool isLoading = false;
   List<String> userTypeList = [];
-  AlbumUsers? currentUser;
+  UsersModel? currentUser;
   String selUserType = '';
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneNumController = TextEditingController();
@@ -86,7 +86,7 @@ class _NewUserForOrganizationScreenState
                     setState(() {
                       isLoading = true;
                     });
-                    AlbumUsers? registeredUser = await firestoreServices
+                    UsersModel? registeredUser = await firestoreServices
                         .getUser(phoneNum: phoneNumController.text.trim());
                     if (registeredUser != null) {
                       if (kDebugMode) {

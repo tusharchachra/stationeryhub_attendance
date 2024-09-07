@@ -5,7 +5,7 @@ import 'dart:ui';
 import 'package:image/image.dart' as img;
 import 'package:tflite_flutter/tflite_flutter.dart';
 
-import '../DB/DatabaseHelper.dart';
+import '../DB/face_database_helper.dart';
 import 'Recognition.dart';
 
 class Recognizer {
@@ -13,7 +13,7 @@ class Recognizer {
   late InterpreterOptions _interpreterOptions;
   static const int WIDTH = 112;
   static const int HEIGHT = 112;
-  final dbHelper = DatabaseHelper();
+  final dbHelper = FaceDatabaseHelper();
   Map<String, Recognition> registered = Map();
   String get modelName => 'assets/tflite_models/mobile_face_net.tflite';
 
@@ -38,15 +38,15 @@ class Recognizer {
     // debugPrint('query all rows:');
     for (final row in allRows) {
       //  debugPrint(row.toString());
-      print(row[DatabaseHelper.columnName]);
-      String name = row[DatabaseHelper.columnName];
-      List<double> embd = row[DatabaseHelper.columnEmbedding]
+      print(row[FaceDatabaseHelper.columnName]);
+      String name = row[FaceDatabaseHelper.columnName];
+      List<double> embd = row[FaceDatabaseHelper.columnEmbedding]
           .split(',')
           .map((e) => double.parse(e))
           .toList()
           .cast<double>();
       Recognition recognition =
-          Recognition(row[DatabaseHelper.columnName], Rect.zero, embd, 0);
+          Recognition(row[FaceDatabaseHelper.columnName], Rect.zero, embd, 0);
       registered.putIfAbsent(name, () => recognition);
       print("R=" + name);
     }
@@ -55,8 +55,8 @@ class Recognizer {
   void registerFaceInDB(String name, List<double> embedding) async {
     // row to insert
     Map<String, dynamic> row = {
-      DatabaseHelper.columnName: name,
-      DatabaseHelper.columnEmbedding: embedding.join(",")
+      FaceDatabaseHelper.columnName: name,
+      FaceDatabaseHelper.columnEmbedding: embedding.join(",")
     };
     final id = await dbHelper.insert(row);
     print('inserted row id: $id');

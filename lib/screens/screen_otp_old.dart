@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:stationeryhub_attendance/form_fields/form_field_button_old.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_home.dart';
 import 'package:stationeryhub_attendance/screens/screen_admin_dashboard_old.dart';
 import 'package:stationeryhub_attendance/screens/screen_mark_attendance.dart';
 
+import '../components/form_field_button_old.dart';
 import '../models/user_type_enum.dart';
 import '../models/users_model.dart';
 import '../services/firebase_firestore_services.dart';
@@ -28,7 +28,7 @@ class OTPScreenOld extends StatefulWidget {
 class _OTPScreenOldState extends State<OTPScreenOld> {
   TextEditingController otpController = TextEditingController();
   //Map<String?, dynamic>? fetchedUser;
-  AlbumUsers? registeredUser;
+  UsersModel? registeredUser;
 
   bool isLoading = false;
 

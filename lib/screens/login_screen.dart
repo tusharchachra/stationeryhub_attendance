@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
-import 'package:stationeryhub_attendance/form_fields/form_field_button.dart';
-import 'package:stationeryhub_attendance/form_fields/form_field_phone_num.dart';
 
+import '../components/form_field_button.dart';
+import '../components/form_field_phone_num.dart';
 import '../controllers/firebase_error_controller.dart';
 import '../controllers/firebase_firestore_controller.dart';
 import '../controllers/login_screen_controller.dart';
@@ -108,7 +108,7 @@ class LoginScreen extends StatelessWidget {
                                 'registered user= ${firestoreController.registeredUser}');
                           }*/
                           //if registered user is found in the firestore, send otp. if not, show bottom sheet to confirm usage
-                          AlbumUsers? tempUser =
+                          UsersModel? tempUser =
                               await firestoreController.getUser(
                                   phoneNum: loginController.phoneNum.value);
                           if (tempUser != null) {

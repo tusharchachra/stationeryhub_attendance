@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:stationeryhub_attendance/form_fields/form_field_button_old.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_home.dart';
 import 'package:stationeryhub_attendance/screens/screen_admin_dashboard_old.dart';
 import 'package:stationeryhub_attendance/services/location_handler.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
+import '../components/form_field_button_old.dart';
 import '../models/organizations_model.dart';
 import '../models/subscription_type_enum.dart';
 import '../models/users_model.dart';
@@ -26,7 +26,7 @@ class _NewOrganizationScreenOldState extends State<NewOrganizationScreenOld> {
   TextEditingController addressController = TextEditingController();
   TextEditingController geoLocationController = TextEditingController();
   Position? currentPosition;
-  AlbumUsers? currentUser;
+  UsersModel? currentUser;
 
   @override
   void initState() {
@@ -110,7 +110,7 @@ class _NewOrganizationScreenOldState extends State<NewOrganizationScreenOld> {
                     });
                     FirebaseFirestoreServices firestoreServices =
                         FirebaseFirestoreServices();
-                    AlbumOrganization newOrganization = AlbumOrganization(
+                    OrganizationModel newOrganization = OrganizationModel(
                       name: nameController.text.trim(),
                       address: addressController.text.trim(),
                       geoLocationLat: currentPosition?.latitude,
