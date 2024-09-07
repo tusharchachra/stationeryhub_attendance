@@ -247,8 +247,10 @@ class DateCarousel extends StatelessWidget {
                           : Get.textTheme.displayLarge,
                     ),
                     Text(
-                      DateFormat.E().format(
-                          adminDashboardScreenController.selectedDate.value),
+                      DateFormat.E().format(DateTime(
+                          adminDashboardScreenController.selectedYear.value,
+                          adminDashboardScreenController.selectedMonth.value,
+                          item)),
                       style: item ==
                               adminDashboardScreenController
                                   .selectedDate.value.day
