@@ -49,6 +49,11 @@
     <string>Used to capture images</string>
     <key>com.apple.security.network.client</key>
     <true/>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Used to store images on your device</string>
+    <key>NSMicrophoneUsageDescription</key>
+        <string>Used to store record audio from your device</string>
+
 
 </dict>
 </plist>

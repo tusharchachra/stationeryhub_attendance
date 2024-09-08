@@ -48,23 +48,32 @@ class AdminDashboardScreen extends StatelessWidget {
   Widget buildDashboard1() {
     return ScaffoldDashboard(
       leadingWidget: Padding(
-        padding: EdgeInsets.fromLTRB(12.w, 13.h, 0, 13.h),
-        child: firestoreController.isLoading.value == true
-            ? ClipRRect(
+          padding: EdgeInsets.fromLTRB(12.w, 13.h, 0, 13.h),
+          child: firestoreController.isLoading.value == true
+              ? Container(
+                  width: 22.w,
+                  height: 22.h,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  child: GradientProgressBar(
+                    child: CircleAvatar(),
+                  ))
+
+              /* ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(22.r)),
                 child: GradientProgressBar(
                   size: Size(22.w, 22.h),
                 ),
-              )
-            : CircleAvatar(
-                maxRadius: 22.r,
-                //backgroundColor: colourProfilePicIconBackground,
-                child: const Icon(
-                  Icons.person,
-                  color: Colors.white,
-                ),
-              ),
-      ),
+              )*/
+              : CircleAvatar(
+                  maxRadius: 22.r,
+                  //backgroundColor: colourProfilePicIconBackground,
+                  child: const Icon(
+                    Icons.person,
+                    color: Colors.white,
+                  ),
+                )),
       pageTitle: (firestoreController.registeredUser?.value?.name ?? 'Guest'),
       pageSubtitle:
           ('\n${firestoreController.registeredUser?.value?.userType?.name.capitalizeFirst}'

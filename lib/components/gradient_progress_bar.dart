@@ -1,51 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
-class GradientProgressBar extends StatefulWidget {
-  final Size size;
+class GradientProgressBar extends StatelessWidget {
+  final Widget child;
 
   const GradientProgressBar({
     super.key,
-    required this.size,
+    required this.child,
   });
 
   @override
-  State<GradientProgressBar> createState() => _FancyContainer();
-}
-
-class _FancyContainer extends State<GradientProgressBar>
-    with SingleTickerProviderStateMixin {
-  late AnimationController controller;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = AnimationController(
-      duration: const Duration(seconds: 1),
-      vsync: this,
-    )
-      ..forward()
-      ..addListener(() {
-        if (controller.isCompleted) {
-          controller.repeat();
-        }
-      });
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final aspectRatio = widget.size.height / widget.size.width;
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade300,
+      highlightColor: Colors.grey.shade100,
+      child: child,
+    );
+  }
+  /*final aspectRatio = widget.size.height / widget.size.width;
     return AnimatedBuilder(
       animation: controller,
       builder: (context, _) {
         return Container(
-          /*width: widget.size.width,
-          height: widget.size.height,*/
+          */ /*width: widget.size.width,
+          height: widget.size.height,*/ /*
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -56,14 +34,15 @@ class _FancyContainer extends State<GradientProgressBar>
                 controller.value,
                 widget.size.height * aspectRatio,
               ),
-              colors: [Colors.black26, Colors.black12] /*_colors*/,
+              colors: [Colors.black26, Colors.black12] */ /*_colors*/ /*,
             ),
           ),
         );
       },
     );
-  }
+  }*/
 }
+/*
 
 class SlideGradient implements GradientTransform {
   final double value;
@@ -76,3 +55,4 @@ class SlideGradient implements GradientTransform {
     return Matrix4.identity()..translate(dist);
   }
 }
+*/

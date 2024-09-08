@@ -13,8 +13,7 @@ import 'package:stationeryhub_attendance/screens/screen_splash.dart';
 import 'firebase_options.dart';
 
 ///TODO:perform setup steps for iOs for google_mlkit_face_detection using steps in pub.dev
-//late List<CameraDescription> cameras;
-
+late List<CameraDescription> cameras;
 void main() async {
   LicenseRegistry.addLicense(() async* {
     final license = await rootBundle.loadString('google_fonts/OFL.txt');
@@ -35,7 +34,7 @@ void main() async {
   //SharedPrefsController sharedPrefsController = Get.find();
   //await sharedPrefsController.clearSharedPrefs();
   //await SharedPrefsServices.sharedPrefsInstance.clearSharedPrefs();
-  final cameras = await availableCameras();
+  cameras = await availableCameras();
   // await ScreenUtil.ensureScreenSize();
   runApp(const StationeryHubAttendance());
 }

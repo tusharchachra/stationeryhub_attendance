@@ -22,5 +22,6 @@ class UtilsController {
     //Get.put(SharedPrefsController());
     Get.put(NewOrganizationScreenController());
     Get.put(AdminDashboardScreenController());
+    //Get.put(CaptureImageScreenController());
   }
 }
