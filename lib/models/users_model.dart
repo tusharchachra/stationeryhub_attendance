@@ -9,6 +9,7 @@ class UsersModel {
   String? phoneNum;
   String? organizationId;
   String? userId;
+  String? profilePicPath;
 
   UsersModel({
     this.firebaseUserId,
@@ -17,6 +18,7 @@ class UsersModel {
     this.name,
     this.phoneNum,
     this.organizationId,
+    this.profilePicPath,
   });
 
   factory UsersModel.fromFirestore(
@@ -25,12 +27,14 @@ class UsersModel {
   ) {
     final data = snapshot.data();
     return UsersModel(
-        firebaseUserId: data?['firebaseUserId'],
-        userId: data?['userId'],
-        name: data?['name'],
-        userType: UserType.values.byName(data!['userType']),
-        phoneNum: data['phoneNum'],
-        organizationId: data['organizationId']);
+      firebaseUserId: data?['firebaseUserId'],
+      userId: data?['userId'],
+      name: data?['name'],
+      userType: UserType.values.byName(data!['userType']),
+      phoneNum: data['phoneNum'],
+      organizationId: data['organizationId'],
+      profilePicPath: data['profilePicPath'],
+    );
   }
 
   UsersModel.fromJson(Map<String, dynamic> json)
@@ -48,7 +52,8 @@ class UsersModel {
             : json['phoneNum'].toString(),
         organizationId = json['organizationId'].toString() == ''
             ? ''
-            : json['organizationId'].toString();
+            : json['organizationId'].toString(),
+        profilePicPath = json['profilePicPath'] ? '' : json['profilePicPath'];
 
   Map<String, dynamic> toJson() => {
         'firebaseUserId': firebaseUserId ?? 'null',
@@ -57,6 +62,7 @@ class UsersModel {
         'name': name,
         'phoneNum': phoneNum,
         'organizationId': organizationId ?? 'null',
+        'profilePicPath': profilePicPath ?? ''
       };
 
   /*void setUid(String id) {

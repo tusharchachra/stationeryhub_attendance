@@ -41,7 +41,7 @@ class CaptureImageScreen extends StatelessWidget {
                               ? true
                               : false,
                       child: CameraPreview(
-                          captureImageScreenController.controller.value!),
+                          captureImageScreenController.cameraController.value!),
                     ),
                   ),
                   Positioned(
@@ -118,7 +118,11 @@ class CaptureImageScreen extends StatelessWidget {
                         ),
                         SizedBox(width: 35.w),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () async {
+                            await captureImageScreenController.clickPicture();
+                            print(
+                                captureImageScreenController.imageFile?.value);
+                          },
                           child: Container(
                             width: 94.w,
                             height: 94.h,

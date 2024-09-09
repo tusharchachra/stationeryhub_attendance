@@ -5,7 +5,7 @@ import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_cont
 import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
-import 'package:stationeryhub_attendance/screens/new_user_screen.dart';
+import 'package:stationeryhub_attendance/screens/capture_image_screen.dart';
 
 import '../components/admin_dashboard_box.dart';
 import '../components/date_carousel.dart';
@@ -119,7 +119,7 @@ class AdminDashboardScreen extends StatelessWidget {
           SizedBox(height: 10.h),
           TextButton(
               onPressed: () {
-                Get.to(() => NewUserScreen());
+                Get.to(() => CaptureImageScreen());
               },
               child: Text('Create new user')),
         ],
