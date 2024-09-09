@@ -4,7 +4,8 @@ import 'package:get/get.dart';
 
 import '../main.dart';
 
-class CaptureImageScreenController extends GetxController {
+class CaptureImageScreenController extends GetxController
+    with GetSingleTickerProviderStateMixin {
   RxBool isCameraInitialized = false.obs;
   Rx<CameraController?> controller =
       CameraController(cameras[0], ResolutionPreset.max).obs;

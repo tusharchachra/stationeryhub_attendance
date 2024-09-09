@@ -2,19 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 class GradientProgressBar extends StatelessWidget {
-  final Widget child;
+  final Widget? child;
+  final Color? baseCol;
+  final Color? highlightCol;
+  final ShimmerDirection? shimmerDirection;
+  final Duration? period;
 
   const GradientProgressBar({
     super.key,
-    required this.child,
+    this.child,
+    this.baseCol,
+    this.highlightCol,
+    this.shimmerDirection,
+    this.period,
   });
 
   @override
   Widget build(BuildContext context) {
+    /* return Shimmer(
+        //period: period ?? Duration(milliseconds: 1500),
+        //direction: shimmerDirection ?? ShimmerDirection.ltr,
+        gradient: LinearGradient(colors: [
+          //baseCol ?? Colors.grey.shade300,
+          //baseCol ?? Colors.grey.shade300,
+          highlightCol ?? Colors.grey.shade100,
+          baseCol ?? Colors.grey.shade300,
+          baseCol ?? Colors.grey.shade300,
+          baseCol ?? Colors.grey.shade300,
+          highlightCol ?? Colors.grey.shade100,
+        ]),
+        child: child ?? Container());*/
+
     return Shimmer.fromColors(
-      baseColor: Colors.grey.shade300,
-      highlightColor: Colors.grey.shade100,
-      child: child,
+      period: period ?? const Duration(milliseconds: 1500),
+      baseColor: baseCol ?? Colors.grey.shade300,
+      highlightColor: highlightCol ?? Colors.grey.shade100,
+      direction: shimmerDirection ?? ShimmerDirection.ltr,
+      child: child ?? Container(),
     );
   }
   /*final aspectRatio = widget.size.height / widget.size.width;

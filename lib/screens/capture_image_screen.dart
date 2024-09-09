@@ -2,7 +2,9 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:stationeryhub_attendance/components/border_painter.dart';
 import 'package:stationeryhub_attendance/components/gradient_progress_bar.dart';
+import 'package:stationeryhub_attendance/components/line_animation_view.dart';
 import 'package:stationeryhub_attendance/controllers/capture_image_screen_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
@@ -42,6 +44,49 @@ class CaptureImageScreen extends StatelessWidget {
                           captureImageScreenController.controller.value!),
                     ),
                   ),
+                  Positioned(
+                    top: 70.h,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: CustomPaint(
+                        foregroundPainter: BorderPainter(),
+                        child: Container(
+                          width: 350.w,
+                          height: 350.h,
+                          color: Colors.transparent,
+                        ),
+                      ),
+                    ),
+                  ),
+                  /* Positioned(
+                      top: 76.h,
+                      left: 0,
+                      right: 0,
+                      child: Center(
+                        child: GradientProgressBar(
+                          //period: Duration(milliseconds: 1000),
+                          //shimmerDirection: ShimmerDirection.ttb,
+                          baseCol: Colors.transparent,
+                          highlightCol: Constants.colourTextLight,
+                          child: ClipRRect(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(50.0.r)),
+                            child: Container(
+                              width: 344.w,
+                              height: 344.h,
+                              color: Constants.colourDateBoxBorder,
+                            ),
+                          ),
+                        ),
+                      )),*/
+                  Positioned(
+                      top: 95.h,
+                      left: 0,
+                      right: 0,
+                      child: Center(
+                        child: LineAnimationView(size: Size(300.w, 300.h)),
+                      )),
                   Positioned(
                     bottom: 69.h,
                     left: 0, right: 0,
