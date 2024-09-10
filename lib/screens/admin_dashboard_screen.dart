@@ -5,7 +5,7 @@ import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_cont
 import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
-import 'package:stationeryhub_attendance/screens/capture_image_screen.dart';
+import 'package:stationeryhub_attendance/screens/user_onboarding_screen.dart';
 
 import '../components/admin_dashboard_box.dart';
 import '../components/date_carousel.dart';
@@ -48,32 +48,33 @@ class AdminDashboardScreen extends StatelessWidget {
   Widget buildDashboard1() {
     return ScaffoldDashboard(
       leadingWidget: Padding(
-          padding: EdgeInsets.fromLTRB(12.w, 13.h, 0, 13.h),
-          child: firestoreController.isLoading.value == true
-              ? Container(
-                  width: 22.w,
-                  height: 22.h,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  child: GradientProgressBar(
-                    child: CircleAvatar(),
-                  ))
+        padding: EdgeInsets.fromLTRB(12.w, 13.h, 0, 13.h),
+        child: firestoreController.isLoading.value == true
+            ? Container(
+                width: 22.w,
+                height: 22.h,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                ),
+                child: GradientProgressBar(
+                  child: CircleAvatar(),
+                ))
 
-              /* ClipRRect(
+            /* ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(22.r)),
                 child: GradientProgressBar(
                   size: Size(22.w, 22.h),
                 ),
               )*/
-              : CircleAvatar(
-                  maxRadius: 22.r,
-                  //backgroundColor: colourProfilePicIconBackground,
-                  child: const Icon(
-                    Icons.person,
-                    color: Colors.white,
-                  ),
-                )),
+            : CircleAvatar(
+                maxRadius: 22.r,
+                //backgroundColor: colourProfilePicIconBackground,
+                child: const Icon(
+                  Icons.person,
+                  color: Colors.white,
+                ),
+              ),
+      ),
       pageTitle: (firestoreController.registeredUser?.value?.name ?? 'Guest'),
       pageSubtitle:
           ('\n${firestoreController.registeredUser?.value?.userType?.name.capitalizeFirst}'
@@ -119,7 +120,7 @@ class AdminDashboardScreen extends StatelessWidget {
           SizedBox(height: 10.h),
           TextButton(
               onPressed: () {
-                Get.to(() => CaptureImageScreen());
+                Get.to(() => UserOnboardingScreen());
               },
               child: Text('Create new user')),
         ],

@@ -6,6 +6,7 @@ class FormFieldText extends StatelessWidget {
   const FormFieldText({
     super.key,
     this.hintText,
+    this.labelText,
     this.prefixIcon,
     this.isMultiLine = false,
     this.textController,
@@ -15,6 +16,7 @@ class FormFieldText extends StatelessWidget {
 
   final TextEditingController? textController;
   final String? hintText;
+  final String? labelText;
   final Widget? prefixIcon;
   final bool isMultiLine;
   final String? Function(String?)? validator;
@@ -22,26 +24,33 @@ class FormFieldText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: textController,
-      style: Get.textTheme.displayMedium!,
-      keyboardType: TextInputType.name,
-      autofocus: false,
-      cursorColor: Constants.colourTextLight,
-      maxLines: isMultiLine ? 3 : 1,
-      minLines: 1,
-      textCapitalization: TextCapitalization.words,
-      textAlignVertical: TextAlignVertical.center,
-      decoration: const InputDecoration()
-          .applyDefaults(Get.theme.inputDecorationTheme)
-          .copyWith(
-            counterText: '',
-            prefixIcon: prefixIcon,
-            prefixIconColor: Constants.colourTextFieldIcon,
-            hintText: hintText,
-          ),
-      validator: validator,
-      onChanged: onChangedAction,
-    );
+    return Wrap(children: [
+      Text(
+        labelText ?? '',
+        style: Get.textTheme.displayLarge,
+      ),
+      TextFormField(
+        controller: textController,
+        style: Get.textTheme.displayMedium!,
+        keyboardType: TextInputType.name,
+        autofocus: false,
+        cursorColor: Constants.colourTextLight,
+        maxLines: isMultiLine ? 3 : 1,
+        minLines: 1,
+        textCapitalization: TextCapitalization.words,
+        textAlignVertical: TextAlignVertical.center,
+        decoration: const InputDecoration()
+            .applyDefaults(Get.theme.inputDecorationTheme)
+            .copyWith(
+              counterText: '',
+              prefixIcon: prefixIcon,
+              prefixIconColor: Constants.colourTextFieldIcon,
+              hintText: hintText,
+            ),
+        validator: validator,
+        onChanged: onChangedAction,
+        cursorOpacityAnimates: true,
+      ),
+    ]);
   }
 }

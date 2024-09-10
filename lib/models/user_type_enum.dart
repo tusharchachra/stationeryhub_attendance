@@ -1,7 +1,7 @@
 enum UserType { admin, employee }
 
 extension UserTypeString on UserType {
-  String getUserName() {
+  String getName() {
     return toString().split('.').last;
     /* switch (this) {
       case 'admin':

@@ -53,7 +53,9 @@ class UsersModel {
         organizationId = json['organizationId'].toString() == ''
             ? ''
             : json['organizationId'].toString(),
-        profilePicPath = json['profilePicPath'] ? '' : json['profilePicPath'];
+        profilePicPath = json['profilePicPath'].toString() == ''
+            ? ''
+            : json['profilePicPath'].toString();
 
   Map<String, dynamic> toJson() => {
         'firebaseUserId': firebaseUserId ?? 'null',
