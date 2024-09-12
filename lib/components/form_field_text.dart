@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 
@@ -27,11 +28,13 @@ class FormFieldText extends StatelessWidget {
     return Wrap(children: [
       Text(
         labelText ?? '',
-        style: Get.textTheme.displayLarge,
+        style: Get.textTheme.headlineMedium
+            ?.copyWith(color: Constants.colourTextDark),
       ),
       TextFormField(
         controller: textController,
-        style: Get.textTheme.displayMedium!,
+        style: Get.textTheme.headlineMedium
+            ?.copyWith(color: Constants.colourTextMedium),
         keyboardType: TextInputType.name,
         autofocus: false,
         cursorColor: Constants.colourTextLight,
@@ -46,6 +49,8 @@ class FormFieldText extends StatelessWidget {
               prefixIcon: prefixIcon,
               prefixIconColor: Constants.colourTextFieldIcon,
               hintText: hintText,
+              contentPadding:
+                  EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
             ),
         validator: validator,
         onChanged: onChangedAction,

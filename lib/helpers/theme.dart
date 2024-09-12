@@ -28,31 +28,47 @@ class ThemeCustom {
       ),
       iconTheme: const IconThemeData(color: Constants.colourPrimary),
       textTheme: TextTheme(
-        headlineLarge: TextStyle(
-          color: Colors.white,
-          fontSize: 20.sp,
+        displayLarge: TextStyle(
+          //color: Constants.colourTextDark,
+          fontSize: 25.sp,
           fontWeight: FontWeight.w500,
         ),
-        titleLarge: TextStyle(
-          color: Constants.colourPrimary,
-          fontSize: 16.sp,
-          fontWeight: FontWeight.w400,
-        ),
-        displayLarge: TextStyle(
-          color: Constants.colourTextDark,
-          fontSize: 20.sp,
-          fontWeight: FontWeight.w400,
-        ),
         displayMedium: TextStyle(
-          color: Constants.colourTextDark,
-          fontSize: 14.sp,
+          //color: Constants.colourTextDark,
+          fontSize: 20.sp,
           fontWeight: FontWeight.w400,
         ),
         displaySmall: TextStyle(
-          color: Constants.colourTextDark,
-          fontSize: 10.sp,
-          fontWeight: FontWeight.w100,
+          //color: Constants.colourTextDark,
+          fontSize: 16.sp,
+          fontWeight: FontWeight.w400,
         ),
+        headlineLarge: TextStyle(
+          //color: Colors.white,
+          fontSize: 14.sp,
+          fontWeight: FontWeight.w500,
+        ),
+        headlineMedium: TextStyle(
+          //color: Colors.white,
+          fontSize: 14.sp,
+          fontWeight: FontWeight.w400,
+        ),
+        titleLarge: TextStyle(
+          color: Constants.colourPrimary,
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w500,
+        ),
+        titleMedium: TextStyle(
+          //color: Colors.white,
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w400,
+        ),
+        titleSmall: TextStyle(
+          //color: Colors.white,
+          fontSize: 8.sp,
+          fontWeight: FontWeight.w500,
+        ),
+        //--------------
         bodyLarge: TextStyle(
           color: Colors.white,
           fontSize: 14.sp,

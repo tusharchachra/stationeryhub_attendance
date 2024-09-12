@@ -7,10 +7,13 @@ class Constants {
   static final Constants instance = Constants._privateConstructor();
 
   static const colourPrimary = Color(0xFF0055FD);
-  static const colourBackground = Color(0x000fffff);
+  //static const colourBackground = Color(0x000fffff);
   static final Color colourIconBackground =
       const Color(0xFF0055FD).withOpacity(0.15);
+
   static const colourTextDark = Color(0xff555555);
+  static const colourTextMedium = Color(0xff5C5C5C);
+
   static const colourTextLight = Color(0xffA8A8A8);
   static const colourOtpBoxBorder = Color(0xffB3ABC2);
   static const colourTextFieldIcon = Color(0xff939393);
