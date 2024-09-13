@@ -6,6 +6,49 @@ class UserOnboardingScreenController extends GetxController {
   Rx<TextEditingController> nameController = TextEditingController().obs;
   Rx<TextEditingController> phoneNumController = TextEditingController().obs;
   Rx<TextEditingController> userTypeController = TextEditingController().obs;
+  RxBool showUserTypeOptions = false.obs;
+  FocusNode userTypeFocusNode = FocusNode();
 
   var selectedUserType = UserType.employee.obs;
+
+  /* @override
+  void onInit() {
+    // TODO: implement onInit
+    print('running init');
+    userTypeFocusNode.addListener(() {
+      if (userTypeFocusNode.hasFocus) {
+        print('has focus');
+        showUserTypeOptions.value = true;
+        print('got focus');
+      } else {
+        showUserTypeOptions.value = false;
+        print('lost focus');
+      }
+    });
+    super.onInit();
+  }*/
+
+  @override
+  void onReady() {
+    // TODO: implement onReady
+    super.onReady();
+    print('running init');
+    userTypeFocusNode.addListener(() {
+      if (userTypeFocusNode.hasFocus) {
+        print('has focus');
+        showUserTypeOptions.value = true;
+        print('got focus');
+      } else {
+        showUserTypeOptions.value = false;
+        print('lost focus');
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    userTypeFocusNode.dispose();
+  }
 }

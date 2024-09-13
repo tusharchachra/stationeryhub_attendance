@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 
@@ -40,17 +39,20 @@ class FormFieldPhoneNum extends StatelessWidget {
             .applyDefaults(Get.theme.inputDecorationTheme)
             .copyWith(
               counterText: '',
-              prefix: Text('+91-',
-                  style: Get.textTheme.headlineMedium!
-                      .copyWith(color: Constants.colourTextMedium)),
-              contentPadding:
-                  EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+              prefix: Text(
+                '+91-',
+                style: Get.textTheme.headlineMedium!
+                    .copyWith(color: Constants.colourTextMedium),
+              ),
               /*prefixIcon: const Icon(Icons.phone),*/
               /*prefixIconColor: Colors.white,*/
             ),
         validator: validatorPhoneNum,
         onChanged: onChangedAction,
         cursorOpacityAnimates: true,
+        /* onTapOutside: (event) {
+          focusNode?.unfocus(disposition: UnfocusDisposition.scope);
+        },*/
       ),
     ]);
   }

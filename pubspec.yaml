@@ -64,6 +64,7 @@ dependencies:
   syncfusion_flutter_datepicker: ^26.2.13
   shimmer: ^3.0.0
   cached_network_image: ^3.4.0
+  getwidget: ^4.0.0
 
 
 

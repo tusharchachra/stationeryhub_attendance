@@ -91,13 +91,13 @@ class ThemeCustom {
         border: OutlineInputBorder(
           borderSide: const BorderSide(color: Constants.colourTextLight),
           borderRadius: BorderRadius.all(
-            Radius.circular(5.0.r),
+            Radius.circular(10.0.r),
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Constants.colourTextLight),
+          borderSide: const BorderSide(color: Constants.colourPrimary),
           borderRadius: BorderRadius.all(
-            Radius.circular(5.0.r),
+            Radius.circular(10.0.r),
           ),
         ),
         contentPadding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
