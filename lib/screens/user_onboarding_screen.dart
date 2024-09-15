@@ -9,6 +9,8 @@ import 'package:stationeryhub_attendance/controllers/firebase_firestore_controll
 import 'package:stationeryhub_attendance/controllers/user_onboarding_screen_controller.dart';
 import 'package:stationeryhub_attendance/models/user_type_enum.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
+import 'package:stationeryhub_attendance/screens/user_id_card_info_screen.dart';
+import 'package:stationeryhub_attendance/screens/user_profile_pic_info_screen.dart';
 
 import '../helpers/constants.dart';
 
@@ -39,12 +41,19 @@ class UserOnboardingScreen extends StatelessWidget {
                 child:
                     firestoreController.registeredUser?.value?.profilePicPath ==
                             ''
-                        ? const Icon(
-                            Icons.camera_alt,
+                        ? IconButton(
+                            icon: Icon(Icons.camera_alt),
                             color: Colors.white,
+                            onPressed: () {
+                              Get.to(() => UserProfilePicInfoScreen());
+                            },
                           )
                         : CachedNetworkImage(
                             placeholder: (context, url) => Icon(
+                              Icons.camera,
+                              color: Colors.white,
+                            ),
+                            errorWidget: (context, url, error) => Icon(
                               Icons.camera,
                               color: Colors.white,
                             ),
@@ -74,21 +83,16 @@ class UserOnboardingScreen extends StatelessWidget {
                   textController:
                       userOnboardingScreenController.userTypeController.value,
                   readOnly: true,
-                  trailingWidget: Obx(
-                    (child): IconButton(
-                        onPressed: () {
-                          userOnboardingScreenController
-                                      .showUserTypeOptions.value ==
-                                  true
-                              ? false
-                              : true;
-                        },
-                        icon: userOnboardingScreenController
-                                    .showUserTypeOptions.value ==
-                                true
-                            ? Icon(Icons.keyboard_arrow_up_sharp)
-                            : Icon(Icons.keyboard_arrow_down_sharp)),
-                  ),
+                  trailingWidget: IconButton(
+                      onPressed: () {
+                        userOnboardingScreenController
+                            .invertShowUserTypeValue();
+                      },
+                      icon: userOnboardingScreenController
+                                  .showUserTypeOptions.value ==
+                              true
+                          ? Icon(Icons.keyboard_arrow_up_sharp)
+                          : Icon(Icons.keyboard_arrow_down_sharp)),
                 ),
               ),
               SizedBox(height: 5.h),
@@ -113,6 +117,8 @@ class UserOnboardingScreen extends StatelessWidget {
                                           .text = e.getName().capitalizeFirst!;
                                       userOnboardingScreenController
                                           .selectedUserType.value = e;
+                                      userOnboardingScreenController
+                                          .invertShowUserTypeValue();
                                     },
                                     child: Padding(
                                       padding: EdgeInsets.symmetric(
@@ -153,6 +159,12 @@ class UserOnboardingScreen extends StatelessWidget {
                       )
                     : Container(),
               ),
+              SizedBox(height: 14.h),
+              TextButton(
+                  onPressed: () {
+                    Get.to(() => UserIdCardInfoScreen());
+                  },
+                  child: Text('Scan Id')),
               SizedBox(height: 14.h),
               FormFieldButton(
                 width: 430.w,

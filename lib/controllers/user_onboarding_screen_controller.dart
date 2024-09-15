@@ -32,15 +32,11 @@ class UserOnboardingScreenController extends GetxController {
   void onReady() {
     // TODO: implement onReady
     super.onReady();
-    print('running init');
     userTypeFocusNode.addListener(() {
       if (userTypeFocusNode.hasFocus) {
-        print('has focus');
         showUserTypeOptions.value = true;
-        print('got focus');
       } else {
         showUserTypeOptions.value = false;
-        print('lost focus');
       }
     });
   }
@@ -50,5 +46,9 @@ class UserOnboardingScreenController extends GetxController {
     // TODO: implement dispose
     super.dispose();
     userTypeFocusNode.dispose();
+  }
+
+  void invertShowUserTypeValue() {
+    showUserTypeOptions.value = !showUserTypeOptions.value;
   }
 }

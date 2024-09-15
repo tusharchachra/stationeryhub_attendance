@@ -11,6 +11,8 @@ class FormFieldButton extends StatelessWidget {
     required this.height,
     required this.buttonText,
     required this.onTapAction,
+    this.leadingIcon,
+    this.buttonStyle,
 
     //required this.buttonDecoration,
   });
@@ -18,7 +20,9 @@ class FormFieldButton extends StatelessWidget {
   final double width;
   final double height;
   final String buttonText;
+  final Widget? leadingIcon;
   final void Function() onTapAction;
+  final ButtonStyle? buttonStyle;
   //final BoxDecoration buttonDecoration;
 
   @override
@@ -27,6 +31,9 @@ class FormFieldButton extends StatelessWidget {
       width: width,
       height: height,
       child: FilledButton(
+        style: buttonStyle != null
+            ? buttonStyle
+            : Get.theme.filledButtonTheme.style,
         onPressed: () {
           errorController.resetValues();
           /* if (errorController.isInternetConnected.value == false) {
@@ -36,8 +43,14 @@ class FormFieldButton extends StatelessWidget {
         },
         child: FittedBox(
           fit: BoxFit.contain,
-          child: Text(
-            buttonText,
+          child: Row(
+            children: [
+              leadingIcon ?? Container(),
+              SizedBox(width: 5),
+              Text(
+                buttonText,
+              ),
+            ],
           ),
         ),
       ),

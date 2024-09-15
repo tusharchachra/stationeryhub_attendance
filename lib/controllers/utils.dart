@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
+import 'package:stationeryhub_attendance/controllers/firebase_storage_controller.dart';
 import 'package:stationeryhub_attendance/controllers/new_organization_screen_controller.dart';
 
 import 'firebase_error_controller.dart';
@@ -22,6 +23,6 @@ class UtilsController {
     //Get.put(SharedPrefsController());
     Get.put(NewOrganizationScreenController());
     Get.put(AdminDashboardScreenController());
-    //Get.put(CaptureImageScreenController());
+    Get.put(FirebaseStorageController());
   }
 }

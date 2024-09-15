@@ -5,7 +5,7 @@ import 'package:stationeryhub_attendance/helpers/constants.dart';
 class ScaffoldDashboard extends StatelessWidget {
   final Widget? leadingWidget;
   final List<Widget>? appBarActions;
-  final bool isLoading;
+  final bool? isLoading;
   final String pageTitle;
   final String? pageSubtitle;
   final Widget bodyWidget;
@@ -15,7 +15,7 @@ class ScaffoldDashboard extends StatelessWidget {
   const ScaffoldDashboard({
     super.key,
     this.appBarActions,
-    required this.isLoading,
+    this.isLoading,
     required this.pageTitle,
     this.pageSubtitle,
     required this.bodyWidget,

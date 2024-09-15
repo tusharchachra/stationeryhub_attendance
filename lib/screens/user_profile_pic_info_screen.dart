@@ -6,8 +6,8 @@ import 'package:stationeryhub_attendance/components/form_field_button.dart';
 import '../scaffold/scaffold_dashboard.dart';
 import 'capture_image_screen.dart';
 
-class UserProfilePicScreen extends StatelessWidget {
-  const UserProfilePicScreen({super.key});
+class UserProfilePicInfoScreen extends StatelessWidget {
+  const UserProfilePicInfoScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

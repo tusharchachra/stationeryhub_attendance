@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class Constants {
   Constants._privateConstructor();
@@ -27,6 +28,7 @@ class Constants {
   static const colourDashboardBox4 = Colors.deepOrange;
   static const colourDashboardBox5 = Colors.tealAccent;
   static const colourDateBoxBorder = Color(0xffEFEFEF);
+  static const colourIdCardBackground = Color(0xffC6E6F9);
 
   static const otpResendTime = 5;
 
@@ -77,4 +79,10 @@ class Constants {
       Radius.circular(10.r),
     ),
   );
+
+  static final buttonStyleWhite = Get.theme.filledButtonTheme.style?.copyWith(
+      foregroundColor: const WidgetStatePropertyAll(Constants.colourTextDark),
+      backgroundColor: const WidgetStatePropertyAll(Colors.white),
+      iconColor: const WidgetStatePropertyAll(colourTextDark),
+      side: const WidgetStatePropertyAll(BorderSide(color: colourTextDark)));
 }
