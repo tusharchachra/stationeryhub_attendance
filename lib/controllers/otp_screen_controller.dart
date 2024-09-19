@@ -9,7 +9,6 @@ import '../controllers/firebase_auth_controller.dart';
 import 'login_screen_controller.dart';
 
 class OtpScreenController extends GetxController {
-  final formKeyOtp = GlobalKey<FormState>();
   Rx<TextEditingController> otpDigitController = TextEditingController().obs;
   final FocusNode focusDigit = FocusNode();
 
@@ -38,14 +37,14 @@ class OtpScreenController extends GetxController {
     super.dispose();
   }
 
-  Future<void> onLogin(var otp) async {
+  /*Future<void> onLogin(var otp) async {
     error.value = await authController.signInPhone(
       phoneNum: loginController.phoneNum.value,
       smsCode: otp.value,
     );
-  }
+  }*/
 
-  String? validateForm(var otp) {
+  void validateForm(var otp) {
     if (kDebugMode) {
       print('validating OTP');
     }
@@ -56,7 +55,7 @@ class OtpScreenController extends GetxController {
       error.value = '';
       isOtpValid.value = true;
     }
-    return error.value;
+    // return error.value;
   }
 
   void startTimer() {

@@ -14,6 +14,7 @@ import '../models/organizations_model.dart';
 
 class NewOrganizationScreen extends StatelessWidget {
   const NewOrganizationScreen({super.key});
+  // static final _formKey = GlobalKey<FormState>();
 
   static NewOrganizationScreenController newOrganizationScreenController =
       Get.find();
@@ -27,7 +28,7 @@ class NewOrganizationScreen extends StatelessWidget {
     return ScaffoldOnboarding(
       bodyWidget: Center(
         child: Form(
-          key: newOrganizationScreenController.formKeyNewOrganization,
+          //  key: _formKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -111,9 +112,16 @@ class NewOrganizationScreen extends StatelessWidget {
                         onTapAction: () async {
                           newOrganizationScreenController.isLoading.value =
                               true;
-                          if (newOrganizationScreenController
+                          /* if (newOrganizationScreenController
                               .formKeyNewOrganization.currentState!
-                              .validate()) {
+                              .validate())*/
+                          newOrganizationScreenController.validateName(
+                              newOrganizationScreenController
+                                  .nameController.value.text
+                                  .trim());
+                          if (newOrganizationScreenController
+                                  .isFormValid.value ==
+                              true) {
                             newOrganizationScreenController.isLoading.value =
                                 true;
 
@@ -132,6 +140,8 @@ class NewOrganizationScreen extends StatelessWidget {
                             String? insertedOrganizationId =
                                 await firestoreController.createOrganization(
                                     newOrganization: newOrganization);
+                            /*await firestoreController
+                                .attachOrganizationListener();*/
 
                             //fetch user from shared prefs
                             /* AlbumUsers? currentUser =

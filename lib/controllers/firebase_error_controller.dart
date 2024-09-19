@@ -39,6 +39,7 @@ class FirebaseErrorController extends GetxController {
     } else {
       errorMsg.value = 'Something went wrong. Please retry after a while.';
     }
+    print(errorMsg.value);
     return errorMsg.value;
   }
 }

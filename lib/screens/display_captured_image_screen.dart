@@ -30,7 +30,7 @@ class DisplayCapturedImageScreen extends StatelessWidget {
               width: 1.sw,
               height: 1.sh,
               child: Image.file(
-                File(captureImageScreenController.imageFile!.path),
+                File(captureImageScreenController.imageFilePath.value),
                 fit: BoxFit.fill,
               ),
             ),
@@ -88,9 +88,12 @@ class DisplayCapturedImageScreen extends StatelessWidget {
           SizedBox(width: 35.w),
           GestureDetector(
             onTap: () async {
-              var x = firebaseStorageController
-                  .uploadProfilePic((captureImageScreenController.imageFile));
-              print(x);
+              /*  var x = firebaseStorageController
+                  .uploadProfilePic((captureImageScreenController.imageFile));*/
+              Get.back();
+              //Get.offUntil(AdminDashboardScreen() as Route, (route) => false);
+              //Get.offUntil(()=>UserOnboardingScreen(), predicate)
+              //print(x);
             },
             child: Container(
               width: 94.w,

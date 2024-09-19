@@ -27,11 +27,7 @@ class CaptureImageScreen extends StatelessWidget {
             : */
             captureImageScreenController.isCameraInitialized.value == false
                 ? GradientProgressBar(
-                    child: Container(
-                      width: 1.sw,
-                      height: 1.sh,
-                      color: Colors.black,
-                    ),
+                    size: Size(1.sw, 1.sh),
                   )
                 : Stack(
                     children: [
@@ -57,13 +53,10 @@ class CaptureImageScreen extends StatelessWidget {
                                 } else {
                                   // Otherwise, display a loading indicator.
                                   return Center(
-                                      child: GradientProgressBar(
-                                    child: Container(
-                                      width: 1.sw,
-                                      height: 1.sh,
-                                      color: Colors.black,
+                                    child: GradientProgressBar(
+                                      size: Size(1.sw, 1.sh),
                                     ),
-                                  ));
+                                  );
                                 }
                               }),
                         ),
@@ -131,10 +124,10 @@ class CaptureImageScreen extends StatelessWidget {
           GestureDetector(
             onTap: () async {
               await captureImageScreenController.clickPicture();
-              print(captureImageScreenController.imageFile);
+              // print(captureImageScreenController.imageFile);
 
-              if (captureImageScreenController.imageFile != null) {
-                Get.to(DisplayCapturedImageScreen());
+              if (captureImageScreenController.imageFilePath.value != '') {
+                Get.off(() => DisplayCapturedImageScreen());
               }
             },
             child: Container(

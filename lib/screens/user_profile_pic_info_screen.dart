@@ -56,7 +56,7 @@ class UserProfilePicInfoScreen extends StatelessWidget {
                 height: 56.h,
                 buttonText: 'Capture face',
                 onTapAction: () {
-                  Get.to(() => CaptureImageScreen());
+                  Get.off(() => CaptureImageScreen());
                 }),
           )
         ],

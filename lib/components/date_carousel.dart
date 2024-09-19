@@ -43,7 +43,7 @@ class DateCarousel extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           //for year
-          Row(
+          /*  Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -59,7 +59,7 @@ class DateCarousel extends StatelessWidget {
                       color: Constants.colourDashboardBox5,
                       child: buildMonthCarousel(months))),
             ],
-          ),
+          ),*/
 
           //for day
           buildDayCarousel(),

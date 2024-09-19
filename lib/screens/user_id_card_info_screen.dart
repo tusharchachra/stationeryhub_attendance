@@ -64,7 +64,7 @@ class UserIdCardInfoScreen extends StatelessWidget {
                       Icons.camera_alt_outlined,
                     ),
                     onTapAction: () {
-                      Get.to(UserIdCardUploadScreen());
+                      Get.off(() => UserIdCardUploadScreen());
                       //Get.to(() => const CaptureImageScreen());
                     }),
               ),

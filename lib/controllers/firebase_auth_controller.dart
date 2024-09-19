@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:stationeryhub_attendance/screens/new_organization_screen.dart';
 
 import '../screens/admin_dashboard_screen.dart';
 import '../screens/login_screen.dart';
@@ -13,12 +14,13 @@ import 'otp_screen_controller.dart';
 class FirebaseAuthController extends GetxController {
   static FirebaseAuthController authController = Get.find();
   static FirebaseErrorController errorController = Get.find();
-  static OtpScreenController otpController = Get.find();
-  //static SharedPrefsController sharedPrefsController = Get.find();
   static FirebaseFirestoreController firestoreController = Get.find();
 
+  static OtpScreenController otpController = Get.find();
+  //static SharedPrefsController sharedPrefsController = Get.find();
+
   late Rx<User?> firebaseUser;
-  late Rx<PhoneAuthCredential> credential;
+  Rx<PhoneAuthCredential>? credential;
   FirebaseAuth authInstance = FirebaseAuth.instance;
   RxBool isInternetConnected = false.obs;
   RxBool isSigningOut = false.obs;
@@ -32,8 +34,10 @@ class FirebaseAuthController extends GetxController {
   void onReady() {
     super.onReady();
     firebaseUser = Rx<User?>(authInstance.currentUser);
+    print('firebaseuser=$firebaseUser');
     firebaseUser.bindStream(authInstance.userChanges());
     ever(firebaseUser, _initialScreen);
+
     // _checkInternet();
   }
 
@@ -60,7 +64,11 @@ class FirebaseAuthController extends GetxController {
     if (user == null) {
       Get.offAll(() => LoginScreen());
     } else {
-      Get.offAll(() => AdminDashboardScreen());
+      if (firestoreController.registeredOrganization?.value?.id == '') {
+        Get.offAll(() => NewOrganizationScreen());
+      } else {
+        Get.offAll(() => AdminDashboardScreen());
+      }
     }
   }
 
@@ -115,7 +123,7 @@ class FirebaseAuthController extends GetxController {
     print(credential);
     try {
       userCredential =
-          await authInstance.signInWithCredential(credential.value);
+          await authInstance.signInWithCredential(credential!.value);
       firebaseUser = Rx<User>(userCredential.user!);
       authInstance.currentUser?.reload();
     } on FirebaseException catch (e) {
@@ -140,7 +148,7 @@ class FirebaseAuthController extends GetxController {
 
     try {
       await authInstance.signOut();
-      // auth.currentUser!.reload();
+      firestoreController.registeredUser = null;
     } on Exception catch (e) {
       if (kDebugMode) {
         print(e);

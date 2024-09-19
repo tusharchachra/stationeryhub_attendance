@@ -3,7 +3,10 @@ import 'package:google_mlkit_document_scanner/google_mlkit_document_scanner.dart
 
 class IdCardCaptureController extends GetxController {
   late DocumentScanner documentScanner;
-  List<String>? documents;
+  RxList<String> documentFront = <String>[].obs;
+  RxList<String> documentBack = <String>[].obs;
+  RxBool isLoadingFront = false.obs;
+  RxBool isLoadingBack = false.obs;
 
   DocumentScannerOptions documentOptions = DocumentScannerOptions(
     documentFormat: DocumentFormat.jpeg, // set output document format
@@ -19,12 +22,40 @@ class IdCardCaptureController extends GetxController {
     super.onInit();
   }
 
-  void scan() async {
+  void scanFront() async {
+    isLoadingFront.value = true;
+    documentFront.value = await scan();
+    isLoadingFront.value = false;
+  }
+
+  void scanBack() async {
+    isLoadingBack.value = true;
+    documentBack.value = await scan();
+    isLoadingBack.value = false;
+  }
+
+  Future<List<String>> scan() async {
     //print('starting scan');
-    DocumentScanningResult result = await documentScanner.scanDocument();
-    //final pdf = result.pdf; // A PDF object.
-    final images = result.images; // A list with the paths to the images.
-    //print(images);
+    List<String> images = [];
+    try {
+      DocumentScanningResult result = await documentScanner.scanDocument();
+      print('result=$result');
+      //final pdf = result.pdf; // A PDF object.
+      images = result.images; // A list with the paths to the images.
+      //print(images);
+    } on Exception catch (e) {
+      // TODO
+      print(e);
+    }
+    return images;
+  }
+
+  void clearFrontScan() {
+    documentFront.clear();
+  }
+
+  void clearBackScan() {
+    documentBack.clear();
   }
 
   @override

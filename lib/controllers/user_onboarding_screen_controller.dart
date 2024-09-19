@@ -1,32 +1,31 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stationeryhub_attendance/controllers/capture_image_screen_controller.dart';
+import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
+import 'package:stationeryhub_attendance/controllers/firebase_storage_controller.dart';
+import 'package:stationeryhub_attendance/controllers/id_card_capture_controller.dart';
 import 'package:stationeryhub_attendance/models/user_type_enum.dart';
+
+import '../models/users_model.dart';
 
 class UserOnboardingScreenController extends GetxController {
   Rx<TextEditingController> nameController = TextEditingController().obs;
   Rx<TextEditingController> phoneNumController = TextEditingController().obs;
+  RxString phoneNum = ('').obs;
   Rx<TextEditingController> userTypeController = TextEditingController().obs;
   RxBool showUserTypeOptions = false.obs;
+  RxBool isPhoneNumValid = false.obs;
   FocusNode userTypeFocusNode = FocusNode();
 
   var selectedUserType = UserType.employee.obs;
 
-  /* @override
-  void onInit() {
-    // TODO: implement onInit
-    print('running init');
-    userTypeFocusNode.addListener(() {
-      if (userTypeFocusNode.hasFocus) {
-        print('has focus');
-        showUserTypeOptions.value = true;
-        print('got focus');
-      } else {
-        showUserTypeOptions.value = false;
-        print('lost focus');
-      }
-    });
-    super.onInit();
-  }*/
+  final formKey = GlobalKey<FormState>();
+
+  final FirebaseStorageController firebaseStorageController = Get.find();
+  final CaptureImageScreenController captureImageScreenController = Get.find();
+  final FirebaseFirestoreController firestoreController = Get.find();
+  final IdCardCaptureController idCardCaptureController = Get.find();
 
   @override
   void onReady() {
@@ -50,5 +49,42 @@ class UserOnboardingScreenController extends GetxController {
 
   void invertShowUserTypeValue() {
     showUserTypeOptions.value = !showUserTypeOptions.value;
+  }
+
+  validatePhoneNum(String? value) {
+    /*if (value == '7808814341') {
+      return null;    } else*/
+    phoneNum = RxString(value!.trim());
+    print('value=$value');
+    String? temp;
+    if (value == '') {
+      isPhoneNumValid.value = false;
+      temp = 'Invalid phone number';
+    } else if (value.length == 10) {
+      isPhoneNumValid.value = true;
+      temp = null;
+    } else if (value.length < 10) {
+      isPhoneNumValid.value = false;
+      temp = 'Invalid phone number';
+    } else {
+      isPhoneNumValid.value = false;
+      temp = 'Unauthorised user';
+    }
+    return temp;
+  }
+
+  void uploadData() async {
+    String? profilePicPath = await firebaseStorageController.uploadProfilePic(
+        XFile(captureImageScreenController.imageFilePath.value));
+    UsersModel? tempUserDetails = await firebaseStorageController.uploadIdCard(
+        fileFront: XFile(idCardCaptureController.documentFront[0]),
+        fileBack: XFile(idCardCaptureController.documentBack[0]));
+
+    ///TODO use tempUser to create new user and upload
+    /*UsersModel newUser = UsersModel(
+        phoneNum: phoneNumController.value.text.trim(),
+        organizationId: firestoreController.registeredOrganization?.value?.id,
+        name: nameController.value.text.trim(),
+        userType: getType(userTypeController.value.text));*/
   }
 }

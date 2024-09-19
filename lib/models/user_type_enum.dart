@@ -12,4 +12,8 @@ extension UserTypeString on UserType {
         return 'employee';
     }*/
   }
+
+  UserType getType() {
+    return UserType.values.firstWhere((n) => n.name == name);
+  }
 }
