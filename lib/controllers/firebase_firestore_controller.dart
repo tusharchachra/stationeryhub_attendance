@@ -30,18 +30,26 @@ class FirebaseFirestoreController extends GetxController {
     /*registeredUser?.value = await getUser(
         phoneNum: authController.firebaseUser.value!.phoneNumber!);
     print('Registered user onReady=$registeredUser');*/
-    registeredUser?.value =
-        await getUser(firebaseId: authController.firebaseUser.value?.uid);
-    //Attaching listener to user
-    await firestoreController.attachUserListener();
 
-    OrganizationModel? tempOrganization =
+    //------------------------------
+    /*if (authController.firebaseUser.value != null) {
+      registeredUser?.value =
+          await getUser(firebaseId: authController.firebaseUser.value?.uid);
+      //Attaching listener to user
+      if (registeredUser?.value != null) {
+        await firestoreController.attachUserListener();
+      }
+    }*/
+
+    /*  OrganizationModel? tempOrganization =
         await getOrganization(orgId: registeredUser?.value?.organizationId);
     if (tempOrganization != null) {
       registeredOrganization?.value = tempOrganization;
       //attaching listener to organization
       await firestoreController.attachOrganizationListener();
-    }
+    }*/
+    //-----------------------------------
+
     /*registeredUser?.bindStream(
         getUserForStreamBiding(phoneNum: loginController.phoneNum.value));
     ever(registeredUser!, (val) {
@@ -60,45 +68,32 @@ class FirebaseFirestoreController extends GetxController {
     //registeredUser?.value = tempUser;
   }
 
-  Future attachUserListener(/*{
-    String? phoneNum,
-  }*/
-      ) async {
+  Future attachUserListener() async {
     isLoading.value = true;
     if (kDebugMode) {
       debugPrint(
           'Attaching listener for current user = ${authController.firebaseUser.value?.uid}');
     }
-    await firestoreController.getUser(
-        firebaseId: authController.firebaseUser.value?.uid);
+    UsersModel? temp =
+        await getUser(firebaseId: authController.firebaseUser.value?.uid);
+    print('tempUser in attaching user Listener=$temp');
     firestoreInstance
         .collection("users")
-        .doc(registeredUser?.value
-            ?.userId) /*.withConverter(
-          fromFirestore: AlbumUsers.fromFirestore,
-          toFirestore: (AlbumUsers user, _) => user.toJson(),
-        )*/
+        .where('userId', isEqualTo: registeredUser?.value?.userId)
         .snapshots()
         .listen((event) {
-      //print(event.docs[0].data());
-      registeredUser?.value = UsersModel.fromJson(event.data()!);
+      print(event.docs[0].data());
+      // registeredUser.
+      registeredUser?.value = UsersModel.fromJson(event.docs[0].data());
+      print('registeredUser in Listener=${registeredUser?.value}');
       if (kDebugMode) {
         print('user data changed and synchronized');
       }
     });
-
     isLoading.value = false;
-    /* .map((snapshot) {
-      print(snapshot);
-      x = AlbumUsers.fromFirestore(snapshot, null);
-      // return AlbumUsers.fromFirestore(snapshot.docs[0], null);
-    })*/
   }
 
-  Future attachOrganizationListener(/*{
-    String? orgId,
-  }*/
-      ) async {
+  Future attachOrganizationListener() async {
     isLoading.value = true;
 
     if (kDebugMode) {
@@ -109,25 +104,17 @@ class FirebaseFirestoreController extends GetxController {
     firestoreInstance
         .collection("organizations")
         .where('id', isEqualTo: registeredOrganization?.value?.id)
-        /*.withConverter(
-          fromFirestore: AlbumUsers.fromFirestore,
-          toFirestore: (AlbumUsers user, _) => user.toJson(),
-        )*/
         .snapshots()
         .listen((event) {
       registeredOrganization?.value =
           OrganizationModel.fromJson(event.docs[0].data());
+      print(
+          'registeredOrganization in listener${registeredOrganization?.value}');
       if (kDebugMode) {
         print('Organization data changed and synchronized');
       }
     });
     isLoading.value = false;
-
-    /* .map((snapshot) {
-      print(snapshot);
-      x = AlbumUsers.fromFirestore(snapshot, null);
-      // return AlbumUsers.fromFirestore(snapshot.docs[0], null);
-    })*/
   }
 
   //return user data from firestore.
@@ -168,6 +155,7 @@ class FirebaseFirestoreController extends GetxController {
       if (docSnap.docs.isNotEmpty) {
         tempUser = docSnap.docs[0].data();
       } else {}
+
       return tempUser;
     } on FirebaseException catch (e) {
       // TODO
@@ -250,6 +238,15 @@ class FirebaseFirestoreController extends GetxController {
       }
       if (user.userType != null) {
         await ref.update({'userType': '${user.userType}'});
+      }
+      if (user.profilePicPath != null) {
+        await ref.update({'profilePicPath': '${user.profilePicPath}'});
+      }
+      if (user.idCardFrontPath != null) {
+        await ref.update({'idCardFrontPath': '${user.idCardFrontPath}'});
+      }
+      if (user.idCardBackPath != null) {
+        await ref.update({'idCardBackPath': '${user.idCardBackPath}'});
       }
 
       if (kDebugMode) {
@@ -390,6 +387,7 @@ class FirebaseFirestoreController extends GetxController {
       //update orgId on firestore
       var tempOrg = OrganizationModel(
           id: ref.id, createdBy: registeredUser?.value?.userId);
+      print('tempOrg=$tempOrg');
       await updateOrganization(organization: tempOrg);
 
       /* AlbumOrganization? insertedOrganization =
@@ -403,9 +401,10 @@ class FirebaseFirestoreController extends GetxController {
       });*/
 
       //inserting the newOrganizationId to the user's profile on firestore
-      await updateUser(
-          user: UsersModel(
-              userId: registeredUser?.value?.userId, organizationId: ref.id));
+      UsersModel tempUser = UsersModel(
+          userId: registeredUser?.value?.userId, organizationId: ref.id);
+      print(tempUser);
+      await updateUser(user: tempUser);
       /*await firestoreController.updateOrganizationIdInCreator(
           currentUserId:
               firestoreController.registeredUser!.value!.firebaseUserId!,

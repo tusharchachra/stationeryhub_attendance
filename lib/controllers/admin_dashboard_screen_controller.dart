@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 
 class AdminDashboardScreenController extends GetxController {
   Rx<DateTime> selectedDate = DateTime.now().obs;
@@ -18,6 +19,7 @@ class AdminDashboardScreenController extends GetxController {
       CarouselSliderController().obs;
   final Rx<CarouselSliderController> monthCarouselController =
       CarouselSliderController().obs;
+  final FirebaseFirestoreController firestoreController = Get.find();
 
   /* List<DateTime> getCurrentMonthDates({required int month, required int year}) {
     final daysCount = DateUtils.getDaysInMonth(year, month);
@@ -28,6 +30,12 @@ class AdminDashboardScreenController extends GetxController {
     }
     return days;
   }*/
+
+  @override
+  onReady() async {
+    /*await firestoreController.attachUserListener();
+    await firestoreController.attachOrganizationListener();*/
+  }
 
   List<int> getCurrentMonthDates({required int month, required int year}) {
     final daysCount = DateUtils.getDaysInMonth(year, month);
