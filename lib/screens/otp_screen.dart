@@ -154,17 +154,32 @@ class OtpScreen extends StatelessWidget {
                           debugPrint(
                               'PhoneAuthCredential=${authController.credential.toString()}');
                         }*/
-                        if (otpController.formKeyOtp.currentState!.validate()) {
+                        otpController.validateForm(otpController.otp.value);
+                        if (otpController.isOtpValid.value == true &&
+                            otpController.error.value == '') {
                           //user sign in
                           await authController.signIn(
-                              authCredential: authController.credential.value);
+                              authCredential: authController.credential?.value);
+
                           //store user to firestore
-                          if (otpController.isNewUser.isTrue) {
-                            await firestoreController.addNewUser(
-                              phoneNum: loginController.phoneNum.value,
-                              userType: UserType.admin,
-                            );
-                            otpController.isNewUser.value = false;
+                          print(
+                              '{authController.firebaseUser.value?.uid=${authController.firebaseUser.value?.uid}');
+                          print(otpController.isNewUser);
+                          if (authController.firebaseUser.value?.uid != null) {
+                            if (otpController.isNewUser.isTrue) {
+                              await firestoreController.addNewUser(
+                                phoneNum: loginController.phoneNum.value,
+                                userType: UserType.admin,
+                              );
+                              otpController.isNewUser.value = false;
+                            }
+                            firestoreController.attachUserListener();
+                          }
+
+                          ///TODO: set error on pinput if wrong OTP is used
+                          if (errorController.errorMsg.isNotEmpty) {
+                            otpController.isOtpValid.value = false;
+                            otpController.error = errorController.errorMsg;
                           }
 
                           //Fetch from firestore and Store registered user to shared prefs
@@ -188,12 +203,6 @@ class OtpScreen extends StatelessWidget {
                                 newOrganization;
                           }*/
                           otpController.isLoading.value = false;
-
-                          ///TODO: set error on pinput if wrong OTP is used
-                          if (errorController.errorMsg.isNotEmpty) {
-                            otpController.isOtpValid.value = false;
-                            otpController.error = errorController.errorMsg;
-                          }
                         }
                       },
                     ),

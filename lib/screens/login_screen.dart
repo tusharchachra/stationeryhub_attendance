@@ -20,12 +20,14 @@ class LoginScreen extends StatelessWidget {
   static LoginScreenController loginController = Get.find();
   static FirebaseAuthController authController = Get.find();
   static FirebaseFirestoreController firestoreController = Get.find();
-  static OtpScreenController otpController = Get.find();
+
+  static OtpScreenController otpController = Get.put(OtpScreenController());
   static FirebaseErrorController errorController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     errorController.resetValues();
+
     otpController.isNewUser.value = false;
     return ScaffoldOnboarding(
       bodyWidget: Center(
@@ -107,26 +109,20 @@ class LoginScreen extends StatelessWidget {
                             print(
                                 'registered user= ${firestoreController.registeredUser}');
                           }*/
-                          //if registered user is found in the firestore, send otp. if not, show bottom sheet to confirm usage
                           UsersModel? tempUser =
                               await firestoreController.getUser(
                                   phoneNum: loginController.phoneNum.value);
+                          print('tempUser in loginScreen=$tempUser');
+                          //if registered user is found in the firestore, send otp. if not, show bottom sheet to confirm usage
                           if (tempUser != null) {
                             loginProcess();
                             otpController.isNewUser.value = false;
-                          }
-                          /* if (firestoreController.registeredUser?.value?.uid !=
-                              null) {
-                            loginProcess();
-                          } */
-                          else {
-                            //print(errorController.errorMsg);
+                          } else {
                             if (kDebugMode) {
                               print(authController.firebaseMessage);
                             }
                             otpController.isNewUser.value = true;
                             //show dialog to register the new user or cancel
-                            // buildShowAdaptiveDialog();
                             Get.bottomSheet(buildBottomSheet(),
                                 backgroundColor: Colors.white);
                           }

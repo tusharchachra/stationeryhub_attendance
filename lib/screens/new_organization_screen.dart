@@ -17,7 +17,7 @@ class NewOrganizationScreen extends StatelessWidget {
   // static final _formKey = GlobalKey<FormState>();
 
   static NewOrganizationScreenController newOrganizationScreenController =
-      Get.find();
+      Get.put(NewOrganizationScreenController());
   static FirebaseFirestoreController firestoreController = Get.find();
   //static SharedPrefsController sharedPrefsController = Get.find();
   static FirebaseErrorController errorController = Get.find();
@@ -112,9 +112,6 @@ class NewOrganizationScreen extends StatelessWidget {
                         onTapAction: () async {
                           newOrganizationScreenController.isLoading.value =
                               true;
-                          /* if (newOrganizationScreenController
-                              .formKeyNewOrganization.currentState!
-                              .validate())*/
                           newOrganizationScreenController.validateName(
                               newOrganizationScreenController
                                   .nameController.value.text
@@ -140,8 +137,8 @@ class NewOrganizationScreen extends StatelessWidget {
                             String? insertedOrganizationId =
                                 await firestoreController.createOrganization(
                                     newOrganization: newOrganization);
-                            /*await firestoreController
-                                .attachOrganizationListener();*/
+                            await firestoreController
+                                .attachOrganizationListener();
 
                             //fetch user from shared prefs
                             /* AlbumUsers? currentUser =

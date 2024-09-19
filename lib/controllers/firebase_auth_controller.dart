@@ -12,7 +12,6 @@ import 'firebase_firestore_controller.dart';
 import 'otp_screen_controller.dart';
 
 class FirebaseAuthController extends GetxController {
-  static FirebaseAuthController authController = Get.find();
   static FirebaseErrorController errorController = Get.find();
   static FirebaseFirestoreController firestoreController = Get.find();
 
@@ -31,13 +30,19 @@ class FirebaseAuthController extends GetxController {
   //String enteredOtp = '111111';
 
   @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    signOutUser();
+  }
+
+  @override
   void onReady() {
     super.onReady();
     firebaseUser = Rx<User?>(authInstance.currentUser);
     print('firebaseuser=$firebaseUser');
     firebaseUser.bindStream(authInstance.userChanges());
     ever(firebaseUser, _initialScreen);
-
     // _checkInternet();
   }
 
@@ -64,7 +69,7 @@ class FirebaseAuthController extends GetxController {
     if (user == null) {
       Get.offAll(() => LoginScreen());
     } else {
-      if (firestoreController.registeredOrganization?.value?.id == '') {
+      if (firestoreController.registeredOrganization?.value?.id == null) {
         Get.offAll(() => NewOrganizationScreen());
       } else {
         Get.offAll(() => AdminDashboardScreen());
@@ -149,6 +154,7 @@ class FirebaseAuthController extends GetxController {
     try {
       await authInstance.signOut();
       firestoreController.registeredUser = null;
+      firestoreController.registeredOrganization = null;
     } on Exception catch (e) {
       if (kDebugMode) {
         print(e);

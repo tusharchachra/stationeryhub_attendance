@@ -10,6 +10,8 @@ class UsersModel {
   String? organizationId;
   String? userId;
   String? profilePicPath;
+  String? idCardFrontPath;
+  String? idCardBackPath;
 
   UsersModel({
     this.firebaseUserId,
@@ -19,6 +21,8 @@ class UsersModel {
     this.phoneNum,
     this.organizationId,
     this.profilePicPath,
+    this.idCardFrontPath,
+    this.idCardBackPath,
   });
 
   factory UsersModel.fromFirestore(
@@ -30,10 +34,12 @@ class UsersModel {
       firebaseUserId: data?['firebaseUserId'],
       userId: data?['userId'],
       name: data?['name'],
-      userType: UserType.values.byName(data!['userType']),
+      userType: UserType.values.byName(data!['userType'].split('.').last),
       phoneNum: data['phoneNum'],
       organizationId: data['organizationId'],
       profilePicPath: data['profilePicPath'],
+      idCardFrontPath: data['idCardFrontPath'],
+      idCardBackPath: data['idCardBackPath'],
     );
   }
 
@@ -46,7 +52,7 @@ class UsersModel {
         name =
             json['name'].toString() == '' ? 'Guest' : json['name'].toString(),
         //json returns "UserType.admin" hence splitting the string to get the exact enum
-        userType = UserType.values.byName(json['userType']),
+        userType = UserType.values.byName(json['userType'].split('.').last),
         phoneNum = json['phoneNum'].toString() == ''
             ? ''
             : json['phoneNum'].toString(),
@@ -55,16 +61,24 @@ class UsersModel {
             : json['organizationId'].toString(),
         profilePicPath = json['profilePicPath'].toString() == ''
             ? ''
-            : json['profilePicPath'].toString();
+            : json['profilePicPath'].toString(),
+        idCardFrontPath = json['idCardFrontPath'].toString() == ''
+            ? ''
+            : json['idCardFrontPath'].toString(),
+        idCardBackPath = json['idCardBackPath'].toString() == ''
+            ? ''
+            : json['idCardBackPath'].toString();
 
   Map<String, dynamic> toJson() => {
         'firebaseUserId': firebaseUserId ?? 'null',
         'userId': userId ?? 'null',
-        'userType': userType?.name,
+        'userType': userType.toString(),
         'name': name,
         'phoneNum': phoneNum,
-        'organizationId': organizationId ?? 'null',
-        'profilePicPath': profilePicPath ?? ''
+        'organizationId': organizationId ?? '',
+        'profilePicPath': profilePicPath ?? '',
+        'idCardFrontPath': idCardFrontPath ?? '',
+        'idCardBackPath': idCardBackPath ?? '',
       };
 
   /*void setUid(String id) {

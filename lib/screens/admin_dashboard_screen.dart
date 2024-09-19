@@ -20,11 +20,11 @@ class AdminDashboardScreen extends StatelessWidget {
 
   static FirebaseFirestoreController firestoreController = Get.find();
   static FirebaseAuthController authController = Get.find();
-  static AdminDashboardScreenController adminDashboardScreenController =
-      Get.find();
 
   @override
   Widget build(BuildContext context) {
+    AdminDashboardScreenController adminDashboardScreenController =
+        Get.put(AdminDashboardScreenController());
     /* if (firestoreController.registeredOrganization?.value.id == null) {
       Get.to(NewOrganizationScreen());
     }*/
@@ -57,6 +57,7 @@ class AdminDashboardScreen extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: GradientProgressBar(
+                  size: Size(22.w, 22.h),
                   child: CircleAvatar(),
                 ))
 
@@ -123,6 +124,11 @@ class AdminDashboardScreen extends StatelessWidget {
                 Get.to(() => UserOnboardingScreen());
               },
               child: Text('Create new user')),
+          TextButton(
+              onPressed: () {
+                authController.signOutUser();
+              },
+              child: Text('Sign out')),
         ],
       ),
     );
