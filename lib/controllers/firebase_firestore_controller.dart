@@ -15,8 +15,8 @@ class FirebaseFirestoreController extends GetxController {
   static FirebaseAuthController authController = Get.find();
   static LoginScreenController loginController = Get.find();
   static FirebaseErrorController errorController = Get.find();
-  Rx<UsersModel?>? registeredUser = UsersModel().obs;
-  Rx<OrganizationModel?>? registeredOrganization = OrganizationModel().obs;
+  Rx<UsersModel?> registeredUser = UsersModel().obs;
+  Rx<OrganizationModel?> registeredOrganization = OrganizationModel().obs;
   final FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
 
   RxBool isLoading = false.obs;
@@ -79,13 +79,10 @@ class FirebaseFirestoreController extends GetxController {
     print('tempUser in attaching user Listener=$temp');
     firestoreInstance
         .collection("users")
-        .where('userId', isEqualTo: registeredUser?.value?.userId)
+        .where('userId', isEqualTo: registeredUser.value?.userId)
         .snapshots()
         .listen((event) {
-      print(event.docs[0].data());
-      // registeredUser.
-      registeredUser?.value = UsersModel.fromJson(event.docs[0].data());
-      print('registeredUser in Listener=${registeredUser?.value}');
+      registeredUser(UsersModel.fromJson(event.docs[0].data()));
       if (kDebugMode) {
         print('user data changed and synchronized');
       }
@@ -98,18 +95,14 @@ class FirebaseFirestoreController extends GetxController {
 
     if (kDebugMode) {
       debugPrint(
-          'Attaching listener for organization = ${registeredOrganization?.value?.id}');
+          'Attaching listener for organization = ${registeredOrganization.value?.id}');
     }
-
     firestoreInstance
         .collection("organizations")
-        .where('id', isEqualTo: registeredOrganization?.value?.id)
+        .where('id', isEqualTo: registeredOrganization.value?.id)
         .snapshots()
         .listen((event) {
-      registeredOrganization?.value =
-          OrganizationModel.fromJson(event.docs[0].data());
-      print(
-          'registeredOrganization in listener${registeredOrganization?.value}');
+      registeredOrganization(OrganizationModel.fromJson(event.docs[0].data()));
       if (kDebugMode) {
         print('Organization data changed and synchronized');
       }
@@ -386,7 +379,7 @@ class FirebaseFirestoreController extends GetxController {
 
       //update orgId on firestore
       var tempOrg = OrganizationModel(
-          id: ref.id, createdBy: registeredUser?.value?.userId);
+          id: ref.id, createdBy: registeredUser.value?.userId);
       print('tempOrg=$tempOrg');
       await updateOrganization(organization: tempOrg);
 
@@ -402,7 +395,7 @@ class FirebaseFirestoreController extends GetxController {
 
       //inserting the newOrganizationId to the user's profile on firestore
       UsersModel tempUser = UsersModel(
-          userId: registeredUser?.value?.userId, organizationId: ref.id);
+          userId: registeredUser.value?.userId, organizationId: ref.id);
       print(tempUser);
       await updateUser(user: tempUser);
       /*await firestoreController.updateOrganizationIdInCreator(

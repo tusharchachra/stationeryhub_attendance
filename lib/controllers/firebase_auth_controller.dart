@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:stationeryhub_attendance/models/organizations_model.dart';
+import 'package:stationeryhub_attendance/models/users_model.dart';
 import 'package:stationeryhub_attendance/screens/new_organization_screen.dart';
 
 import '../screens/admin_dashboard_screen.dart';
@@ -65,11 +67,13 @@ class FirebaseAuthController extends GetxController {
     );
   }
 
-  _initialScreen(User? user) {
+  _initialScreen(User? user) async {
     if (user == null) {
       Get.offAll(() => LoginScreen());
     } else {
-      if (firestoreController.registeredOrganization?.value?.id == null) {
+      firestoreController
+          .registeredOrganization(await firestoreController.getOrganization());
+      if (firestoreController.registeredOrganization.value?.id == null) {
         Get.offAll(() => NewOrganizationScreen());
       } else {
         Get.offAll(() => AdminDashboardScreen());
@@ -153,8 +157,8 @@ class FirebaseAuthController extends GetxController {
 
     try {
       await authInstance.signOut();
-      firestoreController.registeredUser = null;
-      firestoreController.registeredOrganization = null;
+      firestoreController.registeredUser(UsersModel());
+      firestoreController.registeredOrganization(OrganizationModel());
     } on Exception catch (e) {
       if (kDebugMode) {
         print(e);

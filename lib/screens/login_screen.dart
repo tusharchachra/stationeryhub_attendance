@@ -112,7 +112,6 @@ class LoginScreen extends StatelessWidget {
                           UsersModel? tempUser =
                               await firestoreController.getUser(
                                   phoneNum: loginController.phoneNum.value);
-                          print('tempUser in loginScreen=$tempUser');
                           //if registered user is found in the firestore, send otp. if not, show bottom sheet to confirm usage
                           if (tempUser != null) {
                             loginProcess();
@@ -126,8 +125,8 @@ class LoginScreen extends StatelessWidget {
                             Get.bottomSheet(buildBottomSheet(),
                                 backgroundColor: Colors.white);
                           }
-                          loginController.isLoading.value = false;
                         } else {}
+                        loginController.isLoading.value = false;
                       },
                     ))
             ],

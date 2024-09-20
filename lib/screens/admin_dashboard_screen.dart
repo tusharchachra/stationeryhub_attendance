@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
+import 'package:stationeryhub_attendance/controllers/firebase_storage_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
 import 'package:stationeryhub_attendance/screens/user_onboarding_screen.dart';
@@ -20,6 +21,9 @@ class AdminDashboardScreen extends StatelessWidget {
 
   static FirebaseFirestoreController firestoreController = Get.find();
   static FirebaseAuthController authController = Get.find();
+
+  static FirebaseStorageController firebaseStorageController =
+      Get.put(FirebaseStorageController());
 
   @override
   Widget build(BuildContext context) {
