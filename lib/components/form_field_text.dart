@@ -18,6 +18,8 @@ class FormFieldText extends StatelessWidget {
     this.readOnly = false,
     this.trailingWidget,
     this.focusNode,
+    this.border,
+    this.fillColor,
   });
 
   final FocusNode? focusNode;
@@ -31,6 +33,8 @@ class FormFieldText extends StatelessWidget {
   final void Function(String?)? onChangedAction;
   final bool readOnly;
   final Widget? trailingWidget;
+  final InputBorder? border;
+  final Color? fillColor;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +44,7 @@ class FormFieldText extends StatelessWidget {
         style: Get.textTheme.headlineMedium
             ?.copyWith(color: Constants.colourTextDark),
       ),
+      SizedBox(height: 20.h),
       TextFormField(
         focusNode: focusNode,
         controller: textController,
@@ -58,11 +63,15 @@ class FormFieldText extends StatelessWidget {
             .applyDefaults(Get.theme.inputDecorationTheme)
             .copyWith(
               counterText: '',
+              border: border,
+              fillColor: fillColor,
               prefixIcon: prefixIcon,
               prefixIconColor: Constants.colourTextFieldIcon,
               suffixIcon: trailingWidget,
               suffixIconColor: Constants.colourTextFieldIcon,
               hintText: hintText,
+              hintStyle: Get.textTheme.headlineMedium
+                  ?.copyWith(color: Constants.colourTextLight),
               contentPadding:
                   EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
             ),

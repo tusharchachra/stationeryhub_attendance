@@ -14,8 +14,11 @@ class Constants {
 
   static const colourTextDark = Color(0xff555555);
   static const colourTextMedium = Color(0xff5C5C5C);
-
   static const colourTextLight = Color(0xffA8A8A8);
+  static const colourBorderLight = Color(0xffF0F0F0);
+  static const colourBorderMedium = Color(0xffD9E1E7);
+  static const colourBorderDark = Color(0xffA8A8A8);
+//------------------
   static const colourOtpBoxBorder = Color(0xffB3ABC2);
   static const colourTextFieldIcon = Color(0xff939393);
   static const colourError = Colors.red;

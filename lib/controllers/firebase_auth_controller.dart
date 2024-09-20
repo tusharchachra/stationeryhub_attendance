@@ -31,12 +31,14 @@ class FirebaseAuthController extends GetxController {
   String firebaseMessage = '';
   //String enteredOtp = '111111';
 
+/*
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
     signOutUser();
   }
+*/
 
   @override
   void onReady() {

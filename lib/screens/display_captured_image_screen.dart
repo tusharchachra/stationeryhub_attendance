@@ -7,6 +7,7 @@ import 'package:stationeryhub_attendance/components/checkered_box_painter.dart';
 import 'package:stationeryhub_attendance/controllers/capture_image_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_storage_controller.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
+import 'package:stationeryhub_attendance/screens/capture_image_screen.dart';
 
 import '../helpers/constants.dart';
 
@@ -67,7 +68,7 @@ class DisplayCapturedImageScreen extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              Get.back();
+              Get.off(() => const CaptureImageScreen());
             },
             child: Container(
               width: 61.w,
@@ -113,7 +114,7 @@ class DisplayCapturedImageScreen extends StatelessWidget {
           SizedBox(width: 35.w),
           GestureDetector(
             onTap: () {
-              Get.back();
+              Get.off(() => const CaptureImageScreen());
 
               //  captureImageScreenController.switchCameraDirection();
             },

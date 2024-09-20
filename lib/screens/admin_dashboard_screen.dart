@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
-import 'package:stationeryhub_attendance/controllers/firebase_storage_controller.dart';
+import 'package:stationeryhub_attendance/controllers/id_card_capture_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
 import 'package:stationeryhub_attendance/screens/user_onboarding_screen.dart';
@@ -13,6 +13,7 @@ import '../components/date_carousel.dart';
 import '../components/form_field_button.dart';
 import '../components/gradient_progress_bar.dart';
 import '../controllers/firebase_firestore_controller.dart';
+import '../controllers/firebase_storage_controller.dart';
 import '../services/firebase_login_services.dart';
 import 'new_organization_screen.dart';
 
@@ -22,13 +23,13 @@ class AdminDashboardScreen extends StatelessWidget {
   static FirebaseFirestoreController firestoreController = Get.find();
   static FirebaseAuthController authController = Get.find();
 
-  static FirebaseStorageController firebaseStorageController =
-      Get.put(FirebaseStorageController());
-
   @override
   Widget build(BuildContext context) {
-    AdminDashboardScreenController adminDashboardScreenController =
-        Get.put(AdminDashboardScreenController());
+    Get.put(AdminDashboardScreenController());
+    Get.put(FirebaseStorageController());
+    Get.put(IdCardCaptureController());
+    //AdminDashboardScreenController adminDashboardScreenController = Get.find();
+    //FirebaseStorageController firebaseStorageController = Get.find();
     /* if (firestoreController.registeredOrganization?.value.id == null) {
       Get.to(NewOrganizationScreen());
     }*/
@@ -80,16 +81,16 @@ class AdminDashboardScreen extends StatelessWidget {
                 ),
               ),
       ),
-      pageTitle: (firestoreController.registeredUser?.value?.name ?? 'Guest'),
+      pageTitle: (firestoreController.registeredUser.value?.name ?? 'Guest'),
       pageSubtitle:
-          ('\n${firestoreController.registeredUser?.value?.userType?.name.capitalizeFirst}'
+          ('\n${firestoreController.registeredUser.value?.userType?.name.capitalizeFirst}'
               .toString()),
       isLoading: false,
       bodyWidget: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               AdminDashboardBox(
@@ -104,7 +105,7 @@ class AdminDashboardScreen extends StatelessWidget {
               ),
             ],
           ),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               AdminDashboardBox(
@@ -143,7 +144,7 @@ class AdminDashboardScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          firestoreController.registeredOrganization?.value?.name ?? '',
+          firestoreController.registeredOrganization.value?.name ?? '',
           style: Get.textTheme.displayLarge,
         ),
         FormFieldButton(
@@ -188,7 +189,7 @@ class AdminDashboardScreen extends StatelessWidget {
       children: [
         Obx(
           () => Text(
-            'Hello ${firestoreController.registeredUser?.value?.name}',
+            'Hello ${firestoreController.registeredUser.value?.name}',
             style: Get.textTheme.displayLarge,
           ),
         ),

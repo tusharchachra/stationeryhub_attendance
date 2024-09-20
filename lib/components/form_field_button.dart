@@ -13,6 +13,7 @@ class FormFieldButton extends StatelessWidget {
     required this.onTapAction,
     this.leadingIcon,
     this.buttonStyle,
+    this.textStyle,
 
     //required this.buttonDecoration,
   });
@@ -23,6 +24,7 @@ class FormFieldButton extends StatelessWidget {
   final Widget? leadingIcon;
   final void Function() onTapAction;
   final ButtonStyle? buttonStyle;
+  final TextStyle? textStyle;
   //final BoxDecoration buttonDecoration;
 
   @override
@@ -49,6 +51,7 @@ class FormFieldButton extends StatelessWidget {
               SizedBox(width: 5),
               Text(
                 buttonText,
+                style: textStyle,
               ),
             ],
           ),
