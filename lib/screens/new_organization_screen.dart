@@ -112,6 +112,7 @@ class NewOrganizationScreen extends StatelessWidget {
                         onTapAction: () async {
                           newOrganizationScreenController.isLoading.value =
                               true;
+                          String? insertedOrganizationId;
                           newOrganizationScreenController.validateName(
                               newOrganizationScreenController
                                   .nameController.value.text
@@ -134,7 +135,7 @@ class NewOrganizationScreen extends StatelessWidget {
                             );
 
                             //Inserting organization into firestore
-                            String? insertedOrganizationId =
+                            insertedOrganizationId =
                                 await firestoreController.createOrganization(
                                     newOrganization: newOrganization);
                             await firestoreController

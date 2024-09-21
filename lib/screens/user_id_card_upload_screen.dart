@@ -29,13 +29,13 @@ class UserIdCardUploadScreen extends StatelessWidget {
             Wrap(
               runSpacing: 13.h,
               children: [
-                FormFieldButton(
+                /* FormFieldButton(
                   width: 384.w,
                   height: 56.h,
                   buttonText: 'Add more',
                   buttonStyle: Constants.buttonStyleWhite,
                   onTapAction: () {},
-                ),
+                ),*/
                 FormFieldButton(
                   width: 384.w,
                   height: 56.h,

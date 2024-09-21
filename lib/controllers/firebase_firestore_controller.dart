@@ -164,7 +164,8 @@ class FirebaseFirestoreController extends GetxController {
     //return {'user': tempUser, 'userId': };
   }
 
-  Future<void> addNewUser(
+  //register user
+  Future<void> registerNewUser(
       {required String phoneNum,
       required UserType userType,
       String? name,
@@ -172,7 +173,7 @@ class FirebaseFirestoreController extends GetxController {
     isLoading.value = true;
 
     if (kDebugMode) {
-      debugPrint('Storing new user to firestore...');
+      debugPrint('Registering new user to firestore...');
     }
     try {
       final ref = firestoreInstance.collection("users").doc().withConverter(
@@ -187,6 +188,33 @@ class FirebaseFirestoreController extends GetxController {
           phoneNum: phoneNum,
           organizationId: orgId);
       await ref.set(tempUser);
+      if (kDebugMode) {
+        debugPrint('New user Id added = ${ref.id}');
+      }
+      //update userId of the user
+      await firestoreController.updateUser(user: UsersModel(userId: ref.id));
+    } on FirebaseException catch (e) {
+      errorController.getErrorMsg(e);
+      if (kDebugMode) {
+        print('Error:${e.toString()}');
+      }
+    }
+    isLoading.value = false;
+  }
+
+  //add new user
+  Future<void> addNewUser({required UsersModel user}) async {
+    isLoading.value = true;
+
+    if (kDebugMode) {
+      debugPrint('Storing new user to firestore...');
+    }
+    try {
+      final ref = firestoreInstance.collection("users").doc().withConverter(
+            fromFirestore: UsersModel.fromFirestore,
+            toFirestore: (UsersModel user, _) => user.toJson(),
+          );
+      await ref.set(user);
       if (kDebugMode) {
         debugPrint('New user Id added = ${ref.id}');
       }

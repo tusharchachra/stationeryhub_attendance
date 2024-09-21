@@ -167,7 +167,7 @@ class OtpScreen extends StatelessWidget {
                           print(otpController.isNewUser);
                           if (authController.firebaseUser.value?.uid != null) {
                             if (otpController.isNewUser.isTrue) {
-                              await firestoreController.addNewUser(
+                              await firestoreController.registerNewUser(
                                 phoneNum: loginController.phoneNum.value,
                                 userType: UserType.admin,
                               );

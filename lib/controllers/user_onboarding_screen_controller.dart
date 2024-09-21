@@ -17,6 +17,8 @@ class UserOnboardingScreenController extends GetxController {
   RxBool showUserTypeOptions = false.obs;
   RxBool isPhoneNumValid = false.obs;
   FocusNode userTypeFocusNode = FocusNode();
+  RxBool isLoading = false.obs;
+  RxBool isFormValid = false.obs;
 
   var selectedUserType = UserType.employee.obs;
 
@@ -54,6 +56,7 @@ class UserOnboardingScreenController extends GetxController {
   validatePhoneNum(String? value) {
     /*if (value == '7808814341') {
       return null;    } else*/
+
     phoneNum = RxString(value!.trim());
     print('value=$value');
     String? temp;
@@ -70,21 +73,29 @@ class UserOnboardingScreenController extends GetxController {
       isPhoneNumValid.value = false;
       temp = 'Unauthorised user';
     }
+
     return temp;
   }
 
-  void uploadData() async {
+  Future<void> uploadData() async {
+    isLoading.value = true;
     String? profilePicPath = await firebaseStorageController.uploadProfilePic(
         XFile(captureImageScreenController.imageFilePath.value));
-    UsersModel? tempUserDetails = await firebaseStorageController.uploadIdCard(
+    UsersModel? temp = await firebaseStorageController.uploadIdCard(
         fileFront: XFile(idCardCaptureController.documentFront[0]),
         fileBack: XFile(idCardCaptureController.documentBack[0]));
+    UsersModel newUser = UsersModel(
+      phoneNum: phoneNumController.value.text.trim(),
+      organizationId: firestoreController.registeredOrganization.value?.id,
+      name: nameController.value.text.trim(),
+      userType:
+          UserType.values.byName(userTypeController.value.text.toLowerCase()),
+      profilePicPath: profilePicPath,
+      idCardFrontPath: temp?.idCardFrontPath,
+      idCardBackPath: temp?.idCardBackPath,
+    );
+    await firestoreController.addNewUser(user: newUser);
 
-    ///TODO use tempUser to create new user and upload
-    /*UsersModel newUser = UsersModel(
-        phoneNum: phoneNumController.value.text.trim(),
-        organizationId: firestoreController.registeredOrganization?.value?.id,
-        name: nameController.value.text.trim(),
-        userType: getType(userTypeController.value.text));*/
+    isLoading.value = false;
   }
 }

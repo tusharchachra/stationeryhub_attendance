@@ -37,7 +37,7 @@ class FormFieldPhoneNum extends StatelessWidget {
       ),
       SizedBox(height: 20.h),
       TextFormField(
-        // controller: phoneNumController,
+        controller: phoneNumController,
         focusNode: focusNode,
         style: Get.textTheme.headlineMedium
             ?.copyWith(color: Constants.colourTextMedium),
@@ -67,6 +67,9 @@ class FormFieldPhoneNum extends StatelessWidget {
         validator: validatorPhoneNum,
         onChanged: onChangedAction,
         cursorOpacityAnimates: true,
+        onEditingComplete: () {
+          focusNode?.unfocus(disposition: UnfocusDisposition.scope);
+        },
         /* onTapOutside: (event) {
           focusNode?.unfocus(disposition: UnfocusDisposition.scope);
         },*/

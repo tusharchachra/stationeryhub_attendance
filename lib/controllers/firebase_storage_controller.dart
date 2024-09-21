@@ -36,7 +36,7 @@ class FirebaseStorageController extends GetxController {
       } else {
         /*uploadTask = */ await ref.putFile(io.File(file.path), metadata);
         profilePicPath = await ref.getDownloadURL();
-        print('path=$profilePicPath');
+        print('Profile pic path=$profilePicPath');
         /*await firestoreController.updateUser(
           user: firestoreController.registeredUser!.value!,
         );*/
@@ -76,7 +76,7 @@ class FirebaseStorageController extends GetxController {
           /*uploadTask = */ await ref.putFile(
               io.File(fileFront.path), metadataFront);
           tempUserDetails.idCardFrontPath = await ref.getDownloadURL();
-          print('path=$frontPath');
+          print('Id card Front path=$frontPath');
         }
       } on FirebaseException catch (e) {
         // TODO
@@ -97,7 +97,7 @@ class FirebaseStorageController extends GetxController {
           /*uploadTask = */ await ref.putFile(
               io.File(fileBack.path), metadataBack);
           tempUserDetails.idCardBackPath = await ref.getDownloadURL();
-          print('path=$backPath');
+          print('ID card back path=$backPath');
         }
       } on FirebaseException catch (e) {
         // TODO
