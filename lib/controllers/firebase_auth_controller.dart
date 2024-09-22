@@ -41,7 +41,7 @@ class FirebaseAuthController extends GetxController {
 */
 
   @override
-  void onReady() {
+  void onReady() async {
     super.onReady();
     firebaseUser = Rx<User?>(authInstance.currentUser);
     print('firebaseuser=$firebaseUser');
@@ -73,11 +73,14 @@ class FirebaseAuthController extends GetxController {
     if (user == null) {
       Get.offAll(() => LoginScreen());
     } else {
+      print(
+          'registered org=${firestoreController.registeredOrganization.value?.id}');
       firestoreController
           .registeredOrganization(await firestoreController.getOrganization());
       if (firestoreController.registeredOrganization.value?.id == null) {
         Get.offAll(() => NewOrganizationScreen());
       } else {
+        firestoreController.attachOrganizationListener();
         Get.offAll(() => AdminDashboardScreen());
       }
     }
@@ -137,6 +140,8 @@ class FirebaseAuthController extends GetxController {
           await authInstance.signInWithCredential(credential!.value);
       firebaseUser = Rx<User>(userCredential.user!);
       authInstance.currentUser?.reload();
+      firestoreController.registeredUser(await firestoreController.getUser(
+          firebaseId: authInstance.currentUser?.phoneNumber));
     } on FirebaseException catch (e) {
       /* firebaseMessage = kErrorOtp;*/
       print(e.code);

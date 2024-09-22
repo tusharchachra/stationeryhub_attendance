@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:stationeryhub_attendance/controllers/utils.dart';
 import 'package:stationeryhub_attendance/helpers/theme.dart';
 import 'package:stationeryhub_attendance/screens/screen_splash.dart';
@@ -27,6 +28,7 @@ void main() async {
   });*/
   UtilsController utilsController = UtilsController.instance;
   await utilsController.registerControllers();
+  await GetStorage.init();
   await FirebaseAppCheck.instance.activate(
     androidProvider: AndroidProvider.debug,
     appleProvider: AppleProvider.debug,

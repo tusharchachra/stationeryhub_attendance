@@ -65,6 +65,7 @@ dependencies:
   cached_network_image: ^3.4.0
   getwidget: ^4.0.0
   google_mlkit_document_scanner: ^0.2.0
+  get_storage: ^2.1.1
 
 
 

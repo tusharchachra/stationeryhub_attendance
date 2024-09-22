@@ -96,6 +96,6 @@ class UserOnboardingScreenController extends GetxController {
     );
     await firestoreController.addNewUser(user: newUser);
 
-    isLoading.value = false;
+    if (firestoreController.isLoading.value == false) isLoading.value = false;
   }
 }

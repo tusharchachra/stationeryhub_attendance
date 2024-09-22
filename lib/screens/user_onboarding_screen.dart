@@ -154,7 +154,7 @@ class UserOnboardingScreen extends StatelessWidget {
                             height: 56.h,
                             buttonText: 'Add User',
                             onTapAction: () async {
-                              validateForm(
+                              await validateForm(
                                   captureImageScreenController:
                                       captureImageScreenController,
                                   formErrorController: formErrorController,
@@ -171,10 +171,9 @@ class UserOnboardingScreen extends StatelessWidget {
                                 if (userOnboardingScreenController
                                         .isFormValid.value ==
                                     true) {
-                                  ///TODO upload data
                                   await userOnboardingScreenController
                                       .uploadData();
-
+                                  Get.back();
                                   Get.showSnackbar(
                                     GetSnackBar(
                                       messageText: Text(
@@ -515,6 +514,7 @@ class UserOnboardingScreen extends StatelessWidget {
     userOnboardingScreenController.isLoading.value = true;
     FormErrorController formErrorController = Get.find();
     formErrorController.resetErrors();
+    userOnboardingScreenController.isFormValid.value = false;
 
     UsersModel? tempUser =
         await firestoreController.getUser(phoneNum: phoneNum);

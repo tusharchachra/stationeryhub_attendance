@@ -86,8 +86,10 @@ class FirebaseFirestoreController extends GetxController {
       if (kDebugMode) {
         print('user data changed and synchronized');
       }
+      // _getStorageController.writeUserDetails(registeredUser.value);
     });
     isLoading.value = false;
+    Future.delayed(Duration(seconds: 2));
   }
 
   Future attachOrganizationListener() async {
@@ -143,8 +145,8 @@ class FirebaseFirestoreController extends GetxController {
             );
       }
 
-      final docSnap =
-          await ref.get(getOptions ?? const GetOptions(source: Source.server));
+      final docSnap = await ref
+          .get(getOptions ?? const GetOptions(source: Source.serverAndCache));
       if (docSnap.docs.isNotEmpty) {
         tempUser = docSnap.docs[0].data();
       } else {}
@@ -219,7 +221,7 @@ class FirebaseFirestoreController extends GetxController {
         debugPrint('New user Id added = ${ref.id}');
       }
       //update userId of the user
-      await firestoreController.updateUser(user: UsersModel(userId: ref.id));
+      // await firestoreController.updateUser(user: UsersModel(userId: ref.id));
     } on FirebaseException catch (e) {
       errorController.getErrorMsg(e);
       if (kDebugMode) {
@@ -315,8 +317,8 @@ class FirebaseFirestoreController extends GetxController {
             );
       }
 
-      final docSnap =
-          await ref.get(getOptions ?? const GetOptions(source: Source.server));
+      final docSnap = await ref
+          .get(getOptions ?? const GetOptions(source: Source.serverAndCache));
       if (docSnap.docs.isNotEmpty) {
         tempOrganization = docSnap.docs[0].data();
         //tempUser.setUid(authController.firebaseUser.value!.uid);
