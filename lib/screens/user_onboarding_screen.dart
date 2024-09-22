@@ -45,7 +45,7 @@ class UserOnboardingScreen extends StatelessWidget {
     final idCardCaptureController = Get.put(IdCardCaptureController());
     final formErrorController = Get.put(FormErrorController());
     //final FirebaseStorageController firebaseStorageController = Get.find();
-    final IdCardCaptureController cardCaptureController = Get.find();
+    //final IdCardCaptureController cardCaptureController = Get.find();
     final FirebaseErrorController errorController = Get.find();
 
     var outlineInputBorder = OutlineInputBorder(
@@ -124,12 +124,12 @@ class UserOnboardingScreen extends StatelessWidget {
                   buildDocBox(idCardCaptureController: idCardCaptureController),
                   if (idCardCaptureController.documentFront.isNotEmpty)
                     buildCapturedCard(
-                        cardCaptureController: cardCaptureController,
+                        cardCaptureController: idCardCaptureController,
                         direction: ScanDirection.front),
                   SizedBox(height: 10.h),
                   if (idCardCaptureController.documentBack.isNotEmpty)
                     buildCapturedCard(
-                        cardCaptureController: cardCaptureController,
+                        cardCaptureController: idCardCaptureController,
                         direction: ScanDirection.back),
                   /*  Row(
                     children: [

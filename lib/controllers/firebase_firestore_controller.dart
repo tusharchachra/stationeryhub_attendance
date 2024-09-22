@@ -20,6 +20,9 @@ class FirebaseFirestoreController extends GetxController {
   final FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
 
   RxBool isLoading = false.obs;
+  RxBool showPlaceholder = false.obs;
+
+  RxInt userCountForOrganization = 0.obs;
 
   @override
   Future onReady() async {
@@ -105,6 +108,7 @@ class FirebaseFirestoreController extends GetxController {
         .snapshots()
         .listen((event) {
       registeredOrganization(OrganizationModel.fromJson(event.docs[0].data()));
+      updateUserCountForOrganization();
       if (kDebugMode) {
         print('Organization data changed and synchronized');
       }
@@ -228,6 +232,7 @@ class FirebaseFirestoreController extends GetxController {
         print('Error:${e.toString()}');
       }
     }
+    updateUserCountForOrganization();
     isLoading.value = false;
   }
 
@@ -554,5 +559,33 @@ class FirebaseFirestoreController extends GetxController {
       }
     }
     isLoading.value = false;
+  }
+
+  Future<void> updateUserCountForOrganization() async {
+    showPlaceholder.value = true;
+    if (kDebugMode) {
+      debugPrint(
+          'Fetching no. of employees of registered organization from firestore for orgId=$registeredOrganization');
+    }
+    try {
+      {
+        firestoreInstance
+            .collection("users")
+            .where('organizationId',
+                isEqualTo: firestoreController.registeredOrganization.value?.id)
+            .count()
+            .get()
+            .then((response) {
+          userCountForOrganization.value =
+              response.count == null ? 0 : response.count! - 1;
+        });
+      }
+    } on FirebaseException catch (e) {
+      errorController.getErrorMsg(e);
+      if (kDebugMode) {
+        print('Error:${e.toString()}');
+      }
+    }
+    showPlaceholder.value = false;
   }
 }

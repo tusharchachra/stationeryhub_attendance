@@ -81,29 +81,35 @@ class AdminDashboardScreen extends StatelessWidget {
                 ),
               ),
       ),
-      pageTitle: (firestoreController.registeredUser.value?.name ?? 'Guest'),
+      pageTitle:
+          (firestoreController.registeredOrganization.value?.name ?? 'Guest'),
       pageSubtitle:
-          ('\n${firestoreController.registeredUser.value?.userType?.name.capitalizeFirst}'
+          ('\n${firestoreController.registeredUser.value?.name} - ${firestoreController.registeredUser.value?.userType?.name.capitalizeFirst}'
               .toString()),
       isLoading: false,
       bodyWidget: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              AdminDashboardBox(
-                colour: Constants.colourStatusBar,
-                title: 'Total employees',
-                subTitle: '45',
-              ),
-              AdminDashboardBox(
-                colour: Constants.colourDashboardBox1,
-                title: 'Total working hours',
-                subTitle: '45',
-              ),
-            ],
+          Obx(
+            () => Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                AdminDashboardBox(
+                  colour: Constants.colourStatusBar,
+                  title: 'Total employees',
+                  subTitle:
+                      firestoreController.userCountForOrganization.toString(),
+                  showPlaceholder: firestoreController.showPlaceholder.value,
+                ),
+                AdminDashboardBox(
+                  colour: Constants.colourDashboardBox1,
+                  title: 'Total working hours',
+                  subTitle: '45',
+                  showPlaceholder: firestoreController.showPlaceholder.value,
+                ),
+              ],
+            ),
           ),
           const Row(
             mainAxisAlignment: MainAxisAlignment.start,

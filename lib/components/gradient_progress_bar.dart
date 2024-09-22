@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 
 class GradientProgressBar extends StatelessWidget {
@@ -12,7 +11,7 @@ class GradientProgressBar extends StatelessWidget {
 
   const GradientProgressBar({
     super.key,
-  required this.size,
+    required this.size,
     this.child,
     this.baseCol,
     this.highlightCol,

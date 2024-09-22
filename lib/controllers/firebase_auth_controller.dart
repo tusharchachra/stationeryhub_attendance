@@ -81,6 +81,7 @@ class FirebaseAuthController extends GetxController {
         Get.offAll(() => NewOrganizationScreen());
       } else {
         firestoreController.attachOrganizationListener();
+        firestoreController.attachUserListener();
         Get.offAll(() => AdminDashboardScreen());
       }
     }
