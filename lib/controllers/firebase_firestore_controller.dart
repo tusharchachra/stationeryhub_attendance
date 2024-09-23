@@ -108,7 +108,7 @@ class FirebaseFirestoreController extends GetxController {
         .snapshots()
         .listen((event) {
       registeredOrganization(OrganizationModel.fromJson(event.docs[0].data()));
-      updateUserCountForOrganization();
+      setUserCountForOrganization();
       if (kDebugMode) {
         print('Organization data changed and synchronized');
       }
@@ -232,7 +232,7 @@ class FirebaseFirestoreController extends GetxController {
         print('Error:${e.toString()}');
       }
     }
-    updateUserCountForOrganization();
+    setUserCountForOrganization();
     isLoading.value = false;
   }
 
@@ -561,7 +561,7 @@ class FirebaseFirestoreController extends GetxController {
     isLoading.value = false;
   }
 
-  Future<void> updateUserCountForOrganization() async {
+  Future<void> setUserCountForOrganization() async {
     showPlaceholder.value = true;
     if (kDebugMode) {
       debugPrint(
