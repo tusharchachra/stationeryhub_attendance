@@ -21,11 +21,19 @@ class AdminDashboardBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 81.h,
-      width: 0.5.sw,
-      color: colour,
-      child: showPlaceholder! ? buildPlaceholder() : buildValues(),
+    return Expanded(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.5.h),
+        child: Container(
+          height: 80.h,
+          // width: 198.w,
+          decoration: BoxDecoration(
+            color: colour,
+            borderRadius: BorderRadius.circular(5.r),
+          ),
+          child: showPlaceholder! ? buildPlaceholder() : buildValues(),
+        ),
+      ),
     );
   }
 
@@ -56,7 +64,7 @@ class AdminDashboardBox extends StatelessWidget {
                 alignment: Alignment.topRight,
                 child: Text(
                   supportingText!,
-                  style: Get.textTheme.bodySmall,
+                  style: Get.textTheme.bodySmall?.copyWith(color: Colors.white),
                 ),
               ),
             ),

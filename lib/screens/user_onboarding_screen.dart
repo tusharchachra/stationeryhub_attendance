@@ -15,13 +15,14 @@ import 'package:stationeryhub_attendance/controllers/user_onboarding_screen_cont
 import 'package:stationeryhub_attendance/models/user_type_enum.dart';
 import 'package:stationeryhub_attendance/models/users_model.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
-import 'package:stationeryhub_attendance/screens/display_captured_image_screen.dart';
 import 'package:stationeryhub_attendance/screens/user_id_card_info_screen.dart';
 import 'package:stationeryhub_attendance/screens/user_profile_pic_info_screen.dart';
 
+import '../components/picture_circle.dart';
 import '../controllers/firebase_error_controller.dart';
 import '../controllers/id_card_capture_controller.dart';
 import '../helpers/constants.dart';
+import 'display_captured_image_screen.dart';
 
 enum ScanDirection { front, back }
 
@@ -384,30 +385,13 @@ class UserOnboardingScreen extends StatelessWidget {
                 color: Colors.transparent,
                 border: Border.all(color: Colors.white, width: 2.0.w),
               ),
-              child: Container(
+              child: PictureCircle(
                 width: 90.w,
-                height: 90.h,
-                clipBehavior: Clip.antiAlias,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.transparent,
-                ),
-                child: captureImageScreenController.imageFilePath.value == ''
-                    ? Icon(
-                        Icons.person,
-                        color: Colors.white,
-                        size: 50.w,
-                      )
-                    : GestureDetector(
-                        onTap: () {
-                          Get.off(() => DisplayCapturedImageScreen());
-                        },
-                        child: Image.file(
-                          File(
-                              captureImageScreenController.imageFilePath.value),
-                          fit: BoxFit.fitWidth,
-                        ),
-                      ),
+                height: 90.w,
+                imgPath: captureImageScreenController.imageFilePath.value,
+                onTap: () {
+                  Get.off(() => DisplayCapturedImageScreen());
+                },
               ),
             ),
           ),

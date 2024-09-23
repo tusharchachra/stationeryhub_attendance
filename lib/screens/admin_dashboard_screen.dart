@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:stationeryhub_attendance/components/employee_attendance_card.dart';
 import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
 import 'package:stationeryhub_attendance/controllers/id_card_capture_controller.dart';
@@ -87,61 +88,71 @@ class AdminDashboardScreen extends StatelessWidget {
           ('\n${firestoreController.registeredUser.value?.name} - ${firestoreController.registeredUser.value?.userType?.name.capitalizeFirst}'
               .toString()),
       isLoading: false,
-      bodyWidget: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Obx(
-            () => Row(
+      bodyWidget: Padding(
+        padding: EdgeInsets.fromLTRB(10.w, 5.h, 10.w, 0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Obx(
+              () => Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  AdminDashboardBox(
+                    colour: Constants.colourStatusBar,
+                    title: 'Total employees',
+                    subTitle:
+                        firestoreController.userCountForOrganization.toString(),
+                    showPlaceholder: firestoreController.showPlaceholder.value,
+                  ),
+                  AdminDashboardBox(
+                    colour: Constants.colourDashboardBox1,
+                    title: 'Total working hours',
+                    subTitle: '45',
+                    showPlaceholder: firestoreController.showPlaceholder.value,
+                  ),
+                ],
+              ),
+            ),
+            const Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 AdminDashboardBox(
-                  colour: Constants.colourStatusBar,
-                  title: 'Total employees',
-                  subTitle:
-                      firestoreController.userCountForOrganization.toString(),
-                  showPlaceholder: firestoreController.showPlaceholder.value,
+                  colour: Constants.colourDashboardBox2,
+                  title: 'Present',
+                  subTitle: '45',
+                  supportingText: '12%',
                 ),
                 AdminDashboardBox(
-                  colour: Constants.colourDashboardBox1,
-                  title: 'Total working hours',
+                  colour: Constants.colourDashboardBox3,
+                  title: 'Absent',
                   subTitle: '45',
-                  showPlaceholder: firestoreController.showPlaceholder.value,
+                  supportingText: '12%',
                 ),
               ],
             ),
-          ),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              AdminDashboardBox(
-                colour: Constants.colourDashboardBox2,
-                title: 'Present',
-                subTitle: '45',
-                supportingText: '12%',
-              ),
-              AdminDashboardBox(
-                colour: Constants.colourDashboardBox3,
-                title: 'Absent',
-                subTitle: '45',
-                supportingText: '12%',
-              ),
-            ],
-          ),
-          SizedBox(height: 10.h),
-          DateCarousel(),
-          SizedBox(height: 10.h),
-          TextButton(
-              onPressed: () {
-                Get.to(() => UserOnboardingScreen());
-              },
-              child: Text('Create new user')),
-          TextButton(
-              onPressed: () {
-                authController.signOutUser();
-              },
-              child: Text('Sign out')),
-        ],
+            SizedBox(height: 10.h),
+            DateCarousel(),
+            SizedBox(height: 10.h),
+            Text(
+              'Employee List',
+              style: Get.textTheme.headlineMedium
+                  ?.copyWith(color: Constants.colourTextMedium),
+            ),
+            EmployeeAttendanceCard(),
+            TextButton(
+                onPressed: () {
+                  Get.to(() => UserOnboardingScreen());
+                },
+                child: Text('Create new user')),
+            TextButton(
+                onPressed: () {
+                  authController.signOutUser();
+                },
+                child: Text('Sign out')),
+          ],
+        ),
       ),
     );
   }
