@@ -2,12 +2,11 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/models/organizations_model.dart';
 import 'package:stationeryhub_attendance/models/users_model.dart';
-import 'package:stationeryhub_attendance/screens/local_auth_screen.dart';
 
+import '../screens/admin_dashboard_screen.dart';
 import '../screens/login_screen.dart';
 import '../screens/new_organization_screen.dart';
 import 'firebase_error_controller.dart';
@@ -80,11 +79,11 @@ class FirebaseAuthController extends GetxController {
       if (firestoreController.registeredOrganization.value?.id == null) {
         Get.offAll(() => NewOrganizationScreen());
       } else {
-        firestoreController.attachOrganizationListener();
-        firestoreController.attachUserListener();
-        Get.bottomSheet(LocalAuthScreen(),
-            backgroundColor: Colors.white, isDismissible: false);
-        //Get.offAll(() => AdminDashboardScreen());
+        await firestoreController.attachOrganizationListener();
+        await firestoreController.attachUserListener();
+        /*  Get.bottomSheet(LocalAuthScreen(),
+            backgroundColor: Colors.white, isDismissible: false);*/
+        Get.offAll(() => AdminDashboardScreen());
       }
     }
   }

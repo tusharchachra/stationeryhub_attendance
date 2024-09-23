@@ -54,7 +54,7 @@ class ThemeCustom {
           fontWeight: FontWeight.w400,
         ),
         titleLarge: TextStyle(
-          color: Constants.colourPrimary,
+          // color: Constants.colourPrimary,
           fontSize: 12.sp,
           fontWeight: FontWeight.w500,
         ),
@@ -68,21 +68,20 @@ class ThemeCustom {
           fontSize: 8.sp,
           fontWeight: FontWeight.w500,
         ),
-        //--------------
+        bodySmall: TextStyle(
+          fontSize: 10.sp,
+          fontWeight: FontWeight.w400,
+        ),
         bodyLarge: TextStyle(
-          color: Colors.white,
-          fontSize: 14.sp,
+          fontSize: 18.sp,
           fontWeight: FontWeight.w500,
         ),
+        //-----------------------------------------------------
+
         bodyMedium: TextStyle(
           color: Colors.white,
           fontSize: 12.sp,
           fontWeight: FontWeight.w500,
-        ),
-        bodySmall: TextStyle(
-          color: Colors.white,
-          fontSize: 10.sp,
-          fontWeight: FontWeight.w400,
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(

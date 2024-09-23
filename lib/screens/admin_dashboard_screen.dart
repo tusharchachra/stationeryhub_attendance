@@ -128,6 +128,7 @@ class AdminDashboardScreen extends StatelessWidget {
               ),
             ],
           ),
+          SizedBox(height: 10.h),
           DateCarousel(),
           SizedBox(height: 10.h),
           TextButton(

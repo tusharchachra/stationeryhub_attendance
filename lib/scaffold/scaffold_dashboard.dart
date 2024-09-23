@@ -31,11 +31,11 @@ class ScaffoldDashboard extends StatelessWidget {
       textAlign: TextAlign.start,
       text: TextSpan(
           text: pageTitle,
-          style: Get.textTheme.bodyLarge,
+          style: Get.textTheme.headlineLarge?.copyWith(color: Colors.white),
           children: <TextSpan>[
             TextSpan(
               text: pageSubtitle,
-              style: Get.textTheme.bodySmall,
+              style: Get.textTheme.titleMedium?.copyWith(color: Colors.white),
             ),
           ]),
     );

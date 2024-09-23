@@ -2,21 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
-import 'package:stationeryhub_attendance/controllers/local_auth_controller.dart';
+import 'package:stationeryhub_attendance/controllers/local_auth_screen_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
-
-enum _SupportState {
-  unknown,
-  supported,
-  unsupported,
-}
 
 class LocalAuthScreen extends StatelessWidget {
   const LocalAuthScreen({super.key});
+  static final LocalAuthScreenController localAuthController =
+      Get.put(LocalAuthScreenController());
 
   @override
   Widget build(BuildContext context) {
-    final localAuthController = Get.put(LocalAuthScreenController());
+    //final LocalAuthScreenController localAuthController = Get.find();
     final FirebaseAuthController firebaseAuthController = Get.find();
     return SizedBox(
       height: 0.5.sh,
@@ -61,6 +57,9 @@ class LocalAuthScreen extends StatelessWidget {
                   onTap: () async {
                     print('tapped');
                     await localAuthController.authenticate();
+
+                    ///TODO set navigation
+                    if (localAuthController.isAuthenticated == true) {}
                   },
                   child: Image.asset(
                     'assets/images/localAuthIcon.png',
@@ -71,9 +70,10 @@ class LocalAuthScreen extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: TextButton(
-              onPressed: () {
-                localAuthController.cancelAuthentication();
-                firebaseAuthController.signOutUser();
+              onPressed: () async {
+                await localAuthController.cancelAuthentication();
+                Get.back();
+                //firebaseAuthController.signOutUser();
               },
               child: Text(
                 'Cancel',

@@ -243,8 +243,10 @@ class DateCarousel extends StatelessWidget {
                       item.toString(),
                       style: item ==
                               adminDashboardScreenController.selectedDay.value
-                          ? Get.textTheme.headlineLarge
-                          : Get.textTheme.displayLarge,
+                          ? Get.textTheme.bodyLarge
+                              ?.copyWith(color: Colors.white)
+                          : Get.textTheme.bodyLarge
+                              ?.copyWith(color: Constants.colourTextDark),
                     ),
                     Text(
                       DateFormat.E().format(DateTime(
@@ -254,8 +256,10 @@ class DateCarousel extends StatelessWidget {
                       style: item ==
                               adminDashboardScreenController
                                   .selectedDate.value.day
-                          ? Get.textTheme.bodyLarge
-                          : Get.textTheme.displayMedium,
+                          ? Get.textTheme.titleMedium
+                              ?.copyWith(color: Colors.white)
+                          : Get.textTheme.titleMedium
+                              ?.copyWith(color: Constants.colourTextDark),
                     ),
                   ],
                 ),

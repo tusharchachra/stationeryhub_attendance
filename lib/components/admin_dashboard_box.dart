@@ -41,11 +41,12 @@ class AdminDashboardBox extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: Get.textTheme.bodySmall,
+                style: Get.textTheme.bodySmall?.copyWith(color: Colors.white),
               ),
               Text(
                 subTitle,
-                style: Get.textTheme.headlineLarge,
+                style:
+                    Get.textTheme.displayMedium?.copyWith(color: Colors.white),
               ),
             ],
           ),

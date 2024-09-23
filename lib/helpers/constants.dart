@@ -53,7 +53,7 @@ class Constants {
   );
 
   static final inactiveDateBoxDecoration = BoxDecoration(
-    color: colourTextLight,
+    color: colourBorderMedium,
     border: Border.all(color: colourDateBoxBorder),
     borderRadius: BorderRadius.all(
       Radius.circular(14.r),

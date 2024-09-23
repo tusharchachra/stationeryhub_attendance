@@ -1,6 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:local_auth_android/local_auth_android.dart';
+import 'package:local_auth_darwin/local_auth_darwin.dart';
 
 class LocalAuthScreenController extends GetxController {
   final LocalAuthentication localAuth = LocalAuthentication();
@@ -70,10 +72,19 @@ class LocalAuthScreenController extends GetxController {
       if ((_canCheckBiometrics && _availableBiometrics.isNotEmpty) ||
           isDeviceSupported) {
         isAuthenticated = await localAuth.authenticate(
-          localizedReason: 'Let OS determine authentication method',
+          localizedReason: ' ',
+          authMessages: <AuthMessages>[
+            AndroidAuthMessages(
+              signInTitle: ' ',
+              cancelButton: 'Cancel',
+            ),
+            IOSAuthMessages(
+              cancelButton: 'Cancel',
+            ),
+          ],
           options: const AuthenticationOptions(
             stickyAuth: true,
-            // useErrorDialogs: false,
+            useErrorDialogs: false,
           ),
         );
       } else {
