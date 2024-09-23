@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 import 'package:stationeryhub_attendance/controllers/new_organization_screen_controller.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_onboarding.dart';
@@ -21,6 +22,7 @@ class NewOrganizationScreen extends StatelessWidget {
   static FirebaseFirestoreController firestoreController = Get.find();
   //static SharedPrefsController sharedPrefsController = Get.find();
   static FirebaseErrorController errorController = Get.find();
+  static FirebaseAuthController authController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +70,8 @@ class NewOrganizationScreen extends StatelessWidget {
                     ),
                     Text(
                       'Organization details',
-                      style: Get.textTheme.displayLarge,
+                      style: Get.textTheme.displayMedium
+                          ?.copyWith(color: Constants.colourTextDark),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
@@ -90,7 +93,7 @@ class NewOrganizationScreen extends StatelessWidget {
                         textController: newOrganizationScreenController
                             .addressController.value,
                         hintText: 'Address',
-                        prefixIcon: Icon(Icons.location_on_outlined),
+                        prefixIcon: const Icon(Icons.location_on_outlined),
                         isMultiLine: true,
                       ),
                     ),
@@ -105,104 +108,122 @@ class NewOrganizationScreen extends StatelessWidget {
                         height: 25.h,
                         child: const CircularProgressIndicator(),
                       )
-                    : FormFieldButton(
-                        width: 384.w,
-                        height: 56.h,
-                        buttonText: 'Continue',
-                        onTapAction: () async {
-                          newOrganizationScreenController.isLoading.value =
-                              true;
-                          String? insertedOrganizationId;
-                          newOrganizationScreenController.validateName(
-                              newOrganizationScreenController
-                                  .nameController.value.text
-                                  .trim());
-                          if (newOrganizationScreenController
-                                  .isFormValid.value ==
-                              true) {
-                            newOrganizationScreenController.isLoading.value =
-                                true;
+                    : Wrap(
+                        alignment: WrapAlignment.center,
+                        children: [
+                          FormFieldButton(
+                            width: 384.w,
+                            height: 56.h,
+                            buttonText: 'Continue',
+                            onTapAction: () async {
+                              newOrganizationScreenController.isLoading.value =
+                                  true;
+                              String? insertedOrganizationId;
+                              newOrganizationScreenController.validateName(
+                                  newOrganizationScreenController
+                                      .nameController.value.text
+                                      .trim());
+                              if (newOrganizationScreenController
+                                      .isFormValid.value ==
+                                  true) {
+                                newOrganizationScreenController
+                                    .isLoading.value = true;
 
-                            OrganizationModel? newOrganization =
-                                OrganizationModel(
-                              name: newOrganizationScreenController
-                                  .nameController.value.text
-                                  .trim(),
-                              address: newOrganizationScreenController
-                                  .addressController.value.text
-                                  .trim(),
-                              createdOn: DateTime.now(),
-                            );
+                                OrganizationModel? newOrganization =
+                                    OrganizationModel(
+                                  name: newOrganizationScreenController
+                                      .nameController.value.text
+                                      .trim(),
+                                  address: newOrganizationScreenController
+                                      .addressController.value.text
+                                      .trim(),
+                                  createdOn: DateTime.now(),
+                                );
 
-                            //Inserting organization into firestore
-                            insertedOrganizationId =
-                                await firestoreController.createOrganization(
-                                    newOrganization: newOrganization);
-                            await firestoreController
-                                .attachOrganizationListener();
+                                //Inserting organization into firestore
+                                insertedOrganizationId =
+                                    await firestoreController
+                                        .createOrganization(
+                                            newOrganization: newOrganization);
+                                await firestoreController
+                                    .attachOrganizationListener();
 
-                            //fetch user from shared prefs
-                            /* AlbumUsers? currentUser =
-                                await sharedPrefsController
-                                    .getUserFromSharedPrefs();*/
+                                //fetch user from shared prefs
+                                /* AlbumUsers? currentUser =
+                                  await sharedPrefsController
+                                      .getUserFromSharedPrefs();*/
 
-                            //fetch user from firestore
-                            /*AlbumUsers? currentUser =
-                                await firestoreController.getUser(
-                                    phoneNum: firestoreController
-                                        .registeredUser!.value!.phoneNum!);*/
+                                //fetch user from firestore
+                                /*AlbumUsers? currentUser =
+                                  await firestoreController.getUser(
+                                      phoneNum: firestoreController
+                                          .registeredUser!.value!.phoneNum!);*/
 
-                            //fetch organization from firestore
-                            /*newOrganization = await firestoreController
-                                .getOrganization(orgId: insertedOrganizationId);*/
+                                //fetch organization from firestore
+                                /*newOrganization = await firestoreController
+                                  .getOrganization(orgId: insertedOrganizationId);*/
 
-                            //update user details in shared prefs
-                            /*  await sharedPrefsController.storeUserToSharedPrefs(
-                                user: currentUser);*/
+                                //update user details in shared prefs
+                                /*  await sharedPrefsController.storeUserToSharedPrefs(
+                                  user: currentUser);*/
 
-                            //store org details to shred prefs
-                            /* await sharedPrefsController
-                                .storeOrganizationToSharedPrefs(
-                                    organization: newOrganization!);*/
+                                //store org details to shred prefs
+                                /* await sharedPrefsController
+                                  .storeOrganizationToSharedPrefs(
+                                      organization: newOrganization!);*/
 
-                            /* if (kDebugMode) {
-                              print('From shared prefs:');
-                              var temp = await sharedPrefsController
-                                  .getOrganizationFromSharedPrefs();
-                              print(temp.toString());
-                              var temp1 = await sharedPrefsController
-                                  .getUserFromSharedPrefs();
-                              print(temp1.toString());
-                            }*/
-                          }
-                          newOrganizationScreenController.isLoading.value =
-                              false;
-                          {
-                            Get.showSnackbar(
-                              GetSnackBar(
-                                messageText: Text(
-                                  errorController.errorMsg.isNotEmpty
-                                      ? errorController.errorMsg.toString()
-                                      : 'New Organization created',
-                                  textAlign: TextAlign.center,
-                                  style: Get.textTheme.bodyMedium?.copyWith(
-                                      color: Constants.colourTextDark),
-                                ),
-                                duration: const Duration(seconds: 2),
-                                snackPosition: SnackPosition.BOTTOM,
-                                backgroundColor: Colors.white,
-                                boxShadows: [
-                                  BoxShadow(
-                                      color: Colors.grey, blurRadius: 62.0.r),
-                                ],
-                                snackStyle: SnackStyle.FLOATING,
-                                borderRadius: 50.r,
-                                margin: EdgeInsets.all(10.w),
+                                /* if (kDebugMode) {
+                                print('From shared prefs:');
+                                var temp = await sharedPrefsController
+                                    .getOrganizationFromSharedPrefs();
+                                print(temp.toString());
+                                var temp1 = await sharedPrefsController
+                                    .getUserFromSharedPrefs();
+                                print(temp1.toString());
+                              }*/
+                              }
+                              newOrganizationScreenController.isLoading.value =
+                                  false;
+                              {
+                                Get.showSnackbar(
+                                  GetSnackBar(
+                                    messageText: Text(
+                                      errorController.errorMsg.isNotEmpty
+                                          ? errorController.errorMsg.toString()
+                                          : 'New Organization created',
+                                      textAlign: TextAlign.center,
+                                      style: Get.textTheme.bodyMedium?.copyWith(
+                                          color: Constants.colourTextDark),
+                                    ),
+                                    duration: const Duration(seconds: 2),
+                                    snackPosition: SnackPosition.BOTTOM,
+                                    backgroundColor: Colors.white,
+                                    boxShadows: [
+                                      BoxShadow(
+                                          color: Colors.grey,
+                                          blurRadius: 62.0.r),
+                                    ],
+                                    snackStyle: SnackStyle.FLOATING,
+                                    borderRadius: 50.r,
+                                    margin: EdgeInsets.all(10.w),
+                                  ),
+                                );
+                                Get.to(() => const AdminDashboardScreen());
+                              }
+                            },
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              authController.signOutUser();
+                            },
+                            child: Text(
+                              'Cancel',
+                              style: Get.textTheme.displaySmall?.copyWith(
+                                color: Constants.colourTextDark,
                               ),
-                            );
-                            Get.to(() => AdminDashboardScreen());
-                          }
-                        },
+                            ),
+                          ),
+                        ],
                       ),
               )
             ],

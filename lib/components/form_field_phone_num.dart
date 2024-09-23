@@ -40,7 +40,7 @@ class FormFieldPhoneNum extends StatelessWidget {
         controller: phoneNumController,
         focusNode: focusNode,
         style: Get.textTheme.headlineMedium
-            ?.copyWith(color: Constants.colourTextMedium),
+            ?.copyWith(color: Constants.colourTextDark),
         keyboardType: TextInputType.phone,
         autofocus: false,
         maxLength: 10,
@@ -52,7 +52,7 @@ class FormFieldPhoneNum extends StatelessWidget {
               prefix: Text(
                 '+91-',
                 style: Get.textTheme.headlineMedium!
-                    .copyWith(color: Constants.colourTextLight),
+                    .copyWith(color: Constants.colourTextDark),
               ),
               border: border,
               fillColor: fillColor,

@@ -68,11 +68,13 @@ class OtpScreen extends StatelessWidget {
                   ),
                   Text(
                     'Enter the OTP',
-                    style: Get.textTheme.displayLarge,
+                    style: Get.textTheme.displayMedium
+                        ?.copyWith(color: Constants.colourTextDark),
                   ),
                   Text(
-                    'Received on ${loginController.phoneNum.value.substring(0, 1)}******${loginController.phoneNum.value.substring(7, loginController.phoneNum.value.length)}',
-                    style: Get.textTheme.displayMedium,
+                    'Received on ${loginController.phoneNum.value.substring(0, 1)}-----${loginController.phoneNum.value.substring(6, loginController.phoneNum.value.length)}',
+                    style: Get.textTheme.headlineLarge
+                        ?.copyWith(color: Constants.colourTextDark),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 12.w),
@@ -85,12 +87,16 @@ class OtpScreen extends StatelessWidget {
                       children: [
                         Text(
                           'Not yet Received?',
-                          style: Get.textTheme.displayMedium,
+                          style: Get.textTheme.titleLarge?.copyWith(
+                            color: Constants.colourTextDark,
+                          ),
                         ),
                         otpController.isTimerRunning.value == true
                             ? Text(
                                 '${otpController.countdownDuration} sec',
-                                style: Get.textTheme.displayMedium,
+                                style: Get.textTheme.titleLarge?.copyWith(
+                                  color: Constants.colourTextDark,
+                                ),
                               )
                             : GestureDetector(
                                 onTap: () {
@@ -104,7 +110,8 @@ class OtpScreen extends StatelessWidget {
                                                 color:
                                                     Constants.colourTextDark),
                                       ),
-                                      duration: const Duration(seconds: 2),
+                                      duration: const Duration(
+                                          seconds: Constants.otpResendTime),
                                       snackPosition: SnackPosition.BOTTOM,
                                       backgroundColor: Colors.white,
                                       boxShadows: [
@@ -126,8 +133,9 @@ class OtpScreen extends StatelessWidget {
                                 },
                                 child: Text(
                                   'Resend',
-                                  style: Get.textTheme.displayMedium!
-                                      .copyWith(color: Constants.colourPrimary),
+                                  style: Get.textTheme.titleLarge?.copyWith(
+                                    color: Constants.colourPrimary,
+                                  ),
                                 ),
                               ),
                       ],
@@ -202,6 +210,7 @@ class OtpScreen extends StatelessWidget {
                             firestoreController.registeredOrganization?.value =
                                 newOrganization;
                           }*/
+
                           otpController.isLoading.value = false;
                         }
                       },

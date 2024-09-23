@@ -2,13 +2,14 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/models/organizations_model.dart';
 import 'package:stationeryhub_attendance/models/users_model.dart';
-import 'package:stationeryhub_attendance/screens/new_organization_screen.dart';
+import 'package:stationeryhub_attendance/screens/local_auth_screen.dart';
 
-import '../screens/admin_dashboard_screen.dart';
 import '../screens/login_screen.dart';
+import '../screens/new_organization_screen.dart';
 import 'firebase_error_controller.dart';
 import 'firebase_firestore_controller.dart';
 import 'otp_screen_controller.dart';
@@ -73,16 +74,17 @@ class FirebaseAuthController extends GetxController {
     if (user == null) {
       Get.offAll(() => LoginScreen());
     } else {
-      print(
-          'registered org=${firestoreController.registeredOrganization.value?.id}');
       firestoreController
           .registeredOrganization(await firestoreController.getOrganization());
+
       if (firestoreController.registeredOrganization.value?.id == null) {
         Get.offAll(() => NewOrganizationScreen());
       } else {
         firestoreController.attachOrganizationListener();
         firestoreController.attachUserListener();
-        Get.offAll(() => AdminDashboardScreen());
+        Get.bottomSheet(LocalAuthScreen(),
+            backgroundColor: Colors.white, isDismissible: false);
+        //Get.offAll(() => AdminDashboardScreen());
       }
     }
   }

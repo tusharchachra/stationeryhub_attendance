@@ -34,6 +34,7 @@ class Constants {
   static const colourIdCardBackground = Color(0xffC6E6F9);
 
   static const otpResendTime = 5;
+  static const snackbarDuration = 4;
 
   static final unselectedDateBoxDecoration = BoxDecoration(
     color: Colors.white,

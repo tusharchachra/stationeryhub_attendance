@@ -16,7 +16,8 @@ class FormFieldOtp extends StatelessWidget {
     final defaultPinTheme = PinTheme(
       width: 49.w,
       height: 46.h,
-      textStyle: Get.textTheme.displayMedium,
+      textStyle: Get.textTheme.headlineMedium
+          ?.copyWith(color: Constants.colourTextDark),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(7.5.r),
         border: Border.all(color: Constants.colourOtpBoxBorder),
@@ -91,8 +92,9 @@ class FormFieldOtp extends StatelessWidget {
                 errorPinTheme: defaultPinTheme.copyBorderWith(
                   border: Border.all(color: Constants.colourError),
                 ),
-                errorTextStyle: Get.textTheme.displayMedium
-                    ?.copyWith(color: Constants.colourError),
+                errorTextStyle: Get.textTheme.titleLarge?.copyWith(
+                  color: Constants.colourError,
+                ),
               ),
             ),
             /*TextButton(

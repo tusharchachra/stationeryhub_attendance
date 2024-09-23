@@ -52,8 +52,9 @@
     <key>NSPhotoLibraryUsageDescription</key>
     <string>Used to store images on your device</string>
     <key>NSMicrophoneUsageDescription</key>
-        <string>Used to store record audio from your device</string>
-
+    <string>Used to store record audio from your device</string>
+    <key>NSFaceIDUsageDescription</key>
+    <string>Why is my app authenticating using face id?</string>
 
 </dict>
 </plist>

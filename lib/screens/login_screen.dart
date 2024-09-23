@@ -33,7 +33,7 @@ class LoginScreen extends StatelessWidget {
       bodyWidget: Center(
         child: Form(
           key: loginController.formKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
+          autovalidateMode: AutovalidateMode.disabled,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.min,
@@ -72,7 +72,8 @@ class LoginScreen extends StatelessWidget {
                     ),
                     Text(
                       'Enter your phone number',
-                      style: Get.textTheme.displayLarge,
+                      style: Get.textTheme.displayMedium
+                          ?.copyWith(color: Constants.colourTextDark),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
@@ -102,7 +103,6 @@ class LoginScreen extends StatelessWidget {
                         loginController.isLoading.value = true;
                         loginController.focusNode.unfocus();
                         loginController.formKey.currentState!.validate();
-                        loginController.isLoading.value = false;
                         if (loginController.isPhoneNumValid.value) {
                           /* await loginController.updateRegisteredUser();
                           if (kDebugMode) {
@@ -143,7 +143,7 @@ class LoginScreen extends StatelessWidget {
         smsCode: otpController.otp.value,
         onCodeSentAction: () {});
     otpController.startTimer();
-    Get.to(() => OtpScreen());
+    Get.to(() => const OtpScreen());
   }
 
   Widget buildBottomSheet() {
@@ -165,17 +165,20 @@ class LoginScreen extends StatelessWidget {
         children: [
           Text(
             'User not found',
-            style: Get.textTheme.displayLarge,
+            style: Get.textTheme.displayMedium
+                ?.copyWith(color: Constants.colourTextDark),
             textAlign: TextAlign.center,
           ),
           Text(
             'If you are an employee, request your organization to grant access.',
-            style: Get.textTheme.displayMedium,
+            style: Get.textTheme.displaySmall
+                ?.copyWith(color: Constants.colourTextDark),
             textAlign: TextAlign.center,
           ),
           Text(
             'Or',
-            style: Get.textTheme.displayMedium,
+            style: Get.textTheme.displayMedium
+                ?.copyWith(color: Constants.colourTextDark),
             textAlign: TextAlign.center,
           ),
           FormFieldButton(

@@ -148,7 +148,11 @@ class UserOnboardingScreen extends StatelessWidget {
                   SizedBox(height: 10.h),
                   Obx(
                     () => userOnboardingScreenController.isLoading.value == true
-                        ? Center(child: CircularProgressIndicator())
+                        ? SizedBox(
+                            width: 25.w,
+                            height: 25.h,
+                            child: const CircularProgressIndicator(),
+                          )
                         : FormFieldButton(
                             width: 430.w,
                             height: 56.h,
