@@ -452,7 +452,8 @@ class UserOnboardingScreen extends StatelessWidget {
             child: ListView(
               shrinkWrap: true,
               children: UserType.values
-                  .map((e) => GestureDetector(
+                  .map((e) => (e.getName() != 'creator')
+                  ?  GestureDetector(
                         onTap: () {
                           userOnboardingScreenController.userTypeController
                               .value.text = e.getName().capitalizeFirst!;
@@ -464,29 +465,36 @@ class UserOnboardingScreen extends StatelessWidget {
                         child: Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: 24.w, vertical: 10.h),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                e.getName().capitalizeFirst!,
-                                style: Get.textTheme.displaySmall?.copyWith(
-                                    color: userOnboardingScreenController
+                          child:Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      e.getName().capitalizeFirst!,
+                                      style: Get.textTheme.displaySmall
+                                          ?.copyWith(
+                                              color:
+                                                  userOnboardingScreenController
+                                                              .selectedUserType
+                                                              .value ==
+                                                          e
+                                                      ? Constants.colourPrimary
+                                                      : Constants
+                                                          .colourTextLight),
+                                    ),
+                                    userOnboardingScreenController
                                                 .selectedUserType.value ==
                                             e
-                                        ? Constants.colourPrimary
-                                        : Constants.colourTextLight),
-                              ),
-                              userOnboardingScreenController
-                                          .selectedUserType.value ==
-                                      e
-                                  ? Image.asset(
-                                      'assets/images/activeCircle.png')
-                                  : Image.asset(
-                                      'assets/images/inactiveCircle.png')
-                            ],
-                          ),
+                                        ? Image.asset(
+                                            'assets/images/activeCircle.png')
+                                        : Image.asset(
+                                            'assets/images/inactiveCircle.png')
+                                  ],
+                                )
+
                         ),
-                      ))
+                      ):  Container(),
+              )
                   .toList(),
             ),
           )

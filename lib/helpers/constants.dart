@@ -7,6 +7,11 @@ class Constants {
 
   static final Constants instance = Constants._privateConstructor();
 
+  static const dbName = 'employee';
+  static const dbVersion = 1;
+  static const webPathAtt = 'https://www.aayaam3d.com/empAtt/newAppAPI';
+  static const webPathEnv = 'https://www.aayaam3d.com/env';
+
   static const colourPrimary = Color(0xFF0055FD);
   //static const colourBackground = Color(0x000fffff);
   static final Color colourIconBackground =

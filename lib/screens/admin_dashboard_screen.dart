@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:stationeryhub_attendance/components/employee_attendance_card.dart';
 import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
 import 'package:stationeryhub_attendance/controllers/id_card_capture_controller.dart';
@@ -13,8 +12,10 @@ import '../components/admin_dashboard_box.dart';
 import '../components/date_carousel.dart';
 import '../components/form_field_button.dart';
 import '../components/gradient_progress_bar.dart';
+import '../controllers/db_controller.dart';
 import '../controllers/firebase_firestore_controller.dart';
 import '../controllers/firebase_storage_controller.dart';
+import '../helpers/db_service.dart';
 import '../services/firebase_login_services.dart';
 import 'new_organization_screen.dart';
 
@@ -34,6 +35,10 @@ class AdminDashboardScreen extends StatelessWidget {
     /* if (firestoreController.registeredOrganization?.value.id == null) {
       Get.to(NewOrganizationScreen());
     }*/
+
+    final AttendanceController attendanceController =
+        Get.put(AttendanceController(ApiService()));
+
     {
       return Obx(
           () => /*firestoreController.isLoading.value == true
@@ -52,6 +57,9 @@ class AdminDashboardScreen extends StatelessWidget {
   }
 
   Widget buildDashboard1() {
+    final AttendanceController attendanceController =
+        Get.put(AttendanceController(ApiService()));
+    attendanceController.fetchAttendance(userId: 1);
     return ScaffoldDashboard(
       leadingWidget: Padding(
         padding: EdgeInsets.fromLTRB(12.w, 13.h, 0, 13.h),
@@ -140,7 +148,31 @@ class AdminDashboardScreen extends StatelessWidget {
               style: Get.textTheme.headlineMedium
                   ?.copyWith(color: Constants.colourTextMedium),
             ),
-            EmployeeAttendanceCard(),
+            //EmployeeAttendanceCard(),
+            Expanded(
+              child: Obx(() {
+                if (attendanceController.isLoading.value) {
+                  return Center(child: CircularProgressIndicator());
+                }
+
+                return ListView.builder(
+                  itemCount: attendanceController.attendanceList.length,
+                  itemBuilder: (context, index) {
+                    final attendance =
+                        attendanceController.attendanceList[index];
+                    return ListTile(
+                      title: Text(
+                        '${attendance.date} - ${attendance.action}',
+                        style: Get.textTheme.displayMedium
+                            ?.copyWith(color: Constants.colourTextDark),
+                      ),
+                      // subtitle: Text(attendance.remarks),
+                    );
+                  },
+                );
+              }),
+            ),
+
             TextButton(
                 onPressed: () {
                   Get.to(() => UserOnboardingScreen());
