@@ -1,23 +1,22 @@
 class UserAttendanceModel {
-  String? userId;
+  String? empId;
   DateTime? date;
   int? action;
 
   UserAttendanceModel({
-    this.userId,
+    this.empId,
     this.action,
     this.date,
   });
 
   Map<String, dynamic> toJson() => {
-        'userId': userId ?? 'null',
-        'dateTime': date ?? '',
-        'action': action ?? '',
+        'empId': empId,
+        'dateTime': date,
+        'action': action,
       };
 
   UserAttendanceModel.fromJson(Map<String, dynamic> json)
-      : userId =
-            json['userId'].toString() == '' ? '' : json['userId'].toString(),
-        action = json['action'].toString() == '' ? '' : json['action'],
-        date = json['date'].toString() == '' ? '' : json['date'];
+      : empId = (json['empId']),
+        action = int.parse(json['action']),
+        date = DateTime.parse(json['date']);
 }

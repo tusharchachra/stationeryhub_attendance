@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:stationeryhub_attendance/models/user_attendance_model.dart';
 
 import 'constants.dart';
 
@@ -32,7 +31,7 @@ class DBHelper {
     //return d;
   }
 
-  Future<List<UserAttendanceModel>> fetchAttendanceByUser() {}
+  /*Future<List<UserAttendanceModel>> fetchAttendanceByUser() {}*/
   /*Future<List<AlbumEmployeeAttendanceUsers>> fetchUserList() {
 
   }*/

@@ -10,12 +10,13 @@ import 'package:stationeryhub_attendance/screens/user_onboarding_screen.dart';
 
 import '../components/admin_dashboard_box.dart';
 import '../components/date_carousel.dart';
+import '../components/employee_attendance_card.dart';
 import '../components/form_field_button.dart';
 import '../components/gradient_progress_bar.dart';
-import '../controllers/db_controller.dart';
+import '../controllers/api_controller.dart';
 import '../controllers/firebase_firestore_controller.dart';
 import '../controllers/firebase_storage_controller.dart';
-import '../helpers/db_service.dart';
+import '../helpers/api_service.dart';
 import '../services/firebase_login_services.dart';
 import 'new_organization_screen.dart';
 
@@ -36,8 +37,8 @@ class AdminDashboardScreen extends StatelessWidget {
       Get.to(NewOrganizationScreen());
     }*/
 
-    final AttendanceController attendanceController =
-        Get.put(AttendanceController(ApiService()));
+    final ApiController attendanceController =
+        Get.put(ApiController(ApiService()));
 
     {
       return Obx(
@@ -57,9 +58,9 @@ class AdminDashboardScreen extends StatelessWidget {
   }
 
   Widget buildDashboard1() {
-    final AttendanceController attendanceController =
-        Get.put(AttendanceController(ApiService()));
-    attendanceController.fetchAttendance(userId: 1);
+    final ApiController attendanceController =
+        Get.put(ApiController(ApiService()));
+    attendanceController.fetchAttendance(empId: 9);
     return ScaffoldDashboard(
       leadingWidget: Padding(
         padding: EdgeInsets.fromLTRB(12.w, 13.h, 0, 13.h),
@@ -152,7 +153,7 @@ class AdminDashboardScreen extends StatelessWidget {
             Expanded(
               child: Obx(() {
                 if (attendanceController.isLoading.value) {
-                  return Center(child: CircularProgressIndicator());
+                  return Center(child: GradientProgressBar(size: Size(50, 20)));
                 }
 
                 return ListView.builder(
@@ -160,14 +161,16 @@ class AdminDashboardScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final attendance =
                         attendanceController.attendanceList[index];
-                    return ListTile(
+                    return EmployeeAttendanceCard(
+                      attendance: attendance,
+                    ); /*ListTile(
                       title: Text(
                         '${attendance.date} - ${attendance.action}',
                         style: Get.textTheme.displayMedium
                             ?.copyWith(color: Constants.colourTextDark),
                       ),
                       // subtitle: Text(attendance.remarks),
-                    );
+                    );*/
                   },
                 );
               }),
