@@ -150,30 +150,20 @@ class AdminDashboardScreen extends StatelessWidget {
                   ?.copyWith(color: Constants.colourTextMedium),
             ),
             //EmployeeAttendanceCard(),
-            Expanded(
-              child: Obx(() {
-                if (attendanceController.isLoading.value) {
-                  return Center(child: GradientProgressBar(size: Size(50, 20)));
-                }
-
-                return ListView.builder(
+            Obx(
+              () => Expanded(
+                child: ListView.builder(
                   itemCount: attendanceController.attendanceList.length,
                   itemBuilder: (context, index) {
                     final attendance =
                         attendanceController.attendanceList[index];
                     return EmployeeAttendanceCard(
                       attendance: attendance,
-                    ); /*ListTile(
-                      title: Text(
-                        '${attendance.date} - ${attendance.action}',
-                        style: Get.textTheme.displayMedium
-                            ?.copyWith(color: Constants.colourTextDark),
-                      ),
-                      // subtitle: Text(attendance.remarks),
-                    );*/
+                      showPlaceholder: attendanceController.isLoading.value,
+                    );
                   },
-                );
-              }),
+                ),
+              ),
             ),
 
             TextButton(

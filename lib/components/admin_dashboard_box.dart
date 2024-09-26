@@ -74,9 +74,23 @@ class AdminDashboardBox extends StatelessWidget {
   }
 
   Widget buildPlaceholder() {
-    return GradientProgressBar(
-      size: Size(0.5.w, 81.h),
-      baseCol: Colors.transparent,
+    return Padding(
+      padding: EdgeInsets.all(15.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GradientProgressBar(
+            size: Size(150.w, 15.h),
+            baseCol: Colors.white60,
+          ),
+          SizedBox(height: 10),
+          GradientProgressBar(
+            size: Size(80.w, 10.h),
+            baseCol: Colors.white60,
+          ),
+        ],
+      ),
     );
   }
 }

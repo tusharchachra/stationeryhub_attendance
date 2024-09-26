@@ -44,7 +44,20 @@ class GradientProgressBar extends StatelessWidget {
           Container(
             width: size?.width,
             height: size?.height,
-            color: Colors.black,
+            // color: Colors.black,
+            decoration: BoxDecoration(
+                color: Colors.black,
+                border: Border.all(color: Colors.transparent),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(20.0),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.white10,
+                    spreadRadius: 5.0,
+                    blurRadius: 5.0,
+                  ),
+                ]),
           ),
     );
   }

@@ -120,6 +120,7 @@ class FirebaseFirestoreController extends GetxController {
   Future<UsersModel?> getUser({
     String? phoneNum,
     String? firebaseId,
+    String? uid,
     GetOptions? getOptions,
   }) async {
     isLoading.value = true;
@@ -127,7 +128,7 @@ class FirebaseFirestoreController extends GetxController {
     UsersModel? tempUser;
     if (kDebugMode) {
       debugPrint(
-          'Fetching registered user details from firestore phoneNum=$phoneNum,firebaseId=$firebaseId...');
+          'Fetching registered user details from firestore phoneNum=$phoneNum,firebaseId=$firebaseId, uid=$uid...');
     }
     Query<UsersModel> ref;
     try {
@@ -135,6 +136,14 @@ class FirebaseFirestoreController extends GetxController {
         ref = firestoreInstance
             .collection("users")
             .where('phoneNum', isEqualTo: phoneNum)
+            .withConverter(
+              fromFirestore: UsersModel.fromFirestore,
+              toFirestore: (UsersModel user, _) => user.toJson(),
+            );
+      } else if (uid != null) {
+        ref = firestoreInstance
+            .collection("users")
+            .where('userId', isEqualTo: uid)
             .withConverter(
               fromFirestore: UsersModel.fromFirestore,
               toFirestore: (UsersModel user, _) => user.toJson(),
