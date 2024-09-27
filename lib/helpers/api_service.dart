@@ -6,7 +6,7 @@ import '../models/user_attendance_model.dart';
 
 class ApiService {
   Future<List<UserAttendanceModel>> fetchAttendance(
-      {int? empId, String? startDate, String? endDate}) async {
+      {int? empId, DateTime? startDate, String? endDate}) async {
     /*Database db = await instance.database;
     String query = 'SELECT * FROM employeeattendance WHERE empid = $id';
     return await db.rawQuery(query);*/
@@ -18,7 +18,14 @@ class ApiService {
         if (startDate != null) url += 'startDate=$startDate&';
         if (endDate != null) url += 'endDate=$endDate';
       }*/
-      final response = await http.get(Uri.parse('$url?empId=$empId'));
+      var response;
+      if (empId != null) {
+        response = await http.get(Uri.parse('$url?empId=$empId'));
+      } else if (startDate != null) {
+        print(startDate.toString());
+        response =
+            await http.get(Uri.parse('$url?date=${(startDate).toString()}'));
+      }
       print(response.statusCode);
       print(response.body);
       if (response.statusCode == 200) {

@@ -11,10 +11,16 @@ class ApiController extends GetxController {
 
   ApiController(this.apiService);
 
-  void fetchAttendance({int? empId, String? startDate, String? endDate}) async {
+  void fetchAttendance(
+      {int? empId, DateTime? startDate, String? endDate}) async {
     isLoading.value = true;
+    List<UserAttendanceModel> records = [];
     try {
-      final records = await apiService.fetchAttendance(empId: empId);
+      if (empId != null) {
+        records = await apiService.fetchAttendance(empId: empId);
+      } else if (startDate != null) {
+        records = await apiService.fetchAttendance(startDate: startDate);
+      }
       attendanceList.value = records;
       print('records=$records');
     } catch (e) {

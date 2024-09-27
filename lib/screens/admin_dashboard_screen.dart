@@ -16,7 +16,6 @@ import '../components/gradient_progress_bar.dart';
 import '../controllers/api_controller.dart';
 import '../controllers/firebase_firestore_controller.dart';
 import '../controllers/firebase_storage_controller.dart';
-import '../helpers/api_service.dart';
 import '../services/firebase_login_services.dart';
 import 'new_organization_screen.dart';
 
@@ -37,19 +36,15 @@ class AdminDashboardScreen extends StatelessWidget {
       Get.to(NewOrganizationScreen());
     }*/
 
-    final ApiController attendanceController =
-        Get.put(ApiController(ApiService()));
-
     {
-      return Obx(
-          () => /*firestoreController.isLoading.value == true
+      return /*firestoreController.isLoading.value == true
             ? const SplashScreen()
             : firestoreController.registeredOrganization?.value?.id == null
                 ? buildNewOrganizationMessage()
                 */ /* : firestoreController.isLoading.value == true
                   ? buildDashboardLoading()*/ /*
                 : buildDashboard1(),*/
-              buildDashboard1());
+          buildDashboard1();
     }
   }
 
@@ -58,9 +53,8 @@ class AdminDashboardScreen extends StatelessWidget {
   }
 
   Widget buildDashboard1() {
-    final ApiController attendanceController =
-        Get.put(ApiController(ApiService()));
-    attendanceController.fetchAttendance(empId: 9);
+    final ApiController attendanceController = Get.find();
+
     return ScaffoldDashboard(
       leadingWidget: Padding(
         padding: EdgeInsets.fromLTRB(12.w, 13.h, 0, 13.h),
@@ -153,7 +147,10 @@ class AdminDashboardScreen extends StatelessWidget {
             Obx(
               () => Expanded(
                 child: ListView.builder(
-                  itemCount: attendanceController.attendanceList.length,
+                  itemCount: /*attendanceController.attendanceList.isEmpty
+                      ? 3
+                      : */
+                      attendanceController.attendanceList.length,
                   itemBuilder: (context, index) {
                     final attendance =
                         attendanceController.attendanceList[index];

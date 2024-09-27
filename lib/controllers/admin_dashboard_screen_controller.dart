@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 
+import '../helpers/api_service.dart';
+import 'api_controller.dart';
+
 class AdminDashboardScreenController extends GetxController {
   Rx<DateTime> selectedDate = DateTime.now().obs;
   Rx<int> selectedMonth = DateTime.now().month.obs;
@@ -21,6 +24,9 @@ class AdminDashboardScreenController extends GetxController {
       CarouselSliderController().obs;
   final FirebaseFirestoreController firestoreController = Get.find();
 
+  final ApiController attendanceController =
+      Get.put(ApiController(ApiService()));
+
   /* List<DateTime> getCurrentMonthDates({required int month, required int year}) {
     final daysCount = DateUtils.getDaysInMonth(year, month);
     List<DateTime> days = [];
@@ -33,8 +39,11 @@ class AdminDashboardScreenController extends GetxController {
 
   @override
   onReady() async {
-    /*await firestoreController.attachUserListener();
-    await firestoreController.attachOrganizationListener();*/
+    selectedDate.listen((date) {
+      //attendanceController.attendanceList([]);
+      // print(attendanceController.attendanceList);
+      attendanceController.fetchAttendance(startDate: date);
+    });
   }
 
   List<int> getCurrentMonthDates({required int month, required int year}) {
