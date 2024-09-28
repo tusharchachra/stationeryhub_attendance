@@ -3,31 +3,28 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/components/gradient_progress_bar.dart';
 import 'package:stationeryhub_attendance/components/picture_circle.dart';
-import 'package:stationeryhub_attendance/controllers/employee_attendance_card_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
-import 'package:stationeryhub_attendance/models/user_attendance_model.dart';
+import 'package:stationeryhub_attendance/models/attendance_view_model.dart';
 
-class EmployeeAttendanceCard extends StatelessWidget {
-  const EmployeeAttendanceCard({
+class AttendanceCard extends StatelessWidget {
+  const AttendanceCard({
     super.key,
-    required this.attendance,
+    required this.attendanceView,
     this.showPlaceholder = false,
     /*required this.user*/
   });
 
   final bool showPlaceholder;
-  final UserAttendanceModel? attendance;
+  final AttendanceViewModel? attendanceView;
   //final UsersModel? user;
-  static final attendanceCardController =
-      Get.put(EmployeeAttendanceCardController());
 
   @override
   Widget build(BuildContext context) {
     bool showLocalPlaceholder = false;
-    if (attendance != null) {
+    /*if (attendance != null) {
       attendanceCardController.setUser(attendance!.empId!);
-    }
-    if (attendance == null) {
+    }*/
+    if (attendanceView?.attendance == null) {
       showLocalPlaceholder = true;
     }
     return showPlaceholder || showLocalPlaceholder
@@ -49,7 +46,7 @@ class EmployeeAttendanceCard extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 12.h),
           child: Column(
             children: [
-              Row(
+              Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   PictureCircle(
@@ -59,17 +56,22 @@ class EmployeeAttendanceCard extends StatelessWidget {
                     backgroundColor: Constants.colourTextLight,
                   ),
                   Text(
-                    attendanceCardController.user.value.name ?? '',
-                    style: Get.textTheme.displayMedium
+                    attendanceView?.user.name ?? '',
+                    style: Get.textTheme.displaySmall
                         ?.copyWith(color: Constants.colourTextDark),
                   ),
                   Text(
-                    attendance!.date.toString(),
-                    style: Get.textTheme.displayMedium
+                    attendanceView!.attendance.date.toString(),
+                    style: Get.textTheme.displaySmall
+                        ?.copyWith(color: Constants.colourTextDark),
+                  ),
+                  Text(
+                    attendanceView!.attendance.empId.toString(),
+                    style: Get.textTheme.displaySmall
                         ?.copyWith(color: Constants.colourTextDark),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),

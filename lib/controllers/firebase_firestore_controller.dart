@@ -130,6 +130,7 @@ class FirebaseFirestoreController extends GetxController {
       debugPrint(
           'Fetching registered user details from firestore phoneNum=$phoneNum,firebaseId=$firebaseId, uid=$uid...');
     }
+    print(uid);
     Query<UsersModel> ref;
     try {
       if (firebaseId == null) {

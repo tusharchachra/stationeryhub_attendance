@@ -1,9 +1,9 @@
-class UserAttendanceModel {
+class AttendanceModel {
   String? empId;
   DateTime? date;
   int? action;
 
-  UserAttendanceModel({
+  AttendanceModel({
     this.empId,
     this.action,
     this.date,
@@ -15,7 +15,7 @@ class UserAttendanceModel {
         'action': action,
       };
 
-  UserAttendanceModel.fromJson(Map<String, dynamic> json)
+  AttendanceModel.fromJson(Map<String, dynamic> json)
       : empId = (json['empId']),
         action = int.parse(json['action']),
         date = DateTime.parse(json['date']);

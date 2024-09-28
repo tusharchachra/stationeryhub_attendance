@@ -5,8 +5,10 @@ import 'package:http/http.dart' as http;
 import '../models/user_attendance_model.dart';
 
 class ApiService {
-  Future<List<UserAttendanceModel>> fetchAttendance(
+  Future<List<AttendanceModel>> fetchAttendance(
       {int? empId, DateTime? startDate, String? endDate}) async {
+    /* final employeeAttendanceCardController =
+        Get.put(EmployeeAttendanceCardController());*/
     /*Database db = await instance.database;
     String query = 'SELECT * FROM employeeattendance WHERE empid = $id';
     return await db.rawQuery(query);*/
@@ -19,6 +21,7 @@ class ApiService {
         if (endDate != null) url += 'endDate=$endDate';
       }*/
       var response;
+
       if (empId != null) {
         response = await http.get(Uri.parse('$url?empId=$empId'));
       } else if (startDate != null) {
@@ -30,9 +33,19 @@ class ApiService {
       print(response.body);
       if (response.statusCode == 200) {
         List<dynamic> jsonData = json.decode(response.body);
-        return jsonData
-            .map((json) => UserAttendanceModel.fromJson(json))
-            .toList();
+        var attendanceRecord =
+            jsonData.map((json) => AttendanceModel.fromJson(json)).toList();
+
+        /*  for (var temp in attendanceRecord) {
+        */ /*  print(temp.empId);
+          var userRecord =
+              await .getUser(temp.empId!);*/ /*
+          //print(userRecord?.name);
+
+          attendanceViewList
+              .add(AttendanceViewModel(attendance: temp, user: userRecord!));
+        }*/
+        return attendanceRecord;
       } else {
         //throw Exception('Failed to load attendance');
       }
