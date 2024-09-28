@@ -7,7 +7,8 @@ import 'package:stationeryhub_attendance/controllers/firebase_firestore_controll
 import 'attendance_card_controller.dart';
 
 class AdminDashboardScreenController extends GetxController {
-  final attendanceCardController = Get.put(AttendanceCardController());
+  final attendanceCardController =
+      Get.put(AttendanceCardController(), permanent: true);
 
   Rx<DateTime> selectedDate = DateTime.now().obs;
   Rx<int> selectedMonth = DateTime.now().month.obs;

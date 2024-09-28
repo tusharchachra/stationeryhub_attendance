@@ -33,9 +33,10 @@ class AttendanceCardController extends GetxController {
         records = await apiService.fetchAttendance(startDate: startDate);
       }
       for (var record in records) {
-        print(record.empId);
+        // print(record.empId);
         UsersModel? userRecord =
             await firestoreController.getUser(uid: record.empId);
+        // print(userRecord);
         attendanceViewList
             .add(AttendanceViewModel(attendance: record, user: userRecord!));
       }

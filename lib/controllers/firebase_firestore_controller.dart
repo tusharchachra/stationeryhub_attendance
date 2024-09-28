@@ -130,10 +130,10 @@ class FirebaseFirestoreController extends GetxController {
       debugPrint(
           'Fetching registered user details from firestore phoneNum=$phoneNum,firebaseId=$firebaseId, uid=$uid...');
     }
-    print(uid);
+    //print(uid);
     Query<UsersModel> ref;
     try {
-      if (firebaseId == null) {
+      if (phoneNum != null && firebaseId == null && uid == null) {
         ref = firestoreInstance
             .collection("users")
             .where('phoneNum', isEqualTo: phoneNum)
@@ -141,7 +141,7 @@ class FirebaseFirestoreController extends GetxController {
               fromFirestore: UsersModel.fromFirestore,
               toFirestore: (UsersModel user, _) => user.toJson(),
             );
-      } else if (uid != null) {
+      } else if (phoneNum == null && firebaseId == null && uid != null) {
         ref = firestoreInstance
             .collection("users")
             .where('userId', isEqualTo: uid)

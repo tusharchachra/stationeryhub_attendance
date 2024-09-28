@@ -25,7 +25,7 @@ class AdminDashboardScreen extends StatelessWidget {
 
   static FirebaseFirestoreController firestoreController = Get.find();
   static FirebaseAuthController authController = Get.find();
-  static final AttendanceCardController apiController = Get.find();
+  static final AttendanceCardController attendanceCardController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -148,18 +148,20 @@ class AdminDashboardScreen extends StatelessWidget {
             Obx(
               () => Expanded(
                 child: ListView.builder(
-                  itemCount: apiController.isLoading.value
+                  itemCount: attendanceCardController.isLoading.value
                       ? 3
-                      : apiController.attendanceViewList.length,
+                      : attendanceCardController.attendanceViewList.length,
                   itemBuilder: (context, index) {
-                    AttendanceViewModel? attendanceView = null;
-                    if (apiController.attendanceViewList.isNotEmpty &&
-                        apiController.isLoading.value == false) {
-                      attendanceView = apiController.attendanceViewList[index];
+                    AttendanceViewModel? attendanceView;
+                    if (attendanceCardController
+                            .attendanceViewList.isNotEmpty &&
+                        attendanceCardController.isLoading.value == false) {
+                      attendanceView =
+                          attendanceCardController.attendanceViewList[index];
                     }
                     return AttendanceCard(
                       attendanceView: attendanceView,
-                      showPlaceholder: apiController.isLoading.value,
+                      showPlaceholder: attendanceCardController.isLoading.value,
                     );
                   },
                 ),
