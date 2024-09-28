@@ -146,26 +146,40 @@ class AdminDashboardScreen extends StatelessWidget {
             ),
             //EmployeeAttendanceCard(),
             Obx(
-              () => Expanded(
-                child: ListView.builder(
-                  itemCount: attendanceCardController.isLoading.value
-                      ? 3
-                      : attendanceCardController.attendanceViewList.length,
-                  itemBuilder: (context, index) {
-                    AttendanceViewModel? attendanceView;
-                    if (attendanceCardController
-                            .attendanceViewList.isNotEmpty &&
-                        attendanceCardController.isLoading.value == false) {
-                      attendanceView =
-                          attendanceCardController.attendanceViewList[index];
-                    }
-                    return AttendanceCard(
-                      attendanceView: attendanceView,
-                      showPlaceholder: attendanceCardController.isLoading.value,
-                    );
-                  },
-                ),
-              ),
+              () => (attendanceCardController.attendanceViewList.isEmpty &&
+                      attendanceCardController.isLoading.value == false)
+                  ? Expanded(
+                      child: Center(
+                        child: Text(
+                          'No data available',
+                          style: Get.textTheme.displaySmall
+                              ?.copyWith(color: Constants.colourTextLight),
+                        ),
+                      ),
+                    )
+                  : Expanded(
+                      child: ListView.builder(
+                        itemCount: attendanceCardController.isLoading.value
+                            ? 3
+                            : attendanceCardController
+                                .attendanceViewList.length,
+                        itemBuilder: (context, index) {
+                          AttendanceViewModel? attendanceView;
+                          if (attendanceCardController
+                                  .attendanceViewList.isNotEmpty &&
+                              attendanceCardController.isLoading.value ==
+                                  false) {
+                            attendanceView = attendanceCardController
+                                .attendanceViewList[index];
+                          }
+                          return AttendanceCard(
+                            attendanceView: attendanceView,
+                            showPlaceholder:
+                                attendanceCardController.isLoading.value,
+                          );
+                        },
+                      ),
+                    ),
             ),
 
             TextButton(

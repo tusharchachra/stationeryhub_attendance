@@ -1,6 +1,9 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:stationeryhub_attendance/components/gradient_progress_bar.dart';
 
 class PictureCircle extends StatelessWidget {
   const PictureCircle({
@@ -8,6 +11,7 @@ class PictureCircle extends StatelessWidget {
     required this.height,
     required this.width,
     required this.imgPath,
+    required this.isNetworkPath,
     this.icon,
     this.backgroundColor,
     this.onTap,
@@ -16,6 +20,7 @@ class PictureCircle extends StatelessWidget {
   final double height;
   final double width;
   final String imgPath;
+  final bool isNetworkPath;
   final Icon? icon;
   final Color? backgroundColor;
   final Function? onTap;
@@ -44,10 +49,24 @@ class PictureCircle extends StatelessWidget {
                   onTap!();
                 }
               },
-              child: Image.file(
-                File(imgPath),
-                fit: BoxFit.fitWidth,
-              ),
+              child: isNetworkPath
+                  ? /*Image.network(
+                      imgPath,
+                      fit: BoxFit.fitWidth,
+                      loadingBuilder: (context, child, loadingProgress) =>
+                          GradientProgressBar(size: Size(34.w, 34.h)),
+                    )*/
+                  CachedNetworkImage(
+                      imageUrl: imgPath,
+                      fit: BoxFit.fitWidth,
+                      useOldImageOnUrlChange: true,
+                      placeholder: (context, url) =>
+                          GradientProgressBar(size: Size(34.w, 34.h)),
+                    )
+                  : Image.file(
+                      File(imgPath),
+                      fit: BoxFit.fitWidth,
+                    ),
             ),
     );
   }

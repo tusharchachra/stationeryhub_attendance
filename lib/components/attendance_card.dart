@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:stationeryhub_attendance/components/gradient_progress_bar.dart';
 import 'package:stationeryhub_attendance/components/picture_circle.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
@@ -45,22 +46,26 @@ class AttendanceCard extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 12.h),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   PictureCircle(
                     height: 34.h,
                     width: 34.w,
-                    imgPath: '',
+                    imgPath: attendanceView!.user.profilePicPath!,
+                    isNetworkPath: true,
                     backgroundColor: Constants.colourTextLight,
                   ),
+                  SizedBox(width: 12.w),
                   Text(
                     attendanceView?.user.name ?? '',
-                    style: Get.textTheme.displaySmall
+                    style: Get.textTheme.titleLarge
                         ?.copyWith(color: Constants.colourTextDark),
                   ),
-                  Text(
+
+                  /* Text(
                     attendanceView!.attendance.date.toString(),
                     style: Get.textTheme.displaySmall
                         ?.copyWith(color: Constants.colourTextDark),
@@ -69,9 +74,27 @@ class AttendanceCard extends StatelessWidget {
                     attendanceView!.attendance.empId.toString(),
                     style: Get.textTheme.displaySmall
                         ?.copyWith(color: Constants.colourTextDark),
-                  ),
+                  ),*/
                 ],
               ),
+              Row(
+                children: [
+                  Wrap(
+                    children: [
+                      Image.asset(
+                        'assets/images/arrowThinUp.png',
+                        height: 11.h,
+                      ),
+                      Text(
+                        DateFormat('h:m a')
+                            .format(attendanceView!.attendance.date!),
+                        style: Get.textTheme.titleMedium
+                            ?.copyWith(color: Constants.colourTextDark),
+                      ),
+                    ],
+                  )
+                ],
+              )
             ],
           ),
         ),

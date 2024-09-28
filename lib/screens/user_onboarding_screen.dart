@@ -389,6 +389,7 @@ class UserOnboardingScreen extends StatelessWidget {
                 width: 90.w,
                 height: 90.w,
                 imgPath: captureImageScreenController.imageFilePath.value,
+                isNetworkPath: false,
                 onTap: () {
                   Get.off(() => DisplayCapturedImageScreen());
                 },
@@ -452,20 +453,21 @@ class UserOnboardingScreen extends StatelessWidget {
             child: ListView(
               shrinkWrap: true,
               children: UserType.values
-                  .map((e) => (e.getName() != 'creator')
-                  ?  GestureDetector(
-                        onTap: () {
-                          userOnboardingScreenController.userTypeController
-                              .value.text = e.getName().capitalizeFirst!;
-                          userOnboardingScreenController
-                              .selectedUserType.value = e;
-                          userOnboardingScreenController
-                              .invertShowUserTypeValue();
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 24.w, vertical: 10.h),
-                          child:Row(
+                  .map(
+                    (e) => (e.getName() != 'creator')
+                        ? GestureDetector(
+                            onTap: () {
+                              userOnboardingScreenController.userTypeController
+                                  .value.text = e.getName().capitalizeFirst!;
+                              userOnboardingScreenController
+                                  .selectedUserType.value = e;
+                              userOnboardingScreenController
+                                  .invertShowUserTypeValue();
+                            },
+                            child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 24.w, vertical: 10.h),
+                                child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
@@ -490,11 +492,10 @@ class UserOnboardingScreen extends StatelessWidget {
                                         : Image.asset(
                                             'assets/images/inactiveCircle.png')
                                   ],
-                                )
-
-                        ),
-                      ):  Container(),
-              )
+                                )),
+                          )
+                        : Container(),
+                  )
                   .toList(),
             ),
           )

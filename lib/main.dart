@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:stationeryhub_attendance/controllers/utils.dart';
 import 'package:stationeryhub_attendance/helpers/theme.dart';
 import 'package:stationeryhub_attendance/screens/screen_splash.dart';
@@ -38,7 +39,8 @@ void main() async {
   //await SharedPrefsServices.sharedPrefsInstance.clearSharedPrefs();
   cameras = await availableCameras();
   // await ScreenUtil.ensureScreenSize();
-  runApp(const StationeryHubAttendance());
+  initializeDateFormatting('en_US', null)
+      .then((_) => runApp(const StationeryHubAttendance()));
 }
 
 class StationeryHubAttendance extends StatelessWidget {
