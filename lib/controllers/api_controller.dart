@@ -5,16 +5,17 @@ import '../helpers/api_service.dart';
 
 class ApiController extends GetxController {
   RxList<UserAttendanceModel> attendanceList = <UserAttendanceModel>[].obs;
-  var isLoading = true.obs;
+  RxBool isLoading = false.obs;
 
   final ApiService apiService;
 
   ApiController(this.apiService);
 
-  void fetchAttendance(
+  Future<void> fetchAttendance(
       {int? empId, DateTime? startDate, String? endDate}) async {
     isLoading.value = true;
     List<UserAttendanceModel> records = [];
+    //attendanceList.clear();
     try {
       if (empId != null) {
         records = await apiService.fetchAttendance(empId: empId);
@@ -26,9 +27,8 @@ class ApiController extends GetxController {
     } catch (e) {
       // Handle error
       print(e);
-    } finally {
-      isLoading.value = false;
-    }
+    } finally {}
+    isLoading.value = false;
   }
 
   /* void createAttendance(Attendance attendance) async {

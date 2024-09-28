@@ -5,6 +5,7 @@ import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_cont
 import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
 import 'package:stationeryhub_attendance/controllers/id_card_capture_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
+import 'package:stationeryhub_attendance/models/user_attendance_model.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
 import 'package:stationeryhub_attendance/screens/user_onboarding_screen.dart';
 
@@ -53,7 +54,7 @@ class AdminDashboardScreen extends StatelessWidget {
   }
 
   Widget buildDashboard1() {
-    final ApiController attendanceController = Get.find();
+    final ApiController apiController = Get.find();
 
     return ScaffoldDashboard(
       leadingWidget: Padding(
@@ -147,16 +148,15 @@ class AdminDashboardScreen extends StatelessWidget {
             Obx(
               () => Expanded(
                 child: ListView.builder(
-                  itemCount: /*attendanceController.attendanceList.isEmpty
+                  itemCount: apiController.isLoading.value
                       ? 3
-                      : */
-                      attendanceController.attendanceList.length,
+                      : apiController.attendanceList.length,
                   itemBuilder: (context, index) {
-                    final attendance =
-                        attendanceController.attendanceList[index];
+                    UserAttendanceModel? attendance =
+                        apiController.attendanceList[index];
                     return EmployeeAttendanceCard(
                       attendance: attendance,
-                      showPlaceholder: attendanceController.isLoading.value,
+                      showPlaceholder: apiController.isLoading.value,
                     );
                   },
                 ),

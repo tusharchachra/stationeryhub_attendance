@@ -23,10 +23,16 @@ class EmployeeAttendanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool showLocalPlaceholder = false;
     if (attendance != null) {
       attendanceCardController.setUser(attendance!.empId!);
     }
-    return showPlaceholder ? buildPlaceholder() : buildView();
+    if (attendance == null) {
+      showLocalPlaceholder = true;
+    }
+    return showPlaceholder || showLocalPlaceholder
+        ? buildPlaceholder()
+        : buildView();
   }
 
   Padding buildView() {

@@ -39,10 +39,10 @@ class AdminDashboardScreenController extends GetxController {
 
   @override
   onReady() async {
-    selectedDate.listen((date) {
+    selectedDate.listen((date) async {
       //attendanceController.attendanceList([]);
       // print(attendanceController.attendanceList);
-      attendanceController.fetchAttendance(startDate: date);
+      await attendanceController.fetchAttendance(startDate: date);
     });
   }
 
