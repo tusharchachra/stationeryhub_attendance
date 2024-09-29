@@ -123,6 +123,12 @@ class FirebaseFirestoreController extends GetxController {
     String? uid,
     GetOptions? getOptions,
   }) async {
+    ///Fetches users and converts to the UsersModel from the firestore based on the parameters passed.
+    ///
+    /// fetch by phoneNum -> pass only `phoneNum`
+    /// fetch by firebaseId -> pass only `firebaseId`
+    /// fetch by userId -> pass only `uid`
+
     isLoading.value = true;
 
     UsersModel? tempUser;
@@ -178,6 +184,27 @@ class FirebaseFirestoreController extends GetxController {
 
     return null;
     //return {'user': tempUser, 'userId': };
+  }
+
+  //get all users of the organization
+  Future<List<UsersModel>> getAllUsers() async {
+    List<UsersModel> userList = [];
+    final ref = firestoreInstance
+        .collection("users")
+        .where('organizationId', isEqualTo: registeredOrganization.value?.id)
+        .where('userType', isNotEqualTo: UserType.creator.toString())
+        .withConverter(
+          fromFirestore: UsersModel.fromFirestore,
+          toFirestore: (UsersModel user, _) => user.toJson(),
+        );
+    final docSnap =
+        await ref.get(/*const GetOptions(source: Source.serverAndCache)*/);
+    if (docSnap.docs.isNotEmpty) {
+      for (var doc in docSnap.docs) {
+        userList.add(doc.data());
+      }
+    } else {}
+    return userList;
   }
 
   //register user

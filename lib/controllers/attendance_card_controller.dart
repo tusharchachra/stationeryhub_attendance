@@ -20,7 +20,7 @@ class AttendanceCardController extends GetxController {
   }*/
 
   Future<void> loadAttendance(
-      {int? empId, DateTime? startDate, String? endDate}) async {
+      {String? empId, DateTime? startDate, String? endDate}) async {
     isLoading.value = true;
     // List<UserAttendanceModel> records = [];
     List<AttendanceModel> records = [];
@@ -30,16 +30,34 @@ class AttendanceCardController extends GetxController {
       if (empId != null) {
         records = await apiService.fetchAttendance(empId: empId);
       } else if (startDate != null) {
-        records = await apiService.fetchAttendance(startDate: startDate);
+        //fetch all users from firestore
+        List<UsersModel> userList = await firestoreController.getAllUsers();
+        attendanceViewList.value = List.generate(
+            userList.length,
+            (index) =>
+                AttendanceViewModel(attendance: [], user: userList[index]));
+
+        //search for attendance of each user based on the empId on the date
+        for (var user in userList) {
+          records = await apiService.fetchAttendance(
+              empId: user.userId, startDate: startDate);
+          print(records.toString());
+          //assign the fetched attendance to the attendanceViewList
+          attendanceViewList
+              .firstWhere((element) => element.user.userId == records[0].empId)
+              .attendance = records;
+        }
+
+        //attendanceViewList.add(AttendanceViewModel(attendance: null, user: user));
       }
-      for (var record in records) {
+      /* for (var record in records) {
         // print(record.empId);
         UsersModel? userRecord =
             await firestoreController.getUser(uid: record.empId);
         // print(userRecord);
         attendanceViewList
             .add(AttendanceViewModel(attendance: record, user: userRecord!));
-      }
+      }*/
       // attendanceViewList.value = records;
       //print('records=$records');
     } catch (e) {

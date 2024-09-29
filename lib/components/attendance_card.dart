@@ -77,7 +77,54 @@ class AttendanceCard extends StatelessWidget {
                   ),*/
                 ],
               ),
-              Row(
+              Expanded(
+                child: ListView.builder(
+                  itemCount: attendanceView!.attendance.length > 4
+                      ? 4
+                      : attendanceView!.attendance.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) => Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          Image.asset(
+                            index.isEven
+                                ? 'assets/images/arrowThinUp.png'
+                                : 'assets/images/arrowThinDown.png',
+                            height: 11.h,
+                          ),
+                          SizedBox(width: 5.w),
+                          Text(
+                            DateFormat('h:m a').format(
+                                attendanceView!.attendance[index].date!),
+                            style: Get.textTheme.titleMedium
+                                ?.copyWith(color: Constants.colourTextDark),
+                          ),
+                        ],
+                      ),
+                      if (index == 1)
+                        Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.fastfood,
+                              size: 11.w,
+                              color: Constants.colourLunchBreak,
+                            ),
+                            SizedBox(width: 5.w),
+                            buildDuration((attendanceView!
+                                    .attendance[index + 1].date!)
+                                .difference(
+                                    attendanceView!.attendance[index].date!)),
+                          ],
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+              /*Row(
                 children: [
                   Wrap(
                     children: [
@@ -94,12 +141,33 @@ class AttendanceCard extends StatelessWidget {
                     ],
                   )
                 ],
-              )
+              )*/
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget buildDuration(Duration duration) {
+    // Calculate total hours and remaining minutes
+    int hours = duration.inHours;
+    int minutes = duration.inMinutes.remainder(60);
+    // Note: Seconds are considered for total duration but not displayed.
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    return Text(
+      '${twoDigits(hours)}:${twoDigits(minutes)}',
+      style:
+          Get.textTheme.titleMedium?.copyWith(color: Constants.colourTextDark),
+    );
+    /* String twoDigits(int n) => n.toString().padLeft(2, '0');
+    String twoDigitHours = twoDigits(duration.inHours.remainder(24));
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    return Text(
+      '$twoDigitHours:$twoDigitMinutes',
+      style:
+          Get.textTheme.titleMedium?.copyWith(color: Constants.colourTextDark),
+    );*/
   }
 
   Padding buildPlaceholder() {

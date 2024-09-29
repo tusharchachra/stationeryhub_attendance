@@ -37,6 +37,7 @@ class Constants {
   static const colourDashboardBox5 = Colors.tealAccent;
   static const colourDateBoxBorder = Color(0xffEFEFEF);
   static const colourIdCardBackground = Color(0xffC6E6F9);
+  static const colourLunchBreak = Color(0xffFD7900);
 
   static const otpResendTime = 5;
   static const snackbarDuration = 4;
