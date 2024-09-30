@@ -45,162 +45,187 @@ class AttendanceCard extends StatelessWidget {
         ),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 12.h),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              PictureCircle(
-                height: 34.h,
-                width: 34.w,
-                imgPath: attendanceView!.user.profilePicPath!,
-                isNetworkPath: true,
-                backgroundColor: Constants.colourTextLight,
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Wrap(
+                  alignment: WrapAlignment.start,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    PictureCircle(
+                      height: 34.h,
+                      width: 34.w,
+                      imgPath: attendanceView!.user.profilePicPath!,
+                      isNetworkPath: true,
+                      backgroundColor: Constants.colourTextLight,
+                    ),
+                    SizedBox(width: 12.w),
+                    Text(
+                      attendanceView?.user.name ?? '',
+                      style: Get.textTheme.titleLarge
+                          ?.copyWith(color: Constants.colourTextDark),
+                    ),
+                    if (attendanceView!.attendance.isEmpty)
+                      Align(child: Text('Absent'))
+                  ],
+                ),
               ),
-              SizedBox(width: 12.w),
-              Text(
-                attendanceView?.user.name ?? '',
-                style: Get.textTheme.titleLarge
-                    ?.copyWith(color: Constants.colourTextDark),
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: 2,
-                      /*attendanceView!.attendance.length > 4
-                          ? 2
-                          : attendanceView!.attendance.length,*/
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) => Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              Image.asset(
-                                index.isEven
-                                    ? 'assets/images/arrowThinUp.png'
-                                    : 'assets/images/arrowThinDown.png',
-                                height: 11.h,
-                              ),
-                              SizedBox(width: 5.w),
-                              Text(
-                                DateFormat('h:m a').format(
-                                    attendanceView!.attendance[index].date!),
-                                style: Get.textTheme.titleMedium
-                                    ?.copyWith(color: Constants.colourTextDark),
-                              ),
-                            ],
-                          ),
-                          if (index == 1 &&
-                              attendanceView!.attendance.length > 2)
-                            Wrap(
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.fastfood,
-                                  size: 11.w,
-                                  color: Constants.colourLunchBreak,
-                                ),
-                                SizedBox(width: 5.w),
-                                buildDuration((attendanceView!
-                                        .attendance[index + 1].date!)
-                                    .difference(attendanceView!
-                                        .attendance[index].date!)),
-                              ],
+              if (attendanceView!.attendance.isNotEmpty)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    buildTime(
+                        imagePath: 'assets/images/arrowThinDown.png',
+                        time: DateFormat('h:m a')
+                            .format(attendanceView!.attendance[0].date!)),
+                    SizedBox(width: 10.w),
+                    Container(
+                      height: 25.h,
+                      width: 0.8.w,
+                      color: Constants.colourBorderMedium,
+                    ),
+                    SizedBox(width: 10.w),
+                    buildTime(
+                        imagePath: 'assets/images/arrowThinUp.png',
+                        time: DateFormat('h:m a')
+                            .format(attendanceView!.attendance[1].date!)),
+                  ],
+                ),
+              if (attendanceView!.attendance.length > 2)
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.fastfood,
+                      size: 11.w,
+                      color: Constants.colourLunchBreak,
+                    ),
+                    SizedBox(width: 5.w),
+                    buildDuration((attendanceView!.attendance[2].date!)
+                        .difference(attendanceView!.attendance[1].date!)),
+                  ],
+                ),
+              if (attendanceView!.attendance.length > 2)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    buildTime(
+                        imagePath: 'assets/images/arrowThinDown.png',
+                        time: DateFormat('h:m a')
+                            .format(attendanceView!.attendance[2].date!)),
+                    SizedBox(width: 10.w),
+                    Container(
+                      height: 25.h,
+                      width: 0.8.w,
+                      color: Constants.colourBorderMedium,
+                    ),
+                    SizedBox(width: 10.w),
+                    buildTime(
+                        imagePath: 'assets/images/arrowThinUp.png',
+                        time: DateFormat('h:m a')
+                            .format(attendanceView!.attendance[3].date!)),
+                  ],
+                ),
+
+              /*Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SizedBox(
+                      height: 20,
+                      child: ListView.separated(
+                        separatorBuilder: (context, index) => Container(
+                          height: 25.h,
+                          width: 0.8.w,
+                          color: Constants.colourBorderMedium,
+                        ),
+                        shrinkWrap: true,
+                        itemCount: 2,
+                        */ /*attendanceView!.attendance.length > 4
+                            ? 2
+                            : attendanceView!.attendance.length,*/ /*
+
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) => Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          //crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            Image.asset(
+                              index.isEven
+                                  ? 'assets/images/arrowThinUp.png'
+                                  : 'assets/images/arrowThinDown.png',
+                              height: 11.h,
                             ),
-                          Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              Image.asset(
-                                index.isEven
-                                    ? 'assets/images/arrowThinUp.png'
-                                    : 'assets/images/arrowThinDown.png',
-                                height: 11.h,
-                              ),
-                              SizedBox(width: 5.w),
-                              Text(
-                                DateFormat('h:m a').format(
-                                    attendanceView!.attendance[index].date!),
-                                style: Get.textTheme.titleMedium
-                                    ?.copyWith(color: Constants.colourTextDark),
-                              ),
-                            ],
-                          ),
-                        ],
+                            SizedBox(width: 5.w),
+                            Text(
+                              DateFormat('h:m a').format(
+                                  attendanceView!.attendance[index].date!),
+                              style: Get.textTheme.titleMedium
+                                  ?.copyWith(color: Constants.colourTextDark),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
+                  ],
+                ),
+              ),
+              if (attendanceView!.attendance.length > 2)
+                Expanded(
+                  child: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.fastfood,
+                        size: 11.w,
+                        color: Constants.colourLunchBreak,
+                      ),
+                      SizedBox(width: 5.w),
+                      buildDuration((attendanceView!.attendance[2].date!)
+                          .difference(attendanceView!.attendance[1].date!)),
+                    ],
                   ),
-                  Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: attendanceView!.attendance.length > 4
-                          ? 2
-                          : attendanceView!.attendance.length - 2,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) => Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                ),
+              Expanded(
+                child: ListView.separated(
+                  separatorBuilder: (context, index) => Container(
+                    height: 25.h,
+                    width: 0.8.w,
+                    color: Constants.colourBorderMedium,
+                  ),
+                  shrinkWrap: true,
+                  itemCount: attendanceView!.attendance.length > 4
+                      ? 2
+                      : attendanceView!.attendance.length - 2,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) => Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
-                          Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              Image.asset(
-                                index.isEven
-                                    ? 'assets/images/arrowThinUp.png'
-                                    : 'assets/images/arrowThinDown.png',
-                                height: 11.h,
-                              ),
-                              SizedBox(width: 5.w),
-                              Text(
-                                DateFormat('h:m a').format(attendanceView!
-                                    .attendance[index + 2].date!),
-                                style: Get.textTheme.titleMedium
-                                    ?.copyWith(color: Constants.colourTextDark),
-                              ),
-                            ],
+                          Image.asset(
+                            index.isEven
+                                ? 'assets/images/arrowThinUp.png'
+                                : 'assets/images/arrowThinDown.png',
+                            height: 11.h,
                           ),
-                          /* if (index == 1 &&
-                              attendanceView!.attendance.length > 2)
-                            Wrap(
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.fastfood,
-                                  size: 11.w,
-                                  color: Constants.colourLunchBreak,
-                                ),
-                                SizedBox(width: 5.w),
-                                buildDuration((attendanceView!
-                                    .attendance[index + 1].date!)
-                                    .difference(attendanceView!
-                                    .attendance[index].date!)),
-                              ],
-                            ),*/
-                          Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              Image.asset(
-                                index.isEven
-                                    ? 'assets/images/arrowThinUp.png'
-                                    : 'assets/images/arrowThinDown.png',
-                                height: 11.h,
-                              ),
-                              SizedBox(width: 5.w),
-                              Text(
-                                DateFormat('h:m a').format(attendanceView!
-                                    .attendance[index + 2].date!),
-                                style: Get.textTheme.titleMedium
-                                    ?.copyWith(color: Constants.colourTextDark),
-                              ),
-                            ],
+                          SizedBox(width: 5.w),
+                          Text(
+                            DateFormat('h:m a').format(
+                                attendanceView!.attendance[index + 2].date!),
+                            style: Get.textTheme.titleMedium
+                                ?.copyWith(color: Constants.colourTextDark),
                           ),
                         ],
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              )
+                ),
+              ),*/
 
               /* Text(
                 attendanceView!.attendance.date.toString(),
@@ -216,6 +241,35 @@ class AttendanceCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Row buildTime({
+    required String imagePath,
+    required String time,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        Image.asset(
+          imagePath,
+          /*index.isEven
+                      ? 'assets/images/arrowThinUp.png'
+                      : */
+          /*'assets/images/arrowThinDown.png'*/
+          height: 11.h,
+        ),
+        SizedBox(width: 5.w),
+        Text(
+          time
+          /* DateFormat('h:m a')
+                      .format(attendanceView!.attendance[0].date!)*/
+          ,
+          style: Get.textTheme.titleMedium
+              ?.copyWith(color: Constants.colourTextDark),
+        ),
+      ],
     );
   }
 
