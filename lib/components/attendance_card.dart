@@ -49,38 +49,51 @@ class AttendanceCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Wrap(
-                  alignment: WrapAlignment.start,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    PictureCircle(
-                      height: 34.h,
-                      width: 34.w,
-                      imgPath: attendanceView!.user.profilePicPath!,
-                      isNetworkPath: true,
-                      backgroundColor: Constants.colourTextLight,
-                    ),
-                    SizedBox(width: 12.w),
-                    Text(
-                      attendanceView?.user.name ?? '',
-                      style: Get.textTheme.titleLarge
-                          ?.copyWith(color: Constants.colourTextDark),
-                    ),
-                    if (attendanceView!.attendance.isEmpty)
-                      Align(child: Text('Absent'))
-                  ],
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Wrap(
+                    alignment: WrapAlignment.start,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      PictureCircle(
+                        height: 34.h,
+                        width: 34.w,
+                        imgPath: attendanceView!.user.profilePicPath!,
+                        isNetworkPath: true,
+                        backgroundColor: Constants.colourTextLight,
+                      ),
+                      SizedBox(width: 12.w),
+                      Text(
+                        attendanceView?.user.name ?? '',
+                        style: Get.textTheme.titleLarge
+                            ?.copyWith(color: Constants.colourTextDark),
+                      ),
+                    ],
+                  ),
+                  if (attendanceView!.attendance.length == 1)
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 17.w, vertical: 10.h),
+                      decoration: BoxDecoration(
+                          color: Constants.colourError.withOpacity(0.3),
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(2.5.r))),
+                      child: Text(
+                        'Absent',
+                        style: Get.textTheme.titleMedium
+                            ?.copyWith(color: Constants.colourError),
+                      ),
+                    )
+                ],
               ),
-              if (attendanceView!.attendance.isNotEmpty)
+              if (attendanceView!.attendance.length > 1)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     buildTime(
                         imagePath: 'assets/images/arrowThinDown.png',
-                        time: DateFormat('h:m a')
-                            .format(attendanceView!.attendance[0].date!)),
+                        time: attendanceView!.attendance[0].date!),
                     SizedBox(width: 10.w),
                     Container(
                       height: 25.h,
@@ -90,8 +103,7 @@ class AttendanceCard extends StatelessWidget {
                     SizedBox(width: 10.w),
                     buildTime(
                         imagePath: 'assets/images/arrowThinUp.png',
-                        time: DateFormat('h:m a')
-                            .format(attendanceView!.attendance[1].date!)),
+                        time: attendanceView!.attendance[1].date!),
                   ],
                 ),
               if (attendanceView!.attendance.length > 2)
@@ -114,8 +126,7 @@ class AttendanceCard extends StatelessWidget {
                   children: [
                     buildTime(
                         imagePath: 'assets/images/arrowThinDown.png',
-                        time: DateFormat('h:m a')
-                            .format(attendanceView!.attendance[2].date!)),
+                        time: attendanceView!.attendance[2].date!),
                     SizedBox(width: 10.w),
                     Container(
                       height: 25.h,
@@ -125,8 +136,7 @@ class AttendanceCard extends StatelessWidget {
                     SizedBox(width: 10.w),
                     buildTime(
                         imagePath: 'assets/images/arrowThinUp.png',
-                        time: DateFormat('h:m a')
-                            .format(attendanceView!.attendance[3].date!)),
+                        time: attendanceView!.attendance[3].date!),
                   ],
                 ),
 
@@ -246,7 +256,7 @@ class AttendanceCard extends StatelessWidget {
 
   Row buildTime({
     required String imagePath,
-    required String time,
+    required DateTime time,
   }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -262,10 +272,7 @@ class AttendanceCard extends StatelessWidget {
         ),
         SizedBox(width: 5.w),
         Text(
-          time
-          /* DateFormat('h:m a')
-                      .format(attendanceView!.attendance[0].date!)*/
-          ,
+          DateFormat('hh:mm a').format(time),
           style: Get.textTheme.titleMedium
               ?.copyWith(color: Constants.colourTextDark),
         ),
