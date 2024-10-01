@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:stationeryhub_attendance/components/picture_circle.dart';
 import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
 import 'package:stationeryhub_attendance/controllers/id_card_capture_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 import 'package:stationeryhub_attendance/models/attendance_view_model.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
+import 'package:stationeryhub_attendance/screens/update_organization_screen.dart';
 import 'package:stationeryhub_attendance/screens/user_onboarding_screen.dart';
 
 import '../components/admin_dashboard_box.dart';
@@ -22,6 +24,8 @@ import 'new_organization_screen.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
   const AdminDashboardScreen({super.key});
+  static final adminDashboardScreenController =
+      Get.put(AdminDashboardScreenController());
 
   static FirebaseFirestoreController firestoreController = Get.find();
   static FirebaseAuthController authController = Get.find();
@@ -29,7 +33,6 @@ class AdminDashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(AdminDashboardScreenController());
     Get.put(FirebaseStorageController());
     Get.put(IdCardCaptureController());
 
@@ -55,42 +58,118 @@ class AdminDashboardScreen extends StatelessWidget {
     return Container();
   }
 
+  void setTitles() {
+    if (firestoreController.registeredOrganization.value?.name == 'null') {
+      adminDashboardScreenController.pageTitle.value = '';
+    } else {
+      adminDashboardScreenController.pageTitle.value =
+          (firestoreController.registeredOrganization.value!.name!);
+    }
+
+    if (firestoreController.registeredUser.value?.name == 'null') {
+      adminDashboardScreenController.pageSubTitle1.value = '';
+    } else {
+      adminDashboardScreenController.pageSubTitle1.value =
+          (firestoreController.registeredUser.value!.name!);
+    }
+
+    if (firestoreController.registeredUser.value?.userType?.name == 'null') {
+      adminDashboardScreenController.pageSubTitle2.value = '';
+    } else {
+      adminDashboardScreenController.pageSubTitle2.value =
+          (' - ${firestoreController.registeredUser.value?.userType?.name.capitalizeFirst}');
+    }
+
+    /*if()
+
+
+        ? ''
+        : firestoreController.registeredUser.value?.name;
+    pageSubTitle2 = ''.obs;
+    firestoreController.registeredUser.value?.userType?.name == 'null'
+        ? ''
+        : firestoreController
+            .registeredUser.value?.userType?.name.capitalizeFirst;*/
+  }
+
   Widget buildDashboard1() {
+    //setTitles();
     return ScaffoldDashboard(
       leadingWidget: Padding(
-        padding: EdgeInsets.fromLTRB(12.w, 13.h, 0, 13.h),
-        child: firestoreController.isLoading.value == true
-            ? Container(
-                width: 22.w,
-                height: 22.h,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-                child: GradientProgressBar(
-                  size: Size(22.w, 22.h),
-                  child: CircleAvatar(),
-                ))
+          padding: EdgeInsets.fromLTRB(12.w, 13.h, 0, 13.h),
+          child: firestoreController.isLoading.value == true
+              ? Container(
+                  width: 22.w,
+                  height: 22.h,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  child: GradientProgressBar(
+                    size: Size(22.w, 22.h),
+                    child: CircleAvatar(),
+                  ))
 
-            /* ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(22.r)),
-                child: GradientProgressBar(
-                  size: Size(22.w, 22.h),
-                ),
-              )*/
-            : CircleAvatar(
-                maxRadius: 22.r,
-                //backgroundColor: colourProfilePicIconBackground,
-                child: const Icon(
-                  Icons.person,
-                  color: Colors.white,
-                ),
+              /* ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(22.r)),
+                    child: GradientProgressBar(
+                      size: Size(22.w, 22.h),
+                    ),
+                  )*/
+              : GestureDetector(
+                  onTap: () {
+                    Get.to(() => UpdateOrganizationScreen());
+                  },
+                  child: Obx(
+                    () => PictureCircle(
+                      height: 22.h,
+                      width: 22.w,
+                      imgPath: (firestoreController
+                              .registeredOrganization.value?.profilePicPath ??
+                          ''),
+                      backgroundColor: Constants.colourProfilePicIconBackground,
+                      isNetworkPath: firestoreController.registeredOrganization
+                                  .value?.profilePicPath ==
+                              null
+                          ? true
+                          : false,
+                    ),
+                  ),
+                ) /* CircleAvatar(
+                  maxRadius: 22.r,
+                  //backgroundColor: colourProfilePicIconBackground,
+                  child: const Icon(
+                    Icons.person,
+                    color: Colors.white,
+                  ),
+                ),*/
+          ),
+      pageTitle: Obx(
+        () => firestoreController.isLoading.value == true
+            ? const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GradientProgressBar(size: Size(60, 12)),
+                  SizedBox(height: 6.0),
+                  GradientProgressBar(size: Size(50, 10)),
+                ],
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${firestoreController.registeredOrganization.value?.name}',
+                    style: Get.textTheme.headlineLarge
+                        ?.copyWith(color: Colors.white),
+                  ),
+                  Text(
+                    '${firestoreController.registeredUser.value?.name} - ${firestoreController.registeredUser.value?.userType?.name.capitalizeFirst}',
+                    style: Get.textTheme.titleMedium
+                        ?.copyWith(color: Colors.white),
+                  ),
+                ],
               ),
       ),
-      pageTitle:
-          (firestoreController.registeredOrganization.value?.name ?? 'Guest'),
-      pageSubtitle:
-          ('\n${firestoreController.registeredUser.value?.name} - ${firestoreController.registeredUser.value?.userType?.name.capitalizeFirst}'
-              .toString()),
       isLoading: false,
       bodyWidget: Padding(
         padding: EdgeInsets.fromLTRB(10.w, 5.h, 10.w, 0),
