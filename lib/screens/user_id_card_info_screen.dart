@@ -14,7 +14,7 @@ class UserIdCardInfoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScaffoldDashboard(
       isLoading: false,
-      pageTitle: 'ID card',
+      pageTitle: Text('ID card'),
       bodyWidget: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,

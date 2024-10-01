@@ -57,7 +57,7 @@ class UserOnboardingScreen extends StatelessWidget {
     );
     return ScaffoldDashboard(
       isLoading: false,
-      pageTitle: 'New User',
+      pageTitle: Text('New User'),
       bodyWidget: Form(
         key: userOnboardingScreenController.formKey,
         autovalidateMode: AutovalidateMode.disabled,

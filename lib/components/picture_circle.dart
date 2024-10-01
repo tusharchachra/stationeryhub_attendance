@@ -13,6 +13,7 @@ class PictureCircle extends StatelessWidget {
     required this.imgPath,
     required this.isNetworkPath,
     this.icon,
+    this.iconSize,
     this.backgroundColor,
     this.onTap,
   });
@@ -22,6 +23,7 @@ class PictureCircle extends StatelessWidget {
   final String imgPath;
   final bool isNetworkPath;
   final Icon? icon;
+  final double? iconSize;
   final Color? backgroundColor;
   final Function? onTap;
 
@@ -40,7 +42,7 @@ class PictureCircle extends StatelessWidget {
               Icon(
                 Icons.person,
                 color: Colors.white,
-                size: width / 1.5,
+                size: iconSize ?? width / 1.5,
               )
           : GestureDetector(
               onTap: () {

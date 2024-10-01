@@ -13,7 +13,7 @@ class UserProfilePicInfoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScaffoldDashboard(
       isLoading: false,
-      pageTitle: 'New User',
+      pageTitle: Text('New User'),
       bodyWidget: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,

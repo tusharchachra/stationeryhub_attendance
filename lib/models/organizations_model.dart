@@ -10,7 +10,9 @@ class OrganizationModel {
       geoLocationLat; //the the geolocation is stored separately as double because firestore does not support Position class
   double? geoLocationLong;
   DateTime? createdOn;
+  DateTime? lastUpdatedOn;
   String? createdBy;
+  String? profilePicPath;
   SubscriptionType? subscription;
 
   OrganizationModel({
@@ -20,7 +22,9 @@ class OrganizationModel {
     this.geoLocationLat,
     this.geoLocationLong,
     this.createdOn,
+    this.lastUpdatedOn,
     this.createdBy,
+    this.profilePicPath,
     this.subscription,
   });
 
@@ -32,7 +36,9 @@ class OrganizationModel {
       'geoLocationLat': geoLocationLat ?? '',
       'geoLocationLong': geoLocationLong ?? '',
       'createdOn': createdOn?.toIso8601String(),
+      'lastUpdatedOn': lastUpdatedOn?.toIso8601String(),
       'createdBy': createdBy,
+      'profilePicPath': profilePicPath,
       'subscription': subscription?.name,
     };
   }
@@ -53,7 +59,11 @@ class OrganizationModel {
             ? null
             : double.parse(data?['geoLocationLong']),
         createdOn: DateTime.parse(data!['createdOn'].toString()),
+        lastUpdatedOn: data['lastUpdatedOn'].toString() == ''
+            ? null
+            : DateTime.parse(data['lastUpdatedOn'].toString()),
         createdBy: data['createdBy'],
+        profilePicPath: data['profilePicPath'],
         subscription: data['subscription'] == null
             ? null
             : SubscriptionType.values
@@ -71,7 +81,11 @@ class OrganizationModel {
             ? null
             : double.parse(json['geoLocationLong'].toString()),
         createdOn = DateTime.parse(json['createdOn'].toString()),
+        lastUpdatedOn = DateTime.parse(json['createdOn'].toString()),
         createdBy = json['createdBy'].toString(),
+        profilePicPath = json['profilePicPath'].toString() == ''
+            ? ''
+            : json['profilePicPath'].toString(),
         subscription = json['subscription'] == null
             ? null
             : SubscriptionType.values.byName(

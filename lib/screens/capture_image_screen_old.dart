@@ -24,7 +24,7 @@ class _CaptureImageScreenOldState extends State<CaptureImageScreenOld> {
     // TODO: implement build
     return ScaffoldDashboard(
         isLoading: false,
-        pageTitle: 'Image',
+        pageTitle: Text('Image'),
         bodyWidget: Center(
           child: Center(),
         ));

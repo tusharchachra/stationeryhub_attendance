@@ -21,7 +21,7 @@ class DisplayCapturedImageScreen extends StatelessWidget {
     final CaptureImageScreenController captureImageScreenController =
         Get.find();
     return ScaffoldDashboard(
-      pageTitle: 'Confirm Image',
+      pageTitle: Text('Confirm Image'),
       bodyWidget: Container(
         width: 1.sw,
         height: 1.sh,

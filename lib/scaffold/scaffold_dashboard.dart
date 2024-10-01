@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 
 class ScaffoldDashboard extends StatelessWidget {
   final Widget? leadingWidget;
   final List<Widget>? appBarActions;
   final bool? isLoading;
-  final String pageTitle;
-  final String? pageSubtitle;
+  final Widget? pageTitle;
+  //final String? pageSubtitle;
   final Widget bodyWidget;
   final Widget? bottomNavigationBar;
   final BoxDecoration? scaffoldDecoration;
@@ -17,7 +16,7 @@ class ScaffoldDashboard extends StatelessWidget {
     this.appBarActions,
     this.isLoading,
     required this.pageTitle,
-    this.pageSubtitle,
+    //this.pageSubtitle,
     required this.bodyWidget,
     this.bottomNavigationBar,
     this.scaffoldDecoration,
@@ -27,7 +26,7 @@ class ScaffoldDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var title = RichText(
+    /* var title = RichText(
       textAlign: TextAlign.start,
       text: TextSpan(
           text: pageTitle,
@@ -38,14 +37,14 @@ class ScaffoldDashboard extends StatelessWidget {
               style: Get.textTheme.titleMedium?.copyWith(color: Colors.white),
             ),
           ]),
-    );
+    );*/
 
     return Scaffold(
       backgroundColor: Constants.colourScaffoldBackground,
       appBar: AppBar(
         backgroundColor: Constants.colourPrimary,
         leading: leadingWidget,
-        title: title,
+        title: pageTitle,
         actions: [
           IconButton(
             onPressed: () {},

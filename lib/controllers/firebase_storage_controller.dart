@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_error_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
+import 'package:stationeryhub_attendance/models/pic_path_enum.dart';
 import 'package:stationeryhub_attendance/models/users_model.dart';
 
 class FirebaseStorageController extends GetxController {
@@ -13,9 +14,11 @@ class FirebaseStorageController extends GetxController {
   final FirebaseErrorController errorController = Get.find();
   final FirebaseFirestoreController firestoreController = Get.find();
 
-  Future<String?> uploadProfilePic(XFile? file) async {
+  Future<String?> uploadPicture(XFile? file, PicPathEnum? picPath) async {
     isLoading.value = true;
+    String path = PicPath.getPath(picPath);
     String? profilePicPath;
+    print(path);
     if (file == null) {
       print('no file');
       return null;

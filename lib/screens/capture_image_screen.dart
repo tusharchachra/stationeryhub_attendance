@@ -20,7 +20,7 @@ class CaptureImageScreen extends StatelessWidget {
 
     return ScaffoldDashboard(
       isLoading: false,
-      pageTitle: 'Click a picture',
+      pageTitle: Text('Click a picture'),
       bodyWidget: Obx(
         () => /*captureImageScreenController.imageFile != null
             ? Image.file(File(captureImageScreenController.imageFile!.path))

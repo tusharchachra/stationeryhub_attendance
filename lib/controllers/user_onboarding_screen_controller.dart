@@ -79,8 +79,8 @@ class UserOnboardingScreenController extends GetxController {
 
   Future<void> uploadData() async {
     isLoading.value = true;
-    String? profilePicPath = await firebaseStorageController.uploadProfilePic(
-        XFile(captureImageScreenController.imageFilePath.value));
+    String? profilePicPath = await firebaseStorageController.uploadPicture(
+        XFile(captureImageScreenController.imageFilePath.value), null);
     UsersModel? temp = await firebaseStorageController.uploadIdCard(
         fileFront: XFile(idCardCaptureController.documentFront[0]),
         fileBack: XFile(idCardCaptureController.documentBack[0]));

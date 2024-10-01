@@ -27,6 +27,10 @@ class AdminDashboardScreenController extends GetxController {
       CarouselSliderController().obs;
   final FirebaseFirestoreController firestoreController = Get.find();
 
+  Rx<String> pageTitle = ''.obs;
+  Rx<String> pageSubTitle1 = ''.obs;
+  Rx<String> pageSubTitle2 = ''.obs;
+
   /* List<DateTime> getCurrentMonthDates({required int month, required int year}) {
     final daysCount = DateUtils.getDaysInMonth(year, month);
     List<DateTime> days = [];
@@ -42,6 +46,7 @@ class AdminDashboardScreenController extends GetxController {
     selectedDate.listen((date) async {
       //attendanceController.attendanceList([]);
       // print(attendanceController.attendanceList);
+
       await attendanceCardController.loadAttendance(startDate: date);
     });
   }

@@ -18,7 +18,7 @@ class UserIdCardUploadScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScaffoldDashboard(
       isLoading: false,
-      pageTitle: 'Upload ID',
+      pageTitle: Text('Upload ID'),
       bodyWidget: SizedBox.expand(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
