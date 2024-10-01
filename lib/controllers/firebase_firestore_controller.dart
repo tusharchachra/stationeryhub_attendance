@@ -82,17 +82,16 @@ class FirebaseFirestoreController extends GetxController {
     print('tempUser in attaching user Listener=$temp');
     firestoreInstance
         .collection("users")
-        .where('userId', isEqualTo: registeredUser.value?.userId)
+        .where('userId', isEqualTo: temp?.userId)
         .snapshots()
         .listen((event) {
       registeredUser(UsersModel.fromJson(event.docs[0].data()));
       if (kDebugMode) {
-        print('user data changed and synchronized');
+        print('user data changed and synchronized $registeredUser');
       }
       // _getStorageController.writeUserDetails(registeredUser.value);
     });
     isLoading.value = false;
-    Future.delayed(Duration(seconds: 2));
   }
 
   Future attachOrganizationListener() async {
