@@ -11,7 +11,9 @@ import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
 import 'package:stationeryhub_attendance/screens/display_captured_image_screen.dart';
 
 class CaptureImageScreen extends StatelessWidget {
-  const CaptureImageScreen({super.key});
+  const CaptureImageScreen({super.key, this.displayForeground});
+
+  final bool? displayForeground;
 
   @override
   Widget build(BuildContext context) {
@@ -61,29 +63,31 @@ class CaptureImageScreen extends StatelessWidget {
                               }),
                         ),
                       ),
-                      Positioned(
-                        top: 70.h,
-                        left: 0,
-                        right: 0,
-                        child: Center(
-                          child: CustomPaint(
-                            foregroundPainter: BorderPainter(),
-                            child: Container(
-                              width: 350.w,
-                              height: 350.h,
-                              color: Colors.transparent,
+                      if (displayForeground ?? true)
+                        Positioned(
+                          top: 70.h,
+                          left: 0,
+                          right: 0,
+                          child: Center(
+                            child: CustomPaint(
+                              foregroundPainter: BorderPainter(),
+                              child: Container(
+                                width: 350.w,
+                                height: 350.h,
+                                color: Colors.transparent,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Positioned(
-                        top: 95.h,
-                        left: 0,
-                        right: 0,
-                        child: Center(
-                          child: LineAnimationView(size: Size(300.w, 300.h)),
+                      if (displayForeground ?? true)
+                        Positioned(
+                          top: 95.h,
+                          left: 0,
+                          right: 0,
+                          child: Center(
+                            child: LineAnimationView(size: Size(300.w, 300.h)),
+                          ),
                         ),
-                      ),
                       buildButtons(captureImageScreenController),
                     ],
                   ),
@@ -127,7 +131,9 @@ class CaptureImageScreen extends StatelessWidget {
               // print(captureImageScreenController.imageFile);
 
               if (captureImageScreenController.imageFilePath.value != '') {
-                Get.off(() => DisplayCapturedImageScreen());
+                Get.off(() => DisplayCapturedImageScreen(
+                      displayForeground: displayForeground,
+                    ));
               }
             },
             child: Container(

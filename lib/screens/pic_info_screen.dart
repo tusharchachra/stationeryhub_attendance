@@ -6,14 +6,31 @@ import 'package:stationeryhub_attendance/components/form_field_button.dart';
 import '../scaffold/scaffold_dashboard.dart';
 import 'capture_image_screen.dart';
 
-class UserProfilePicInfoScreen extends StatelessWidget {
-  const UserProfilePicInfoScreen({super.key});
+class PicInfoScreen extends StatelessWidget {
+  const PicInfoScreen({
+    super.key,
+    this.title,
+    this.infoTile,
+    this.infoBody,
+    this.buttonTitle,
+    this.icon,
+    this.backgroundImagePath,
+    this.displayForegroundWhileCapture,
+  });
+
+  final String? title;
+  final String? infoTile;
+  final String? infoBody;
+  final String? buttonTitle;
+  final Icon? icon;
+  final String? backgroundImagePath;
+  final bool? displayForegroundWhileCapture;
 
   @override
   Widget build(BuildContext context) {
     return ScaffoldDashboard(
       isLoading: false,
-      pageTitle: Text('New User'),
+      pageTitle: Text(title ?? 'New User'),
       bodyWidget: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -30,10 +47,10 @@ class UserProfilePicInfoScreen extends StatelessWidget {
                   children: [
                     Padding(
                       padding: EdgeInsets.only(right: 12.w),
-                      child: Icon(Icons.person_add_sharp),
+                      child: icon ?? Icon(Icons.person_add_sharp),
                     ),
                     Text(
-                      'Add a new user',
+                      infoTile ?? 'Add a new user',
                       style: Get.textTheme.titleLarge,
                     )
                   ],
@@ -42,21 +59,25 @@ class UserProfilePicInfoScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.fromLTRB(39.w, 0, 12.w, 12.h),
                 child: Text(
-                  'Click a picture to use as profile picture',
+                  infoBody ?? 'Click a picture to use as profile picture',
                   style: Get.textTheme.displayMedium,
                 ),
               ),
             ],
           ),
-          Center(child: Image.asset('assets/images/addNewUserBackground.png')),
+          Center(
+              child: Image.asset(backgroundImagePath ??
+                  'assets/images/addNewUserBackground.png')),
           Padding(
             padding: EdgeInsets.only(bottom: 48.h),
             child: FormFieldButton(
                 width: 384.w,
                 height: 56.h,
-                buttonText: 'Capture face',
+                buttonText: buttonTitle ?? 'Capture face',
                 onTapAction: () {
-                  Get.off(() => CaptureImageScreen());
+                  Get.off(() => CaptureImageScreen(
+                        displayForeground: displayForegroundWhileCapture,
+                      ));
                 }),
           )
         ],

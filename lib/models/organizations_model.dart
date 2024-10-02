@@ -81,7 +81,9 @@ class OrganizationModel {
             ? null
             : double.parse(json['geoLocationLong'].toString()),
         createdOn = DateTime.parse(json['createdOn'].toString()),
-        lastUpdatedOn = DateTime.parse(json['createdOn'].toString()),
+        lastUpdatedOn = json['lastUpdatedOn'] == ''
+            ? null
+            : DateTime.parse(json['lastUpdatedOn'].toString()),
         createdBy = json['createdBy'].toString(),
         profilePicPath = json['profilePicPath'].toString() == ''
             ? ''

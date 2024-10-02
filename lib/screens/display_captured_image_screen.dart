@@ -12,7 +12,9 @@ import 'package:stationeryhub_attendance/screens/capture_image_screen.dart';
 import '../helpers/constants.dart';
 
 class DisplayCapturedImageScreen extends StatelessWidget {
-  const DisplayCapturedImageScreen({super.key});
+  const DisplayCapturedImageScreen({super.key, this.displayForeground});
+
+  final bool? displayForeground;
 
   static final FirebaseStorageController firebaseStorageController = Get.find();
 
@@ -35,21 +37,22 @@ class DisplayCapturedImageScreen extends StatelessWidget {
                 fit: BoxFit.fill,
               ),
             ),
-            Positioned(
-              top: 70.h,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: CustomPaint(
-                  foregroundPainter: CheckeredBoxPainter(),
-                  child: Container(
-                    width: 350.w,
-                    height: 350.h,
-                    color: Colors.transparent,
+            if (displayForeground ?? true)
+              Positioned(
+                top: 70.h,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: CustomPaint(
+                    foregroundPainter: CheckeredBoxPainter(),
+                    child: Container(
+                      width: 350.w,
+                      height: 350.h,
+                      color: Colors.transparent,
+                    ),
                   ),
                 ),
               ),
-            ),
             buildButtons(captureImageScreenController)
           ],
         ),

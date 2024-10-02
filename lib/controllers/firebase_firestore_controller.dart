@@ -536,6 +536,11 @@ class FirebaseFirestoreController extends GetxController {
       if (organization.subscription != null) {
         await ref.update({'subscription': '${organization.subscription}'});
       }
+      if (organization.profilePicPath != null) {
+        await ref.update({'profilePicPath': '${organization.profilePicPath}'});
+      }
+
+      await ref.update({'lastUpdatedOn': '${organization.lastUpdatedOn}'});
 
       if (kDebugMode) {
         debugPrint('Organization details updated');

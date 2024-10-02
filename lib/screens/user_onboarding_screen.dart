@@ -15,8 +15,8 @@ import 'package:stationeryhub_attendance/controllers/user_onboarding_screen_cont
 import 'package:stationeryhub_attendance/models/user_type_enum.dart';
 import 'package:stationeryhub_attendance/models/users_model.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
+import 'package:stationeryhub_attendance/screens/pic_info_screen.dart';
 import 'package:stationeryhub_attendance/screens/user_id_card_info_screen.dart';
-import 'package:stationeryhub_attendance/screens/user_profile_pic_info_screen.dart';
 
 import '../components/picture_circle.dart';
 import '../controllers/firebase_error_controller.dart';
@@ -402,7 +402,7 @@ class UserOnboardingScreen extends StatelessWidget {
             left: 80.w,
             child: GestureDetector(
                 onTap: () {
-                  Get.to(() => UserProfilePicInfoScreen());
+                  Get.to(() => PicInfoScreen());
                 },
                 child: Image.asset('assets/images/cameraBlue.png')))
       ],

@@ -24,8 +24,6 @@ import 'new_organization_screen.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
   const AdminDashboardScreen({super.key});
-  static final adminDashboardScreenController =
-      Get.put(AdminDashboardScreenController());
 
   static FirebaseFirestoreController firestoreController = Get.find();
   static FirebaseAuthController authController = Get.find();
@@ -35,8 +33,7 @@ class AdminDashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(FirebaseStorageController());
     Get.put(IdCardCaptureController());
-
-    //AdminDashboardScreenController adminDashboardScreenController = Get.find();
+    Get.put(AdminDashboardScreenController());
     //FirebaseStorageController firebaseStorageController = Get.find();
     /* if (firestoreController.registeredOrganization?.value.id == null) {
       Get.to(NewOrganizationScreen());
@@ -59,6 +56,8 @@ class AdminDashboardScreen extends StatelessWidget {
   }
 
   void setTitles() {
+    AdminDashboardScreenController adminDashboardScreenController = Get.find();
+
     if (firestoreController.registeredOrganization.value?.name == 'null') {
       adminDashboardScreenController.pageTitle.value = '';
     } else {
@@ -93,48 +92,51 @@ class AdminDashboardScreen extends StatelessWidget {
   }
 
   Widget buildDashboard1() {
-    //setTitles();
     return ScaffoldDashboard(
       leadingWidget: Padding(
           padding: EdgeInsets.fromLTRB(12.w, 13.h, 0, 13.h),
-          child: firestoreController.isLoading.value == true
-              ? Container(
-                  width: 22.w,
-                  height: 22.h,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  child: GradientProgressBar(
-                    size: Size(22.w, 22.h),
-                    child: CircleAvatar(),
-                  ))
-
-              /* ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(22.r)),
+          child: Obx(
+            () => firestoreController.isLoading.value == true
+                ? Container(
+                    width: 22.w,
+                    height: 22.h,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                    ),
                     child: GradientProgressBar(
                       size: Size(22.w, 22.h),
+                      child: CircleAvatar(),
                     ),
-                  )*/
-              : GestureDetector(
-                  onTap: () {
-                    Get.to(() => UpdateOrganizationScreen());
-                  },
-                  child: Obx(
-                    () => PictureCircle(
-                      height: 22.h,
-                      width: 22.w,
-                      imgPath: (firestoreController
-                              .registeredOrganization.value?.profilePicPath ??
-                          ''),
-                      backgroundColor: Constants.colourProfilePicIconBackground,
-                      isNetworkPath: firestoreController.registeredOrganization
-                                  .value?.profilePicPath ==
-                              null
-                          ? true
-                          : false,
+                  )
+                : GestureDetector(
+                    onTap: () {
+                      print('tapped');
+                      Get.to(() => UpdateOrganizationScreen());
+                    },
+                    child: Obx(
+                      () => PictureCircle(
+                        height: 22.h,
+                        width: 22.w,
+                        imgPath: (firestoreController
+                                .registeredOrganization.value?.profilePicPath ??
+                            ''),
+                        backgroundColor:
+                            Constants.colourProfilePicIconBackground,
+                        isNetworkPath: firestoreController
+                                    .registeredOrganization
+                                    .value
+                                    ?.profilePicPath ==
+                                ''
+                            ? false
+                            : true,
+                        onTap: () {
+                          print('tapped');
+                          Get.to(() => UpdateOrganizationScreen());
+                        },
+                      ),
                     ),
                   ),
-                ) /* CircleAvatar(
+          ) /* CircleAvatar(
                   maxRadius: 22.r,
                   //backgroundColor: colourProfilePicIconBackground,
                   child: const Icon(

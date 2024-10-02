@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_storage_controller.dart';
 import 'package:stationeryhub_attendance/controllers/update_organization_screen_controller.dart';
-import 'package:stationeryhub_attendance/models/pic_path_enum.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
+import 'package:stationeryhub_attendance/screens/pic_info_screen.dart';
 
 import '../components/form_error.dart';
 import '../components/form_field_button.dart';
@@ -16,7 +17,6 @@ import '../controllers/capture_image_screen_controller.dart';
 import '../controllers/firebase_error_controller.dart';
 import '../controllers/form_error_controller.dart';
 import '../helpers/constants.dart';
-import 'display_captured_image_screen.dart';
 
 class UpdateOrganizationScreen extends StatelessWidget {
   const UpdateOrganizationScreen({super.key});
@@ -42,12 +42,14 @@ class UpdateOrganizationScreen extends StatelessWidget {
     //final IdCardCaptureController cardCaptureController = Get.find();
     final FirebaseErrorController errorController = Get.find();
 
-    updateOrganizationScreenController.nameController.value.text =
+    updateOrganizationScreenController.creatorNameController.value.text =
+        firestoreController.registeredUser.value!.name!;
+    updateOrganizationScreenController.orgNameController.value.text =
         firestoreController.registeredOrganization.value!.name!;
-    firestoreController.registeredOrganization.value!.name!;
     updateOrganizationScreenController.addressController.value.text =
         firestoreController.registeredOrganization.value!.address!;
-
+    captureImageScreenController.imageFilePath.value =
+        firestoreController.registeredOrganization.value?.profilePicPath ?? '';
     var outlineInputBorder = OutlineInputBorder(
       borderSide: BorderSide.none,
       borderRadius: BorderRadius.all(
@@ -56,7 +58,10 @@ class UpdateOrganizationScreen extends StatelessWidget {
     );
     return ScaffoldDashboard(
       isLoading: false,
-      pageTitle: Text('Update Organization'),
+      pageTitle: Text(
+        'Update Organization',
+        style: Get.textTheme.headlineLarge?.copyWith(color: Colors.white),
+      ),
       bodyWidget: Form(
         key: updateOrganizationScreenController.formKey,
         autovalidateMode: AutovalidateMode.disabled,
@@ -77,12 +82,16 @@ class UpdateOrganizationScreen extends StatelessWidget {
                   ),*/
                   SizedBox(height: 23.h),
                   FormFieldText(
-                    labelText: 'Name',
-                    textController:
-                        updateOrganizationScreenController.nameController.value,
+                    labelText: 'Organization Name',
+                    textController: updateOrganizationScreenController
+                        .orgNameController.value,
                     hintText: 'Enter name',
                     border: outlineInputBorder,
                     fillColor: Constants.colourBorderLight,
+                    onChangedAction: (val) {
+                      updateOrganizationScreenController.isChangesMade.value =
+                          true;
+                    },
                     validator: (val) {
                       if (val?.trim() == '') {
                         return 'Name is mandatory';
@@ -98,6 +107,10 @@ class UpdateOrganizationScreen extends StatelessWidget {
                     hintText: 'Enter address',
                     border: outlineInputBorder,
                     fillColor: Constants.colourBorderLight,
+                    onChangedAction: (val) {
+                      updateOrganizationScreenController.isChangesMade.value =
+                          true;
+                    },
                     validator: (val) {
                       if (val?.trim() == '') {
                         return 'Address is mandatory';
@@ -106,11 +119,38 @@ class UpdateOrganizationScreen extends StatelessWidget {
                     },
                   ),
                   SizedBox(height: 20.h),
+                  FormFieldText(
+                    labelText: 'Your name',
+                    textController: updateOrganizationScreenController
+                        .creatorNameController.value,
+                    hintText: 'Enter name',
+                    border: outlineInputBorder,
+                    fillColor: Constants.colourBorderLight,
+                    onChangedAction: (val) {
+                      updateOrganizationScreenController.isChangesMade.value =
+                          true;
+                    },
+                    validator: (val) {
+                      if (val?.trim() == '') {
+                        return 'Your name is mandatory';
+                      } else
+                        return null;
+                    },
+                  ),
                   SizedBox(height: 14.h),
                   (formErrorController.errors.isNotEmpty)
                       ? FormError()
                       : Container(),
                   SizedBox(height: 10.h),
+                  if (firestoreController
+                          .registeredOrganization.value?.lastUpdatedOn !=
+                      null)
+                    Text(
+                      'Previous update: ${DateFormat('dd/mm/y hh:mm a').format(firestoreController.registeredOrganization.value!.lastUpdatedOn!)}',
+                      style: Get.textTheme.labelSmall
+                          ?.copyWith(color: Constants.colourTextLight),
+                    ),
+                  SizedBox(height: 20.h),
                   Obx(
                     () => updateOrganizationScreenController.isLoading.value ==
                             true
@@ -124,15 +164,22 @@ class UpdateOrganizationScreen extends StatelessWidget {
                             height: 56.h,
                             buttonText: 'Update',
                             onTapAction: () async {
-                              print(PicPath.getPath(PicPathEnum.organization));
+                              /* var uploadPath =
+                                  PicPathEnum.organization.getPath();*/
                               if (updateOrganizationScreenController
                                   .formKey.currentState!
                                   .validate()) {
-                                if (updateOrganizationScreenController
+                                /*if (updateOrganizationScreenController
                                         .isFormValid.value ==
-                                    true) {
-                                  /*await updateOrganizationScreenController
-                                      .uploadData();*/
+                                    true)*/
+                                {
+                                  if (updateOrganizationScreenController
+                                          .isChangesMade.value ==
+                                      true) {
+                                    await updateOrganizationScreenController
+                                        .uploadData();
+                                  }
+
                                   Get.back();
                                   Get.showSnackbar(
                                     GetSnackBar(
@@ -140,7 +187,11 @@ class UpdateOrganizationScreen extends StatelessWidget {
                                         errorController.errorMsg.isNotEmpty
                                             ? errorController.errorMsg
                                                 .toString()
-                                            : 'Update successful',
+                                            : updateOrganizationScreenController
+                                                        .isChangesMade.value ==
+                                                    true
+                                                ? 'Update successful'
+                                                : 'No changes made',
                                         textAlign: TextAlign.center,
                                         style: Get.textTheme.bodyMedium
                                             ?.copyWith(
@@ -165,8 +216,8 @@ class UpdateOrganizationScreen extends StatelessWidget {
                                   //firestoreController.addNewUser(phoneNum: phoneNum, userType: userType)
                                 }
                               } else {
-                                updateOrganizationScreenController
-                                    .isFormValid.value = false;
+                                /*  updateOrganizationScreenController
+                                    .isFormValid.value = false;*/
                                 print(formErrorController.errors);
                               }
                             },
@@ -212,22 +263,44 @@ class UpdateOrganizationScreen extends StatelessWidget {
                   color: Colors.white,
                 ),
                 imgPath: captureImageScreenController.imageFilePath.value,
-                isNetworkPath: false,
+                isNetworkPath:
+                    captureImageScreenController.imageFilePath.value == '' &&
+                            updateOrganizationScreenController
+                                    .isPicChanged.value ==
+                                false
+                        ? false
+                        : true,
                 onTap: () {
-                  Get.off(() => DisplayCapturedImageScreen());
+                  /*Get.off(() => DisplayCapturedImageScreen(
+                        displayForeground: false,
+                      ));*/
                 },
               ),
             ),
           ),
         ),
         Positioned(
-            top: 80.h,
-            left: 80.w,
-            child: GestureDetector(
-                onTap: () {
-                  // Get.to(() => UserProfilePicInfoScreen());
-                },
-                child: Image.asset('assets/images/cameraBlue.png')))
+          top: 80.h,
+          left: 80.w,
+          child: GestureDetector(
+            onTap: () {
+              updateOrganizationScreenController.isPicChanged.value = true;
+              Get.to(
+                () => PicInfoScreen(
+                  title: 'Organization picture',
+                  infoTile: 'Add a picture of your organization',
+                  infoBody:
+                      'Click a picture using the camera or upload from gallery',
+                  icon: Icon(Icons.business_outlined),
+                  backgroundImagePath: 'assets/images/addOrgPicBackground.png',
+                  buttonTitle: 'Continue',
+                  displayForegroundWhileCapture: false,
+                ),
+              );
+            },
+            child: Image.asset('assets/images/cameraBlue.png'),
+          ),
+        )
       ],
     );
   }

@@ -5,6 +5,7 @@ import 'package:stationeryhub_attendance/controllers/capture_image_screen_contro
 import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_storage_controller.dart';
 import 'package:stationeryhub_attendance/controllers/id_card_capture_controller.dart';
+import 'package:stationeryhub_attendance/models/pic_path_enum.dart';
 import 'package:stationeryhub_attendance/models/user_type_enum.dart';
 
 import '../models/users_model.dart';
@@ -80,7 +81,8 @@ class UserOnboardingScreenController extends GetxController {
   Future<void> uploadData() async {
     isLoading.value = true;
     String? profilePicPath = await firebaseStorageController.uploadPicture(
-        XFile(captureImageScreenController.imageFilePath.value), null);
+        XFile(captureImageScreenController.imageFilePath.value),
+        PicPathEnum.profile);
     UsersModel? temp = await firebaseStorageController.uploadIdCard(
         fileFront: XFile(idCardCaptureController.documentFront[0]),
         fileBack: XFile(idCardCaptureController.documentBack[0]));

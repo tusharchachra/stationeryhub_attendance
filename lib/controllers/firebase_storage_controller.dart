@@ -14,20 +14,24 @@ class FirebaseStorageController extends GetxController {
   final FirebaseErrorController errorController = Get.find();
   final FirebaseFirestoreController firestoreController = Get.find();
 
-  Future<String?> uploadPicture(XFile? file, PicPathEnum? picPath) async {
+  Future<String?> uploadPicture(XFile? file, PicPathEnum? storagePath) async {
     isLoading.value = true;
-    String path = PicPath.getPath(picPath);
-    String? profilePicPath;
-    print(path);
+    String path = '';
+    String? uploadPath;
+    print('storagePath=$storagePath');
     if (file == null) {
       print('no file');
       return null;
     }
+    if (storagePath == null) {
+      return null;
+    }
+    path = storagePath.getPath();
     // UploadTask uploadTask;
     // Create a Reference to the file
     Reference ref = FirebaseStorage.instance
         .ref()
-        .child('/profilePic')
+        .child('/$path')
         .child(DateTime.timestamp().toString());
     final metadata = SettableMetadata(
       contentType: 'image/jpeg',
@@ -38,8 +42,8 @@ class FirebaseStorageController extends GetxController {
         /*uploadTask = */ await ref.putData(await file.readAsBytes(), metadata);
       } else {
         /*uploadTask = */ await ref.putFile(io.File(file.path), metadata);
-        profilePicPath = await ref.getDownloadURL();
-        print('Profile pic path=$profilePicPath');
+        uploadPath = await ref.getDownloadURL();
+        print('Pic path=$uploadPath');
         /*await firestoreController.updateUser(
           user: firestoreController.registeredUser!.value!,
         );*/
@@ -49,7 +53,7 @@ class FirebaseStorageController extends GetxController {
       errorController.getErrorMsg(e);
     }
     isLoading.value = false;
-    return profilePicPath;
+    return uploadPath;
     //return Future.value(uploadTask);
   }
 
