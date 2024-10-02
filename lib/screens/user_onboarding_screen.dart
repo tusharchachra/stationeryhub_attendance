@@ -402,7 +402,16 @@ class UserOnboardingScreen extends StatelessWidget {
             left: 80.w,
             child: GestureDetector(
                 onTap: () {
-                  Get.to(() => PicInfoScreen());
+                  Get.to(() => const PicInfoScreen(
+                        title: 'New User',
+                        infoTile: 'Add a new user',
+                        infoBody: 'Click a picture to use as profile picture',
+                        backgroundImagePath:
+                            'assets/images/addNewUserBackground.png',
+                        buttonTitle: 'Capture face',
+                        icon: Icon(Icons.person_add_sharp),
+                        displayForegroundWhileCapture: true,
+                      ));
                 },
                 child: Image.asset('assets/images/cameraBlue.png')))
       ],

@@ -81,11 +81,17 @@ class UserOnboardingScreenController extends GetxController {
   Future<void> uploadData() async {
     isLoading.value = true;
     String? profilePicPath = await firebaseStorageController.uploadPicture(
-        XFile(captureImageScreenController.imageFilePath.value),
-        PicPathEnum.profile);
-    UsersModel? temp = await firebaseStorageController.uploadIdCard(
+        file: XFile(captureImageScreenController.imageFilePath.value),
+        storagePath: PicPathEnum.profile);
+    String? frontPath = await firebaseStorageController.uploadPicture(
+        file: XFile(idCardCaptureController.documentFront[0]),
+        storagePath: PicPathEnum.idCard);
+    String? backPath = await firebaseStorageController.uploadPicture(
+        file: XFile(idCardCaptureController.documentBack[0]),
+        storagePath: PicPathEnum.idCard);
+    /*UsersModel? temp = await firebaseStorageController.uploadIdCard(
         fileFront: XFile(idCardCaptureController.documentFront[0]),
-        fileBack: XFile(idCardCaptureController.documentBack[0]));
+        fileBack: XFile(idCardCaptureController.documentBack[0]));*/
     UsersModel newUser = UsersModel(
       phoneNum: phoneNumController.value.text.trim(),
       organizationId: firestoreController.registeredOrganization.value?.id,
@@ -93,8 +99,8 @@ class UserOnboardingScreenController extends GetxController {
       userType:
           UserType.values.byName(userTypeController.value.text.toLowerCase()),
       profilePicPath: profilePicPath,
-      idCardFrontPath: temp?.idCardFrontPath,
-      idCardBackPath: temp?.idCardBackPath,
+      idCardFrontPath: frontPath,
+      idCardBackPath: backPath,
     );
     await firestoreController.addNewUser(user: newUser);
 

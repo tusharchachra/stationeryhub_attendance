@@ -54,8 +54,8 @@ class UpdateOrganizationScreenController extends GetxController {
       if (captureImageScreenController.imageFilePath.value != '' &&
           isPicChanged.value == true) {
         picPath = await firebaseStorageController.uploadPicture(
-            XFile(captureImageScreenController.imageFilePath.value),
-            PicPathEnum.organization);
+            file: XFile(captureImageScreenController.imageFilePath.value),
+            storagePath: PicPathEnum.organization);
       }
       print('profilePicPath=$picPath');
 

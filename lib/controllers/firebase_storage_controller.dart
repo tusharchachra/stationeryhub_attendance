@@ -7,14 +7,14 @@ import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_error_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 import 'package:stationeryhub_attendance/models/pic_path_enum.dart';
-import 'package:stationeryhub_attendance/models/users_model.dart';
 
 class FirebaseStorageController extends GetxController {
   RxBool isLoading = false.obs;
   final FirebaseErrorController errorController = Get.find();
   final FirebaseFirestoreController firestoreController = Get.find();
 
-  Future<String?> uploadPicture(XFile? file, PicPathEnum? storagePath) async {
+  Future<String?> uploadPicture(
+      {required XFile? file, required PicPathEnum storagePath}) async {
     isLoading.value = true;
     String path = '';
     String? uploadPath;
@@ -57,7 +57,7 @@ class FirebaseStorageController extends GetxController {
     //return Future.value(uploadTask);
   }
 
-  Future<UsersModel?> uploadIdCard(
+  /*Future<UsersModel?> uploadIdCard(
       {required XFile fileFront, XFile? fileBack}) async {
     isLoading.value = true;
     String? frontPath;
@@ -77,10 +77,10 @@ class FirebaseStorageController extends GetxController {
       );
       try {
         if (kIsWeb) {
-          /*uploadTask = */ await ref.putData(
+          */ /*uploadTask = */ /* await ref.putData(
               await fileFront.readAsBytes(), metadataFront);
         } else {
-          /*uploadTask = */ await ref.putFile(
+          */ /*uploadTask = */ /* await ref.putFile(
               io.File(fileFront.path), metadataFront);
           tempUserDetails.idCardFrontPath = await ref.getDownloadURL();
           print('Id card Front path=$frontPath');
@@ -98,10 +98,10 @@ class FirebaseStorageController extends GetxController {
       );
       try {
         if (kIsWeb) {
-          /*uploadTask = */ await ref.putData(
+          */ /*uploadTask = */ /* await ref.putData(
               await fileBack.readAsBytes(), metadataBack);
         } else {
-          /*uploadTask = */ await ref.putFile(
+          */ /*uploadTask = */ /* await ref.putFile(
               io.File(fileBack.path), metadataBack);
           tempUserDetails.idCardBackPath = await ref.getDownloadURL();
           print('ID card back path=$backPath');
@@ -115,5 +115,5 @@ class FirebaseStorageController extends GetxController {
     isLoading.value = false;
     return tempUserDetails;
     //return Future.value(uploadTask);
-  }
+  }*/
 }

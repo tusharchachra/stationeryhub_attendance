@@ -30,7 +30,7 @@ class PicInfoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScaffoldDashboard(
       isLoading: false,
-      pageTitle: Text(title ?? 'New User'),
+      pageTitle: Text(title ?? ''),
       bodyWidget: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -47,10 +47,10 @@ class PicInfoScreen extends StatelessWidget {
                   children: [
                     Padding(
                       padding: EdgeInsets.only(right: 12.w),
-                      child: icon ?? Icon(Icons.person_add_sharp),
+                      child: icon ?? Container(),
                     ),
                     Text(
-                      infoTile ?? 'Add a new user',
+                      infoTile ?? '',
                       style: Get.textTheme.titleLarge,
                     )
                   ],
@@ -59,21 +59,20 @@ class PicInfoScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.fromLTRB(39.w, 0, 12.w, 12.h),
                 child: Text(
-                  infoBody ?? 'Click a picture to use as profile picture',
+                  infoBody ?? '',
                   style: Get.textTheme.displayMedium,
                 ),
               ),
             ],
           ),
-          Center(
-              child: Image.asset(backgroundImagePath ??
-                  'assets/images/addNewUserBackground.png')),
+          if (backgroundImagePath != null)
+            Center(child: Image.asset(backgroundImagePath!)),
           Padding(
             padding: EdgeInsets.only(bottom: 48.h),
             child: FormFieldButton(
                 width: 384.w,
                 height: 56.h,
-                buttonText: buttonTitle ?? 'Capture face',
+                buttonText: buttonTitle ?? '',
                 onTapAction: () {
                   Get.off(() => CaptureImageScreen(
                         displayForeground: displayForegroundWhileCapture,
