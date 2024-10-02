@@ -48,29 +48,32 @@ class UpdateOrganizationScreenController extends GetxController {
   Future<void> uploadData() async {
     isLoading.value = true;
     String? picPath;
+    print('isPiChanged=${isPicChanged}');
 
-    if (captureImageScreenController.imageFilePath.value != '' &&
-        isPicChanged.value == true) {
-      picPath = await firebaseStorageController.uploadPicture(
-          XFile(captureImageScreenController.imageFilePath.value),
-          PicPathEnum.organization);
+    if (isChangesMade.value == true || isPicChanged.value == true) {
+      if (captureImageScreenController.imageFilePath.value != '' &&
+          isPicChanged.value == true) {
+        picPath = await firebaseStorageController.uploadPicture(
+            XFile(captureImageScreenController.imageFilePath.value),
+            PicPathEnum.organization);
+      }
+      print('profilePicPath=$picPath');
+
+      OrganizationModel updatedOrganization = OrganizationModel(
+        id: firestoreController.registeredOrganization.value?.id,
+        name: orgNameController.value.text.trim(),
+        address: addressController.value.text.trim(),
+        profilePicPath: picPath,
+        lastUpdatedOn: DateTime.now(),
+      );
+      await firestoreController.updateOrganization(
+          organization: updatedOrganization);
+
+      UsersModel updatedCreator = UsersModel(
+          userId: firestoreController.registeredUser.value?.userId,
+          name: creatorNameController.value.text.trim());
+      await firestoreController.updateUser(user: updatedCreator);
+      if (firestoreController.isLoading.value == false) isLoading.value = false;
     }
-    print('profilePicPath=$picPath');
-
-    OrganizationModel updatedOrganization = OrganizationModel(
-      id: firestoreController.registeredOrganization.value?.id,
-      name: orgNameController.value.text.trim(),
-      address: addressController.value.text.trim(),
-      profilePicPath: picPath,
-      lastUpdatedOn: DateTime.now(),
-    );
-    await firestoreController.updateOrganization(
-        organization: updatedOrganization);
-
-    UsersModel updatedCreator = UsersModel(
-        userId: firestoreController.registeredUser.value?.userId,
-        name: creatorNameController.value.text.trim());
-    await firestoreController.updateUser(user: updatedCreator);
-    if (firestoreController.isLoading.value == false) isLoading.value = false;
   }
 }

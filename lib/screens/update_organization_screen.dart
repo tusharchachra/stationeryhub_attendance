@@ -50,6 +50,12 @@ class UpdateOrganizationScreen extends StatelessWidget {
         firestoreController.registeredOrganization.value!.address!;
     captureImageScreenController.imageFilePath.value =
         firestoreController.registeredOrganization.value?.profilePicPath ?? '';
+
+    print('isPiChanged=${updateOrganizationScreenController.isPicChanged}');
+
+    print(
+        'captureImageScreenController.imageFilePath.value=${captureImageScreenController.imageFilePath.value}');
+
     var outlineInputBorder = OutlineInputBorder(
       borderSide: BorderSide.none,
       borderRadius: BorderRadius.all(
@@ -146,7 +152,9 @@ class UpdateOrganizationScreen extends StatelessWidget {
                           .registeredOrganization.value?.lastUpdatedOn !=
                       null)
                     Text(
-                      'Previous update: ${DateFormat('dd/mm/y hh:mm a').format(firestoreController.registeredOrganization.value!.lastUpdatedOn!)}',
+                      'Previous update: ${DateFormat('d/M/y hh:mm a').format(firestoreController.registeredOrganization.value!.lastUpdatedOn!)}',
+                      //'Previous update: ${firestoreController.registeredOrganization.value!.lastUpdatedOn!}',
+
                       style: Get.textTheme.labelSmall
                           ?.copyWith(color: Constants.colourTextLight),
                     ),
@@ -169,52 +177,40 @@ class UpdateOrganizationScreen extends StatelessWidget {
                               if (updateOrganizationScreenController
                                   .formKey.currentState!
                                   .validate()) {
-                                /*if (updateOrganizationScreenController
-                                        .isFormValid.value ==
-                                    true)*/
-                                {
-                                  if (updateOrganizationScreenController
-                                          .isChangesMade.value ==
-                                      true) {
-                                    await updateOrganizationScreenController
-                                        .uploadData();
-                                  }
+                                await updateOrganizationScreenController
+                                    .uploadData();
 
-                                  Get.back();
-                                  Get.showSnackbar(
-                                    GetSnackBar(
-                                      messageText: Text(
-                                        errorController.errorMsg.isNotEmpty
-                                            ? errorController.errorMsg
-                                                .toString()
-                                            : updateOrganizationScreenController
-                                                        .isChangesMade.value ==
-                                                    true
-                                                ? 'Update successful'
-                                                : 'No changes made',
-                                        textAlign: TextAlign.center,
-                                        style: Get.textTheme.bodyMedium
-                                            ?.copyWith(
-                                                color:
-                                                    Constants.colourTextDark),
-                                      ),
-                                      duration: Duration(
-                                          seconds: Constants.snackbarDuration),
-                                      snackPosition: SnackPosition.BOTTOM,
-                                      backgroundColor: Colors.white,
-                                      boxShadows: [
-                                        BoxShadow(
-                                            color: Colors.grey,
-                                            blurRadius: 62.0.r),
-                                      ],
-                                      snackStyle: SnackStyle.FLOATING,
-                                      borderRadius: 50.r,
-                                      margin: EdgeInsets.all(10.w),
+                                Get.back();
+                                Get.showSnackbar(
+                                  GetSnackBar(
+                                    messageText: Text(
+                                      errorController.errorMsg.isNotEmpty
+                                          ? errorController.errorMsg.toString()
+                                          : updateOrganizationScreenController
+                                                      .isChangesMade.value ==
+                                                  true
+                                              ? 'Update successful'
+                                              : 'No changes made',
+                                      textAlign: TextAlign.center,
+                                      style: Get.textTheme.bodyMedium?.copyWith(
+                                          color: Constants.colourTextDark),
                                     ),
-                                  );
+                                    duration: Duration(
+                                        seconds: Constants.snackbarDuration),
+                                    snackPosition: SnackPosition.BOTTOM,
+                                    backgroundColor: Colors.white,
+                                    boxShadows: [
+                                      BoxShadow(
+                                          color: Colors.grey,
+                                          blurRadius: 62.0.r),
+                                    ],
+                                    snackStyle: SnackStyle.FLOATING,
+                                    borderRadius: 50.r,
+                                    margin: EdgeInsets.all(10.w),
+                                  ),
+                                );
 
-                                  //firestoreController.addNewUser(phoneNum: phoneNum, userType: userType)
-                                }
+                                //firestoreController.addNewUser(phoneNum: phoneNum, userType: userType)
                               } else {
                                 /*  updateOrganizationScreenController
                                     .isFormValid.value = false;*/
@@ -263,13 +259,14 @@ class UpdateOrganizationScreen extends StatelessWidget {
                   color: Colors.white,
                 ),
                 imgPath: captureImageScreenController.imageFilePath.value,
-                isNetworkPath:
-                    captureImageScreenController.imageFilePath.value == '' &&
-                            updateOrganizationScreenController
-                                    .isPicChanged.value ==
-                                false
-                        ? false
-                        : true,
+                isNetworkPath: captureImageScreenController
+                                .imageFilePath.value !=
+                            firestoreController
+                                .registeredOrganization.value?.profilePicPath &&
+                        updateOrganizationScreenController.isPicChanged.value ==
+                            true
+                    ? false
+                    : true,
                 onTap: () {
                   /*Get.off(() => DisplayCapturedImageScreen(
                         displayForeground: false,
@@ -285,6 +282,8 @@ class UpdateOrganizationScreen extends StatelessWidget {
           child: GestureDetector(
             onTap: () {
               updateOrganizationScreenController.isPicChanged.value = true;
+              print(
+                  'isPiChanged=${updateOrganizationScreenController.isPicChanged}');
               Get.to(
                 () => PicInfoScreen(
                   title: 'Organization picture',

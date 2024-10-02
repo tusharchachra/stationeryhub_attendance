@@ -18,7 +18,7 @@ class CaptureImageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CaptureImageScreenController captureImageScreenController =
-        Get.put(CaptureImageScreenController());
+        Get.find();
 
     return ScaffoldDashboard(
       isLoading: false,
@@ -127,8 +127,11 @@ class CaptureImageScreen extends StatelessWidget {
           SizedBox(width: 35.w),
           GestureDetector(
             onTap: () async {
+              print(
+                  'captureImageScreenController.imageFilePath.value=${captureImageScreenController.imageFilePath.value}');
               await captureImageScreenController.clickPicture();
-              // print(captureImageScreenController.imageFile);
+              print(
+                  'captureImageScreenController.imageFilePath.value=${captureImageScreenController.imageFilePath.value}');
 
               if (captureImageScreenController.imageFilePath.value != '') {
                 Get.off(() => DisplayCapturedImageScreen(
