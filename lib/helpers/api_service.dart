@@ -7,12 +7,13 @@ import '../models/user_attendance_model.dart';
 
 class ApiService {
   Future<List<AttendanceModel>> fetchAttendance(
-      {String? empId, DateTime? startDate, String? endDate}) async {
+      {String? empId, DateTime? startDate, DateTime? endDate}) async {
     ///Fetches attendance based on the arguments
     ///
     /// fetch by employee Id -> pass only `empId`
-    /// fetch for one date -> pass only `startDate`
+    /// fetch for all on one date -> pass only `startDate`
     /// fetch by employee Id for one date -> pass `empId` and `startDate`
+    /// fetch by employee Id for between dates -> pass `empId`, `startDate` and `endDate`
     /* final employeeAttendanceCardController =
         Get.put(EmployeeAttendanceCardController());*/
     /*Database db = await instance.database;
@@ -28,13 +29,18 @@ class ApiService {
       }*/
       var response;
 
+      //by empId
       if (empId != null && startDate == null && endDate == null) {
         response = await http.get(Uri.parse('$url?empId=$empId'));
-      } else if (empId == null && startDate != null && endDate == null) {
+      }
+      //all for one date
+      else if (empId == null && startDate != null && endDate == null) {
         print(startDate.toString());
         response =
             await http.get(Uri.parse('$url?date=${(startDate).toString()}'));
-      } else if (empId != null && startDate != null && endDate == null) {
+      }
+      //for one employee on one date
+      else if (empId != null && startDate != null && endDate == null) {
         /*response =
             await http.get(Uri.parse('$url?empId=$empId&date=${(startDate)}'));*/
         var temp = {
@@ -50,6 +56,25 @@ class ApiService {
             },
             body: body);
       }
+      //for one employee between start and end date
+      else if (empId != null && startDate != null && endDate != null) {
+        /*response =
+            await http.get(Uri.parse('$url?empId=$empId&date=${(startDate)}'));*/
+        var temp = {
+          'empId': empId,
+          'startDate': DateFormat('y-MM-dd').format(startDate),
+          'endDate': DateFormat('y-MM-dd').format(endDate)
+        };
+        //print(startDate.toString());
+        var body = jsonEncode(temp);
+        print(body);
+        response = await http.post(Uri.parse(url),
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: body);
+      }
+
       print(response.statusCode);
       print(response.body);
       if (response.statusCode == 200) {

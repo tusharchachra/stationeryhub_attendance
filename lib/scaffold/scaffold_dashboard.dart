@@ -11,6 +11,7 @@ class ScaffoldDashboard extends StatelessWidget {
   final Widget? bottomNavigationBar;
   final BoxDecoration? scaffoldDecoration;
   final TextStyle? appBarTextStyle;
+  final Color? backgroundColour;
   const ScaffoldDashboard({
     super.key,
     this.appBarActions,
@@ -22,6 +23,7 @@ class ScaffoldDashboard extends StatelessWidget {
     this.scaffoldDecoration,
     this.appBarTextStyle,
     this.leadingWidget,
+    this.backgroundColour,
   });
 
   @override
@@ -40,7 +42,7 @@ class ScaffoldDashboard extends StatelessWidget {
     );*/
 
     return Scaffold(
-      backgroundColor: Constants.colourScaffoldBackground,
+      backgroundColor: backgroundColour ?? Constants.colourScaffoldBackground,
       appBar: AppBar(
         backgroundColor: Constants.colourPrimary,
         leading: leadingWidget,

@@ -8,6 +8,7 @@ import 'package:stationeryhub_attendance/controllers/id_card_capture_controller.
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 import 'package:stationeryhub_attendance/models/attendance_view_model.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
+import 'package:stationeryhub_attendance/screens/employee_list_screen.dart';
 import 'package:stationeryhub_attendance/screens/update_organization_screen.dart';
 import 'package:stationeryhub_attendance/screens/user_onboarding_screen.dart';
 
@@ -273,6 +274,11 @@ class AdminDashboardScreen extends StatelessWidget {
                   authController.signOutUser();
                 },
                 child: Text('Sign out')),
+            TextButton(
+                onPressed: () {
+                  Get.to(() => EmployeeListScreen());
+                },
+                child: Text('Emp list')),
           ],
         ),
       ),

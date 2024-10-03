@@ -38,6 +38,10 @@ class Constants {
   static const colourDateBoxBorder = Color(0xffEFEFEF);
   static const colourIdCardBackground = Color(0xffC6E6F9);
   static const colourLunchBreak = Color(0xffFD7900);
+  static const employeeTextColour = Color(0xff2B9C55);
+  static Color employeeBoxColour = employeeTextColour.withOpacity(0.29);
+  static const adminTextColour = Color(0xffFF6C01);
+  static Color adminBoxColour = adminTextColour.withOpacity(0.29);
 
   static const otpResendTime = 5;
   static const snackbarDuration = 4;
