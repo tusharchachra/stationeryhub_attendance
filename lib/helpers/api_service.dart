@@ -2,18 +2,23 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:stationeryhub_attendance/models/attendance_count_model.dart';
 
 import '../models/user_attendance_model.dart';
 
 class ApiService {
   Future<List<AttendanceModel>> fetchAttendance(
-      {String? empId, DateTime? startDate, DateTime? endDate}) async {
+      {String? empId,
+      DateTime? startDate,
+      DateTime? endDate,
+      bool? getCount}) async {
     ///Fetches attendance based on the arguments
     ///
     /// fetch by employee Id -> pass only `empId`
     /// fetch for all on one date -> pass only `startDate`
     /// fetch by employee Id for one date -> pass `empId` and `startDate`
     /// fetch by employee Id for between dates -> pass `empId`, `startDate` and `endDate`
+    /// fetch attendance count for empId between dates pass `empId`, `startDate`, `endDate` and `getCount=true`
     /* final employeeAttendanceCardController =
         Get.put(EmployeeAttendanceCardController());*/
     /*Database db = await instance.database;
@@ -57,13 +62,39 @@ class ApiService {
             body: body);
       }
       //for one employee between start and end date
-      else if (empId != null && startDate != null && endDate != null) {
+      else if (empId != null &&
+          startDate != null &&
+          endDate != null &&
+          getCount == false) {
         /*response =
             await http.get(Uri.parse('$url?empId=$empId&date=${(startDate)}'));*/
         var temp = {
           'empId': empId,
           'startDate': DateFormat('y-MM-dd').format(startDate),
           'endDate': DateFormat('y-MM-dd').format(endDate)
+        };
+        //print(startDate.toString());
+        var body = jsonEncode(temp);
+        print(body);
+        response = await http.post(Uri.parse(url),
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: body);
+      }
+
+      //get count for one employee between start and end date
+      else if (empId != null &&
+          startDate != null &&
+          endDate != null &&
+          getCount == true) {
+        /*response =
+            await http.get(Uri.parse('$url?empId=$empId&date=${(startDate)}'));*/
+        var temp = {
+          'empId': empId,
+          'startDate': DateFormat('y-MM-dd').format(startDate),
+          'endDate': DateFormat('y-MM-dd').format(endDate),
+          'getCount': true,
         };
         //print(startDate.toString());
         var body = jsonEncode(temp);
@@ -86,6 +117,59 @@ class ApiService {
 
         print(attendanceRecord);
         return attendanceRecord;
+      } else {
+        //throw Exception('Failed to load attendance');
+      }
+    } on Exception catch (e) {
+      // TODO handle ui based on exception
+      print('Exception: $e');
+    }
+    return [];
+  }
+
+  Future<List<AttendanceCountModel>> fetchAttendanceCount(
+      {String? empId,
+      DateTime? startDate,
+      DateTime? endDate,
+      bool? getCount}) async {
+    /// fetch attendance count for empId between dates pass `empId`, `startDate`, `endDate` and `getCount=true`
+    String url = 'https://www.aayaam3d.com/api/viewAttendance/';
+    try {
+      var response;
+
+      //get count for one employee between start and end date
+      if (empId != null &&
+          startDate != null &&
+          endDate != null &&
+          getCount == true) {
+        /*response =
+            await http.get(Uri.parse('$url?empId=$empId&date=${(startDate)}'));*/
+        var temp = {
+          'empId': empId,
+          'startDate': DateFormat('y-MM-dd').format(startDate),
+          'endDate': DateFormat('y-MM-dd').format(endDate),
+          'getCount': true,
+        };
+        //print(startDate.toString());
+        var body = jsonEncode(temp);
+        print(body);
+        response = await http.post(Uri.parse(url),
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: body);
+      }
+
+      print(response.statusCode);
+      print(response.body);
+      if (response.statusCode == 200) {
+        var jsonData = json.decode(response.body);
+        List<AttendanceCountModel> attendanceCount = [];
+        for (var data in jsonData) {
+          attendanceCount.add(AttendanceCountModel.fromJson(data));
+        }
+        print(attendanceCount);
+        return attendanceCount;
       } else {
         //throw Exception('Failed to load attendance');
       }

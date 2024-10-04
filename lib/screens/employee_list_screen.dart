@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/components/form_field_button.dart';
+import 'package:stationeryhub_attendance/controllers/employee_card_controller.dart';
 import 'package:stationeryhub_attendance/controllers/employee_list_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
+import 'package:stationeryhub_attendance/models/attendance_count_view_model.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
 import 'package:stationeryhub_attendance/screens/user_onboarding_screen.dart';
 
@@ -12,6 +14,9 @@ import '../components/employee_card.dart';
 
 class EmployeeListScreen extends StatelessWidget {
   const EmployeeListScreen({super.key});
+
+  static final EmployeeCardController employeeCardController =
+      Get.put(EmployeeCardController());
 
   @override
   Widget build(BuildContext context) {
@@ -99,9 +104,18 @@ class EmployeeListScreen extends StatelessWidget {
         Expanded(
           child: ListView.builder(
             itemCount: employeeListScreenController.employeeList.length,
-            itemBuilder: (context, index) => EmployeeCard(
-              employee: employeeListScreenController.employeeList[index],
-            ),
+            itemBuilder: (context, index) {
+              AttendanceCountViewModel? attendanceCountView;
+              if (employeeCardController.attendanceCountViewList.isNotEmpty &&
+                  employeeCardController.isLoading.value == false) {
+                attendanceCountView =
+                    employeeCardController.attendanceCountViewList[index];
+              }
+              return EmployeeCard(
+                attendanceCountView: attendanceCountView,
+                employee: employeeListScreenController.employeeList[index],
+              );
+            },
           ),
         )
       ],

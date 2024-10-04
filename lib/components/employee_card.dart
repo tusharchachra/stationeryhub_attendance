@@ -4,12 +4,15 @@ import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/components/picture_circle.dart';
 import 'package:stationeryhub_attendance/controllers/employee_card_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
+import 'package:stationeryhub_attendance/models/attendance_count_view_model.dart';
 import 'package:stationeryhub_attendance/models/user_type_enum.dart';
 import 'package:stationeryhub_attendance/models/users_model.dart';
 
 class EmployeeCard extends StatelessWidget {
-  const EmployeeCard({super.key, required this.employee});
+  const EmployeeCard(
+      {super.key, required this.employee, this.attendanceCountView});
   final UsersModel employee;
+  final AttendanceCountViewModel? attendanceCountView;
 
   @override
   Widget build(BuildContext context) {
@@ -144,11 +147,22 @@ class EmployeeCard extends StatelessWidget {
       {required EmployeeCardController controller,
       required String title,
       required String body}) {
-    controller.loadAttendance(employee.userId!);
-    return /*Obx(
-      () => controller.isLoading.value == true
-          ? CircularProgressIndicator()
-          :*/
+    final EmployeeCardController employeeCardController =
+        Get.put(EmployeeCardController());
+    DateTime start = DateTime(DateTime.now().year, DateTime.now().month - 1, 1);
+
+    ///TODO: remove (-1) from month
+    DateTime end = DateTime(
+        DateTime.now().year,
+        DateTime.now().month - 1,
+        DateUtils.getDaysInMonth(
+            DateTime.now().year, DateTime.now().month - 1));
+    employeeCardController.loadAttendance(
+        empId: employee.userId!, startDate: start, endDate: end);
+
+    return /*Obx(() => controller.isLoading.value == true
+        ? CircularProgressIndicator()
+        : */
         Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -159,7 +173,12 @@ class EmployeeCard extends StatelessWidget {
             color: Constants.colourTextDark,
           ),
         ),
-        //Text(data)
+        Text(
+          attendanceCountView == null
+              ? ''
+              : attendanceCountView!.attendanceCount.length.toString(),
+          style: Get.textTheme.titleMedium?.copyWith(color: Colors.blue),
+        )
       ],
       // ),
     );

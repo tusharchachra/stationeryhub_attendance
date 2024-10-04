@@ -19,4 +19,10 @@ class AttendanceModel {
       : empId = (json['empId']),
         action = int.parse(json['action']),
         date = DateTime.parse(json['date']);
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return toJson().toString();
+  }
 }
