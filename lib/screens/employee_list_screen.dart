@@ -23,7 +23,7 @@ class EmployeeListScreen extends StatelessWidget {
     final employeeListScreenController =
         Get.put(EmployeeListScreenController());
     final FirebaseFirestoreController firestoreController = Get.find();
-    print(employeeListScreenController.employeeList);
+    //print(employeeListScreenController.employeeList);
     return ScaffoldDashboard(
       backgroundColour: employeeListScreenController.backgroundColor.value,
       pageTitle: Text(
@@ -101,21 +101,24 @@ class EmployeeListScreen extends StatelessWidget {
             ],
           ),
         ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: employeeListScreenController.employeeList.length,
-            itemBuilder: (context, index) {
-              AttendanceCountViewModel? attendanceCountView;
-              if (employeeCardController.attendanceCountViewList.isNotEmpty &&
-                  employeeCardController.isLoading.value == false) {
-                attendanceCountView =
-                    employeeCardController.attendanceCountViewList[index];
-              }
-              return EmployeeCard(
-                attendanceCountView: attendanceCountView,
-                employee: employeeListScreenController.employeeList[index],
-              );
-            },
+        Obx(
+          () => Expanded(
+            child: ListView.builder(
+              itemCount: employeeListScreenController.employeeList.length,
+              itemBuilder: (context, index) {
+                AttendanceCountViewModel? attendanceCountView;
+                if (employeeCardController.attendanceCountViewList.isNotEmpty &&
+                    employeeCardController.isLoading.value == false) {
+                  attendanceCountView =
+                      employeeCardController.attendanceCountViewList[index];
+                }
+                //print('attCountView=${attendanceCountView.toString()}');
+                return EmployeeCard(
+                  attendanceCountView: attendanceCountView,
+                  employee: employeeListScreenController.employeeList[index],
+                );
+              },
+            ),
           ),
         )
       ],

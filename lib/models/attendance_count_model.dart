@@ -1,3 +1,6 @@
+///Model class for att count of empId on a date
+library;
+
 class AttendanceCountModel {
   final String? empId;
   final DateTime date;

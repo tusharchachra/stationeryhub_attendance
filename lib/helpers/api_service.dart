@@ -152,7 +152,7 @@ class ApiService {
         };
         //print(startDate.toString());
         var body = jsonEncode(temp);
-        print(body);
+        //print(body);
         response = await http.post(Uri.parse(url),
             headers: {
               "Content-Type": "application/json",
@@ -160,15 +160,15 @@ class ApiService {
             body: body);
       }
 
-      print(response.statusCode);
-      print(response.body);
+      print('responseCode=${response.statusCode}');
+      print('responseBody=${response.body}');
       if (response.statusCode == 200) {
         var jsonData = json.decode(response.body);
         List<AttendanceCountModel> attendanceCount = [];
         for (var data in jsonData) {
           attendanceCount.add(AttendanceCountModel.fromJson(data));
         }
-        print(attendanceCount);
+        //print('attendanceCountList=$attendanceCount');
         return attendanceCount;
       } else {
         //throw Exception('Failed to load attendance');

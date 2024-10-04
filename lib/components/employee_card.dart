@@ -147,18 +147,17 @@ class EmployeeCard extends StatelessWidget {
       {required EmployeeCardController controller,
       required String title,
       required String body}) {
-    final EmployeeCardController employeeCardController =
-        Get.put(EmployeeCardController());
-    DateTime start = DateTime(DateTime.now().year, DateTime.now().month - 1, 1);
+    /* final EmployeeCardController employeeCardController =
+        Get.put(EmployeeCardController());*/
+    /* DateTime start = DateTime(DateTime.now().year, DateTime.now().month - 1, 1);
 
-    ///TODO: remove (-1) from month
     DateTime end = DateTime(
         DateTime.now().year,
         DateTime.now().month - 1,
         DateUtils.getDaysInMonth(
-            DateTime.now().year, DateTime.now().month - 1));
-    employeeCardController.loadAttendance(
-        empId: employee.userId!, startDate: start, endDate: end);
+            DateTime.now().year, DateTime.now().month - 1));*/
+    /* controller.loadAttendance(
+        empId: employee.userId!, startDate: start, endDate: end);*/
 
     return /*Obx(() => controller.isLoading.value == true
         ? CircularProgressIndicator()
