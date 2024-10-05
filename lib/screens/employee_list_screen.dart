@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/components/form_field_button.dart';
+import 'package:stationeryhub_attendance/components/gradient_progress_bar.dart';
 import 'package:stationeryhub_attendance/controllers/employee_card_controller.dart';
 import 'package:stationeryhub_attendance/controllers/employee_list_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
-import 'package:stationeryhub_attendance/models/attendance_count_view_model.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
 import 'package:stationeryhub_attendance/screens/user_onboarding_screen.dart';
 
@@ -15,8 +15,7 @@ import '../components/employee_card.dart';
 class EmployeeListScreen extends StatelessWidget {
   const EmployeeListScreen({super.key});
 
-  static final EmployeeCardController employeeCardController =
-      Get.put(EmployeeCardController());
+  static final EmployeeCardController employeeCardController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +30,82 @@ class EmployeeListScreen extends StatelessWidget {
         style: Get.textTheme.displaySmall?.copyWith(color: Colors.white),
       ),
       bodyWidget: Obx(
-        () => employeeListScreenController.employeeList.isEmpty
-            ? buildEmptyEmployeeList()
-            : buildEmployeeList(
-                employeeListScreenController: employeeListScreenController),
+        () => employeeListScreenController.isLoading.value == true
+            ? buildPlaceholder(employeeListScreenController)
+            : employeeListScreenController.employeeList.isEmpty
+                ? buildEmptyEmployeeList()
+                : buildEmployeeList(
+                    employeeListScreenController: employeeListScreenController),
       ),
+    );
+  }
+
+  Widget buildPlaceholder(
+      EmployeeListScreenController employeeListScreenController) {
+    employeeListScreenController.backgroundColor.value =
+        Constants.colourScaffoldBackground;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(
+          height: 65.h,
+          color: Constants.colourBorderLight,
+          padding: EdgeInsets.symmetric(vertical: 11.h, horizontal: 12.w),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Wrap(
+                children: [
+                  Icon(
+                    Icons.person_add,
+                    color: Constants.colourPrimary,
+                    size: 17.w,
+                  ),
+                  SizedBox(width: 10.w),
+                  buildGradientProgressBar100x20(),
+                ],
+              ),
+              Container(
+                  width: 44.w,
+                  height: 44.h,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                  ),
+                  child: GradientProgressBar(size: Size(44.w, 44.h)))
+            ],
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 22.h, horizontal: 12.w),
+          child: Row(
+            children: [
+              buildGradientProgressBar100x20(),
+            ],
+          ),
+        ),
+        Obx(
+          () => Expanded(
+            child: ListView.builder(
+              itemCount: employeeListScreenController.employeeList.length,
+              itemBuilder: (context, index) {
+                return Obx(() => EmployeeCard(
+                      showPlaceholder: true,
+                      attendanceCountView: null,
+                      employee:
+                          employeeListScreenController.employeeList[index],
+                    ));
+              },
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  GradientProgressBar buildGradientProgressBar100x20() {
+    return GradientProgressBar(
+      size: Size(150.w, 20.h),
     );
   }
 
@@ -106,17 +176,12 @@ class EmployeeListScreen extends StatelessWidget {
             child: ListView.builder(
               itemCount: employeeListScreenController.employeeList.length,
               itemBuilder: (context, index) {
-                AttendanceCountViewModel? attendanceCountView;
-                if (employeeCardController.attendanceCountViewList.isNotEmpty &&
-                    employeeCardController.isLoading.value == false) {
-                  attendanceCountView =
-                      employeeCardController.attendanceCountViewList[index];
-                }
-                //print('attCountView=${attendanceCountView.toString()}');
-                return EmployeeCard(
-                  attendanceCountView: attendanceCountView,
-                  employee: employeeListScreenController.employeeList[index],
-                );
+                return Obx(() => EmployeeCard(
+                      attendanceCountView:
+                          employeeCardController.attendanceCountViewList[index],
+                      employee:
+                          employeeListScreenController.employeeList[index],
+                    ));
               },
             ),
           ),
