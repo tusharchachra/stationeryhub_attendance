@@ -26,7 +26,7 @@ class Constants {
 //------------------
   static const colourOtpBoxBorder = Color(0xffB3ABC2);
   static const colourTextFieldIcon = Color(0xff939393);
-  static const colourError = Colors.red;
+  static const colourError = Color(0xffFF9431);
   static const colourStatusBar = Color(0xff284EAD);
   static const colourProfilePicIconBackground = Color(0xffC1CFEE);
   static const colourScaffoldBackground = Color(0xffF8F8F8);

@@ -238,9 +238,13 @@ class UserOnboardingScreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SizedBox(
+            Container(
               width: 83.w,
               height: 51.h,
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.r),
+              ),
               child: Image.file(
                 File(direction == ScanDirection.front
                     ? cardCaptureController.documentFront[0]

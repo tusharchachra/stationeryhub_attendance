@@ -17,6 +17,7 @@ class UserIdCardUploadScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScaffoldDashboard(
+      backgroundColour: Colors.white,
       isLoading: false,
       pageTitle: Text('Upload ID'),
       bodyWidget: SizedBox.expand(
@@ -66,7 +67,10 @@ class UserIdCardUploadScreen extends StatelessWidget {
             () => Container(
               width: 366.w,
               height: 247.h,
-              color: Constants.colourIdCardBackground,
+              decoration: BoxDecoration(
+                color: Constants.colourBorderLight,
+                borderRadius: BorderRadius.circular(10.r),
+              ),
               child: Center(
                 child: (direction == ScanDirection.front &&
                             cardController.isLoadingFront.value == true) ||

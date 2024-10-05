@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/controllers/form_error_controller.dart';
+import 'package:stationeryhub_attendance/helpers/constants.dart';
 
 class FormError extends StatelessWidget {
   const FormError({super.key});
@@ -20,13 +21,14 @@ class FormError extends StatelessWidget {
       children: [
         Icon(
           Icons.error_outline,
-          color: Colors.red,
+          color: Constants.colourError,
           size: 15.w,
         ),
         SizedBox(width: 5.h),
         Text(
           error,
-          style: Get.textTheme.bodySmall?.copyWith(color: Colors.red),
+          style:
+              Get.textTheme.bodySmall?.copyWith(color: Constants.colourError),
         ),
       ],
     );
