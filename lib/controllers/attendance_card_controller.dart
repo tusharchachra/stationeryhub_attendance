@@ -41,7 +41,7 @@ class AttendanceCardController extends GetxController {
         for (var user in userList) {
           records = await apiService.fetchAttendance(
               empId: user.userId, startDate: startDate);
-          print(records.toString());
+
           //assign the fetched attendance to the attendanceViewList
           attendanceViewList
               .firstWhere((element) => element.user.userId == records[0].empId)
@@ -62,7 +62,8 @@ class AttendanceCardController extends GetxController {
       //print('records=$records');
     } catch (e) {
       // Handle error
-      print(e);
+      //print(LoggerStackTrace.from(StackTrace.current));
+      print('Error: $e');
     } finally {}
     isLoading.value = false;
   }

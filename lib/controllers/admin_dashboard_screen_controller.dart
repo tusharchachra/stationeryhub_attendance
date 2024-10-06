@@ -44,10 +44,7 @@ class AdminDashboardScreenController extends GetxController {
   @override
   onReady() async {
     selectedDate.listen((date) async {
-      //attendanceController.attendanceList([]);
-      // print(attendanceController.attendanceList);
-
-      await attendanceCardController.loadAttendance(startDate: date);
+      await attendanceCardController.loadAttendance(startDate: (date));
     });
   }
 
@@ -81,6 +78,8 @@ class AdminDashboardScreenController extends GetxController {
         DateTime(selectedYear.value, selectedMonth.value, selectedDay.value);
     if (kDebugMode) {
       debugPrint('selectedDate=$selectedDate');
+      /*debugPrint(
+          '${LoggerStackTrace.from(StackTrace.current)}selectedDate=$selectedDate');*/
     }
   }
 }

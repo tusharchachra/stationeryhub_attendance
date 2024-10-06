@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/helpers/api_service.dart';
 import 'package:stationeryhub_attendance/models/attendance_count_model.dart';
@@ -34,23 +33,21 @@ class EmployeeCardController extends GetxController {
     //check if dates are set. if not, we shall consider the current month from 1st to date
     ///TODO switch commented lines when live data is available in the db
     if (startDate == null) {
-      /*start = DateTime(DateTime.now().year, DateTime.now().month, 1);*/
-      start = DateTime(DateTime.now().year, DateTime.now().month - 1, 1);
+      start = DateTime(DateTime.now().year, DateTime.now().month, 1);
+      /*start = DateTime(DateTime.now().year, DateTime.now().month - 1, 1);*/
     } else {
       start = startDate;
     }
 
     ///TODO switch commented lines when live data is available in the db
     if (endDate == null) {
-      /*end = DateTime(
-          DateTime.now().year,
-          DateTime.now().month,
-          DateTime.now().date);*/
       end = DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day);
+      /*end = DateTime(
           DateTime.now().year,
           DateTime.now().month - 1,
           DateUtils.getDaysInMonth(
-              DateTime.now().year, DateTime.now().month - 1));
+              DateTime.now().year, DateTime.now().month - 1));*/
     } else {
       end = endDate;
     }
@@ -77,7 +74,7 @@ class EmployeeCardController extends GetxController {
         }
       }
 
-      print('attendanceCountViewList=${attendanceCountViewList.toString()}');
+      print('attendanceCountViewList=${attendanceCountViewList.length}');
     } catch (e) {
       // Handle error
       print(e);

@@ -8,7 +8,8 @@ class EmployeeListScreenController extends GetxController {
   RxList<UsersModel> employeeList = <UsersModel>[].obs;
   RxBool isLoading = false.obs;
   static final FirebaseFirestoreController firestoreController = Get.find();
-  static final EmployeeCardController employeeCardController = Get.find();
+  static final EmployeeCardController employeeCardController =
+      Get.put(EmployeeCardController());
 
   Rx<Color> backgroundColor = Colors.white.obs;
 

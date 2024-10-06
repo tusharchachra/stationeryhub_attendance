@@ -34,7 +34,7 @@ class AdminDashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(FirebaseStorageController());
     Get.put(IdCardCaptureController());
-    Get.put(AdminDashboardScreenController());
+    Get.put(AdminDashboardScreenController(), permanent: true);
     //FirebaseStorageController firebaseStorageController = Get.find();
     /* if (firestoreController.registeredOrganization?.value.id == null) {
       Get.to(NewOrganizationScreen());
@@ -131,7 +131,6 @@ class AdminDashboardScreen extends StatelessWidget {
                             ? false
                             : true,
                         onTap: () {
-                          print('tapped');
                           Get.to(() => UpdateOrganizationScreen());
                         },
                       ),
@@ -254,6 +253,7 @@ class AdminDashboardScreen extends StatelessWidget {
                             attendanceView = attendanceCardController
                                 .attendanceViewList[index];
                           }
+
                           return AttendanceCard(
                             attendanceView: attendanceView,
                             showPlaceholder:

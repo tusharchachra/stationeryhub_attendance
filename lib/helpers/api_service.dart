@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:stationeryhub_attendance/helpers/logger_stack_trace.dart';
 import 'package:stationeryhub_attendance/models/attendance_count_model.dart';
 
 import '../models/user_attendance_model.dart';
@@ -35,26 +36,35 @@ class ApiService {
       var response;
 
       //by empId
-      if (empId != null && startDate == null && endDate == null) {
+      if (empId != null &&
+          startDate == null &&
+          endDate == null &&
+          getCount == null) {
         response = await http.get(Uri.parse('$url?empId=$empId'));
       }
       //all for one date
-      else if (empId == null && startDate != null && endDate == null) {
+      else if (empId == null &&
+          startDate != null &&
+          endDate == null &&
+          getCount == null) {
         print(startDate.toString());
         response =
             await http.get(Uri.parse('$url?date=${(startDate).toString()}'));
       }
       //for one employee on one date
-      else if (empId != null && startDate != null && endDate == null) {
+      else if (empId != null &&
+          startDate != null &&
+          endDate == null &&
+          getCount == null) {
         /*response =
             await http.get(Uri.parse('$url?empId=$empId&date=${(startDate)}'));*/
         var temp = {
           'empId': empId,
-          'date': DateFormat('y-MM-d').format(startDate)
+          'startDate': DateFormat('y-MM-dd').format(startDate)
         };
         //print(startDate.toString());
         var body = jsonEncode(temp);
-        print(body);
+        print('body=$body');
         response = await http.post(Uri.parse(url),
             headers: {
               "Content-Type": "application/json",
@@ -106,8 +116,8 @@ class ApiService {
             body: body);
       }
 
-      print(response.statusCode);
-      print(response.body);
+      print('responseCode=${response.statusCode}');
+      print('responseBody=${response.body}');
       if (response.statusCode == 200) {
         var jsonData = json.decode(response.body);
         List<AttendanceModel> attendanceRecord = [];
@@ -115,7 +125,7 @@ class ApiService {
           attendanceRecord.add(AttendanceModel.fromJson(data));
         }
 
-        print(attendanceRecord);
+        print('attendanceRecord=$attendanceRecord');
         return attendanceRecord;
       } else {
         //throw Exception('Failed to load attendance');

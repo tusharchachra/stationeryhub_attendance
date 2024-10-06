@@ -47,7 +47,8 @@ class AttendanceCard extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 12.h),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            //crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -87,7 +88,37 @@ class AttendanceCard extends StatelessWidget {
                     )
                 ],
               ),
-              if (attendanceView!.attendance.length > 1)
+              if (attendanceView!.attendance.length > 2)
+                Expanded(
+                  child: buildDuration((attendanceView!.attendance[2].date!)
+                      .difference(attendanceView!.attendance[1].date!)),
+                ),
+              Expanded(
+                child: ListView.separated(
+                  separatorBuilder: (context, index) => Container(
+                    height: 25.h,
+                    width: 0.8.w,
+                    color: Constants.colourBorderMedium,
+                  ),
+                  itemCount: attendanceView!.attendance.length,
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        buildTime(
+                          // imagePath: 'assets/images/arrowThinDown.png',
+                          index: index,
+                          time: attendanceView!.attendance[index].date!,
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+              /* if (attendanceView!.attendance.length > 1)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -136,9 +167,9 @@ class AttendanceCard extends StatelessWidget {
                     SizedBox(width: 10.w),
                     buildTime(
                         imagePath: 'assets/images/arrowThinUp.png',
-                        time: attendanceView!.attendance[3].date!),
+                        time: attendanceView!.attendance[2].date!),
                   ],
-                ),
+                ),*/
 
               /*Expanded(
                 child: Row(
@@ -254,20 +285,21 @@ class AttendanceCard extends StatelessWidget {
     );
   }
 
-  Row buildTime({
-    required String imagePath,
+  Widget buildTime({
+    /*required String imagePath,*/
+    int? index,
     required DateTime time,
   }) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       //crossAxisAlignment: WrapCrossAlignment.center,
+      /*mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisSize: MainAxisSize.min,*/
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Image.asset(
-          imagePath,
-          /*index.isEven
-                      ? 'assets/images/arrowThinUp.png'
-                      : */
-          /*'assets/images/arrowThinDown.png'*/
+          index!.isEven
+              ? 'assets/images/arrowThinUp.png'
+              : 'assets/images/arrowThinDown.png',
           height: 11.h,
         ),
         SizedBox(width: 5.w),
@@ -286,6 +318,30 @@ class AttendanceCard extends StatelessWidget {
     int minutes = duration.inMinutes.remainder(60);
     // Note: Seconds are considered for total duration but not displayed.
     String twoDigits(int n) => n.toString().padLeft(2, '0');
+    return Row(
+      //crossAxisAlignment: WrapCrossAlignment.center,
+      /*mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisSize: MainAxisSize.min,*/
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          //height: 25.h,
+          width: 0.8.w,
+          color: Constants.colourBorderMedium,
+        ),
+        Icon(
+          Icons.fastfood,
+          size: 11.w,
+          color: Constants.colourLunchBreak,
+        ),
+        SizedBox(width: 5.w),
+        Text(
+          '${twoDigits(hours)}:${twoDigits(minutes)}',
+          style: Get.textTheme.titleMedium
+              ?.copyWith(color: Constants.colourTextDark),
+        ),
+      ],
+    );
     return Text(
       '${twoDigits(hours)}:${twoDigits(minutes)}',
       style:
