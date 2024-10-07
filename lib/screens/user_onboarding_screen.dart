@@ -27,7 +27,7 @@ import 'display_captured_image_screen.dart';
 enum ScanDirection { front, back }
 
 class UserOnboardingScreen extends StatelessWidget {
-  UserOnboardingScreen({super.key});
+  const UserOnboardingScreen({super.key});
 
   static FirebaseFirestoreController firestoreController = Get.find();
   /*static UserOnboardingScreenController userOnboardingScreenController =
@@ -35,7 +35,7 @@ class UserOnboardingScreen extends StatelessWidget {
   static final CaptureImageScreenController captureImageScreenController =
       Get.find();*/
 
-  final FocusNode focusNode = FocusNode();
+  static FocusNode focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {

@@ -25,7 +25,7 @@ class EmployeeListScreen extends StatelessWidget {
     return ScaffoldDashboard(
       backgroundColour: employeeListScreenController.backgroundColor.value,
       pageTitle: Text(
-        ('Employees'),
+        'Employees',
         style: Get.textTheme.displaySmall?.copyWith(color: Colors.white),
       ),
       bodyWidget: Obx(
