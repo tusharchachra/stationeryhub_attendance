@@ -7,8 +7,7 @@ import 'package:stationeryhub_attendance/helpers/constants.dart';
 
 class LocalAuthScreen extends StatelessWidget {
   const LocalAuthScreen({super.key});
-  static final LocalAuthScreenController localAuthController =
-      Get.put(LocalAuthScreenController());
+  static final LocalAuthScreenController localAuthController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +58,9 @@ class LocalAuthScreen extends StatelessWidget {
                     await localAuthController.authenticate();
 
                     ///TODO set navigation
-                    if (localAuthController.isAuthenticated == true) {}
+                    if (localAuthController.isAuthenticated == true) {
+                      Get.back();
+                    }
                   },
                   child: Image.asset(
                     'assets/images/localAuthIcon.png',

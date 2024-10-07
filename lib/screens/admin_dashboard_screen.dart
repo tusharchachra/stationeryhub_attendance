@@ -5,10 +5,11 @@ import 'package:stationeryhub_attendance/components/picture_circle.dart';
 import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
 import 'package:stationeryhub_attendance/controllers/id_card_capture_controller.dart';
+import 'package:stationeryhub_attendance/controllers/local_auth_screen_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 import 'package:stationeryhub_attendance/models/attendance_view_model.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
-import 'package:stationeryhub_attendance/screens/employee_options_screen.dart';
+import 'package:stationeryhub_attendance/screens/local_auth_screen.dart';
 import 'package:stationeryhub_attendance/screens/update_organization_screen.dart';
 
 import '../components/admin_dashboard_box.dart';
@@ -20,6 +21,7 @@ import '../controllers/attendance_card_controller.dart';
 import '../controllers/firebase_firestore_controller.dart';
 import '../controllers/firebase_storage_controller.dart';
 import '../services/firebase_login_services.dart';
+import 'employee_options_screen.dart';
 import 'new_organization_screen.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
@@ -275,7 +277,20 @@ class AdminDashboardScreen extends StatelessWidget {
                 child: Text('Sign out')),
             TextButton(
                 onPressed: () {
-                  Get.to(() => EmployeeOptionsScreen());
+                  LocalAuthScreenController localAuthController =
+                      Get.put(LocalAuthScreenController());
+                  Get.bottomSheet(
+                    LocalAuthScreen(),
+                    backgroundColor: Colors.white,
+                    isDismissible: false,
+                  ).then(
+                    (value) {
+                      if (localAuthController.isAuthenticated) {
+                        Get.to(() => EmployeeOptionsScreen());
+                        // localAuthController.dispose();
+                      }
+                    },
+                  );
                 },
                 child: Text('Emp list')),
           ],
