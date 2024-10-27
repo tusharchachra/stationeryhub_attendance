@@ -8,6 +8,7 @@ import 'package:stationeryhub_attendance/helpers/constants.dart';
 import 'package:stationeryhub_attendance/models/attendance_count_view_model.dart';
 import 'package:stationeryhub_attendance/models/user_type_enum.dart';
 import 'package:stationeryhub_attendance/models/users_model.dart';
+import 'package:stationeryhub_attendance/screens/user_onboarding_screen.dart';
 
 class EmployeeCard extends StatelessWidget {
   const EmployeeCard(
@@ -90,9 +91,19 @@ class EmployeeCard extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 18.w),
-                  const Icon(
-                    Icons.more_vert,
-                    color: Constants.colourTextDark,
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(
+                        () => UserOnboardingScreen(
+                          isEditing: true,
+                          employee: employee,
+                        ),
+                      );
+                    },
+                    child: Icon(
+                      Icons.edit,
+                      color: Constants.colourTextDark,
+                    ),
                   )
                 ],
               )

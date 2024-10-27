@@ -61,7 +61,7 @@ class EmployeeListScreen extends StatelessWidget {
                     size: 17.w,
                   ),
                   SizedBox(width: 10.w),
-                  buildGradientProgressBar100x20(),
+                  buildGradientProgressBar150x20(),
                 ],
               ),
               Container(
@@ -79,7 +79,7 @@ class EmployeeListScreen extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 22.h, horizontal: 12.w),
           child: Row(
             children: [
-              buildGradientProgressBar100x20(),
+              buildGradientProgressBar150x20(),
             ],
           ),
         ),
@@ -99,7 +99,7 @@ class EmployeeListScreen extends StatelessWidget {
     );
   }
 
-  GradientProgressBar buildGradientProgressBar100x20() {
+  GradientProgressBar buildGradientProgressBar150x20() {
     return GradientProgressBar(
       size: Size(150.w, 20.h),
     );

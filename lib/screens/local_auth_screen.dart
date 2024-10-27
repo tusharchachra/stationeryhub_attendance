@@ -54,7 +54,6 @@ class LocalAuthScreen extends StatelessWidget {
                 )
               : GestureDetector(
                   onTap: () async {
-                    print('tapped');
                     await localAuthController.authenticate();
 
                     ///TODO set navigation
