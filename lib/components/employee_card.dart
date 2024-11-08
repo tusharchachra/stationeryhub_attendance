@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/components/gradient_progress_bar.dart';
 import 'package:stationeryhub_attendance/components/picture_circle.dart';
-import 'package:stationeryhub_attendance/controllers/employee_card_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 import 'package:stationeryhub_attendance/models/attendance_count_view_model.dart';
 import 'package:stationeryhub_attendance/models/user_type_enum.dart';
@@ -22,9 +21,6 @@ class EmployeeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final EmployeeCardController employeeCardController =
-        Get.put(EmployeeCardController());
-
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
       child: Container(
@@ -33,15 +29,12 @@ class EmployeeCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(4.r),
           border: Border.all(color: Constants.colourBorderMedium, width: 1.w),
         ),
-        child: employeeCardController.isLoading.value == true ||
-                showPlaceholder == true
-            ? buildPlaceholder(employeeCardController)
-            : buildView(employeeCardController),
+        child: showPlaceholder == true ? buildPlaceholder() : buildView(),
       ),
     );
   }
 
-  Column buildView(EmployeeCardController employeeCardController) {
+  Column buildView() {
     return Column(
       children: [
         Padding(
@@ -99,6 +92,7 @@ class EmployeeCard extends StatelessWidget {
                           employee: employee,
                         ),
                       );
+                      //employeeCardController.loadAttendanceCount();
                     },
                     child: Icon(
                       Icons.edit,
@@ -143,7 +137,6 @@ class EmployeeCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             buildAttendanceColumn(
-              controller: employeeCardController,
               title: 'Present',
               body: attendanceCountView == null
                   ? ''
@@ -151,7 +144,6 @@ class EmployeeCard extends StatelessWidget {
             ),
             buildDivider(),
             buildAttendanceColumn(
-              controller: employeeCardController,
               title: 'Absent',
               body: attendanceCountView == null
                   ? ''
@@ -167,7 +159,7 @@ class EmployeeCard extends StatelessWidget {
     );
   }
 
-  Column buildPlaceholder(EmployeeCardController employeeCardController) {
+  Column buildPlaceholder() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -219,10 +211,7 @@ class EmployeeCard extends StatelessWidget {
     );
   }
 
-  Widget buildAttendanceColumn(
-      {required EmployeeCardController controller,
-      required String title,
-      required String body}) {
+  Widget buildAttendanceColumn({required String title, required String body}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,

@@ -7,10 +7,11 @@ import 'package:stationeryhub_attendance/helpers/constants.dart';
 
 class LocalAuthScreen extends StatelessWidget {
   const LocalAuthScreen({super.key});
-  static final LocalAuthScreenController localAuthController = Get.find();
+
 
   @override
   Widget build(BuildContext context) {
+     final LocalAuthScreenController localAuthController = Get.find();
     //final LocalAuthScreenController localAuthController = Get.find();
     final FirebaseAuthController firebaseAuthController = Get.find();
     return SizedBox(

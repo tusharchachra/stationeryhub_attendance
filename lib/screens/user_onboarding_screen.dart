@@ -65,12 +65,16 @@ class UserOnboardingScreen extends StatelessWidget {
     );
 
     if (isEditing && employee != null) {
+      userOnboardingScreenController.isEditing.value = true;
       userOnboardingScreenController.phoneNumController.value.text =
-          employee!.phoneNum!;
+          employee!.phoneNum!.trim();
       userOnboardingScreenController.nameController.value.text =
-          employee!.name!;
+          employee!.name!.trim();
       userOnboardingScreenController.selectedUserType.value =
           employee!.userType!;
+      userOnboardingScreenController.userTypeController.value.text =
+          employee!.userType!.name.capitalizeFirst!;
+
       /*userOnboardingScreenController.captureImageScreenController.*/
       userOnboardingScreenController.captureImageScreenController.imageFilePath
           .value = employee!.profilePicPath!;
@@ -101,7 +105,11 @@ class UserOnboardingScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  buildProfilePicCircle(captureImageScreenController),
+                  buildProfilePicCircle(
+                    captureImageScreenController: captureImageScreenController,
+                    userOnboardingScreenController:
+                        userOnboardingScreenController,
+                  ),
                   SizedBox(height: 48.h),
                   buildSubHeading(
                     text: 'Profile',
@@ -157,6 +165,8 @@ class UserOnboardingScreen extends StatelessWidget {
                   if (idCardCaptureController.documentFront.isNotEmpty)
                     buildCapturedCard(
                       cardCaptureController: idCardCaptureController,
+                      userOnboardingScreenController:
+                          userOnboardingScreenController,
                       direction: ScanDirection.front,
                       isEditing: isEditing,
                     ),
@@ -164,6 +174,8 @@ class UserOnboardingScreen extends StatelessWidget {
                   if (idCardCaptureController.documentBack.isNotEmpty)
                     buildCapturedCard(
                       cardCaptureController: idCardCaptureController,
+                      userOnboardingScreenController:
+                          userOnboardingScreenController,
                       direction: ScanDirection.back,
                       isEditing: isEditing,
                     ),
@@ -192,7 +204,7 @@ class UserOnboardingScreen extends StatelessWidget {
                         : FormFieldButton(
                             width: 430.w,
                             height: 56.h,
-                            buttonText:isEditing?'Submit' :'Add User',
+                            buttonText: isEditing ? 'Submit' : 'Add User',
                             onTapAction: () async {
                               await validateForm(
                                   captureImageScreenController:
@@ -211,8 +223,14 @@ class UserOnboardingScreen extends StatelessWidget {
                                 if (userOnboardingScreenController
                                         .isFormValid.value ==
                                     true) {
-                                  await userOnboardingScreenController
-                                      .uploadData();
+                                  isEditing
+                                      ? {
+                                          await userOnboardingScreenController
+                                              .uploadEditedData(
+                                                  uid: employee!.userId!)
+                                        }
+                                      : await userOnboardingScreenController
+                                          .uploadData();
                                   Get.back();
                                   Get.showSnackbar(
                                     GetSnackBar(
@@ -220,7 +238,9 @@ class UserOnboardingScreen extends StatelessWidget {
                                         errorController.errorMsg.isNotEmpty
                                             ? errorController.errorMsg
                                                 .toString()
-                                            : 'New User created',
+                                            : isEditing
+                                                ? 'Update successful'
+                                                : 'New User created',
                                         textAlign: TextAlign.center,
                                         style: Get.textTheme.bodyMedium
                                             ?.copyWith(
@@ -263,6 +283,7 @@ class UserOnboardingScreen extends StatelessWidget {
   Widget buildCapturedCard(
       {required IdCardCaptureController cardCaptureController,
       required ScanDirection direction,
+      required UserOnboardingScreenController userOnboardingScreenController,
       bool isEditing = false}) {
     return Container(
       decoration: BoxDecoration(
@@ -305,8 +326,16 @@ class UserOnboardingScreen extends StatelessWidget {
               onTap: () {
                 if (direction == ScanDirection.front) {
                   cardCaptureController.documentFront.clear();
+                  if (isEditing) {
+                    userOnboardingScreenController.isIdFrontChanged.value =
+                        true;
+                  }
                 } else {
                   cardCaptureController.documentBack.clear();
+                  if (isEditing) {
+                    userOnboardingScreenController.isIdFrontChanged.value =
+                        true;
+                  }
                 }
               },
               child: SizedBox(
@@ -410,8 +439,10 @@ class UserOnboardingScreen extends StatelessWidget {
     );
   }
 
-  Widget buildProfilePicCircle(
-      CaptureImageScreenController captureImageScreenController) {
+  Widget buildProfilePicCircle({
+    required CaptureImageScreenController captureImageScreenController,
+    required UserOnboardingScreenController userOnboardingScreenController,
+  }) {
     return Stack(
       children: [
         Container(
@@ -450,6 +481,10 @@ class UserOnboardingScreen extends StatelessWidget {
             left: 80.w,
             child: GestureDetector(
                 onTap: () {
+                  if (isEditing) {
+                    userOnboardingScreenController.isProfilePicChanged.value =
+                        true;
+                  }
                   Get.to(() => const PicInfoScreen(
                         title: 'New User',
                         infoTile: 'Add a new user',
@@ -572,7 +607,7 @@ class UserOnboardingScreen extends StatelessWidget {
 
     UsersModel? tempUser =
         await firestoreController.getUser(phoneNum: phoneNum);
-    if (tempUser != null) {
+    if (tempUser != null && !isEditing) {
       formErrorController.errors.add('User already exists');
     }
     userOnboardingScreenController.isLoading.value = false;

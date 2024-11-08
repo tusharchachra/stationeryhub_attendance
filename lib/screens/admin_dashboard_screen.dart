@@ -112,7 +112,6 @@ class AdminDashboardScreen extends StatelessWidget {
                   )
                 : GestureDetector(
                     onTap: () {
-                      print('tapped');
                       Get.to(() => UpdateOrganizationScreen());
                     },
                     child: Obx(

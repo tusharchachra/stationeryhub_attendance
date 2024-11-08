@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/controllers/capture_image_screen_controller.dart';
+import 'package:stationeryhub_attendance/controllers/employee_list_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_storage_controller.dart';
 import 'package:stationeryhub_attendance/controllers/id_card_capture_controller.dart';
@@ -20,6 +21,10 @@ class UserOnboardingScreenController extends GetxController {
   FocusNode userTypeFocusNode = FocusNode();
   RxBool isLoading = false.obs;
   RxBool isFormValid = false.obs;
+  RxBool isEditing = false.obs;
+  RxBool isProfilePicChanged = false.obs;
+  RxBool isIdFrontChanged = false.obs;
+  RxBool isIdBackChanged = false.obs;
 
   var selectedUserType = UserType.employee.obs;
 
@@ -29,6 +34,7 @@ class UserOnboardingScreenController extends GetxController {
   final CaptureImageScreenController captureImageScreenController = Get.find();
   final FirebaseFirestoreController firestoreController = Get.find();
   final IdCardCaptureController idCardCaptureController = Get.find();
+  final EmployeeListScreenController employeeListScreenController = Get.find();
 
   @override
   void onReady() {
@@ -46,8 +52,12 @@ class UserOnboardingScreenController extends GetxController {
   @override
   void dispose() {
     // TODO: implement dispose
-    super.dispose();
     userTypeFocusNode.dispose();
+    isEditing.value = false;
+    isProfilePicChanged.value = false;
+    isIdFrontChanged.value = false;
+    isIdBackChanged.value = false;
+    super.dispose();
   }
 
   void invertShowUserTypeValue() {
@@ -59,7 +69,7 @@ class UserOnboardingScreenController extends GetxController {
       return null;    } else*/
 
     phoneNum = RxString(value!.trim());
-    print('value=$value');
+    //print('value=$value');
     String? temp;
     if (value == '') {
       isPhoneNumValid.value = false;
@@ -105,5 +115,51 @@ class UserOnboardingScreenController extends GetxController {
     await firestoreController.addNewUser(user: newUser);
 
     if (firestoreController.isLoading.value == false) isLoading.value = false;
+  }
+
+  Future<void> uploadEditedData({required String uid}) async {
+    isLoading.value = true;
+    String? profilePicPath;
+    String? frontPath;
+    String? backPath;
+    if (isEditing.value == true) {
+      if (isProfilePicChanged.value == true) {
+        profilePicPath = await firebaseStorageController.uploadPicture(
+            file: XFile(captureImageScreenController.imageFilePath.value),
+            storagePath: PicPathEnum.profile);
+      }
+      if (isIdFrontChanged.value == true) {
+        frontPath = await firebaseStorageController.uploadPicture(
+            file: XFile(idCardCaptureController.documentFront[0]),
+            storagePath: PicPathEnum.idCard);
+      }
+      if (isIdBackChanged.value == true) {
+        backPath = await firebaseStorageController.uploadPicture(
+            file: XFile(idCardCaptureController.documentBack[0]),
+            storagePath: PicPathEnum.idCard);
+      }
+      /*UsersModel? temp = await firebaseStorageController.uploadIdCard(
+        fileFront: XFile(idCardCaptureController.documentFront[0]),
+        fileBack: XFile(idCardCaptureController.documentBack[0]));*/
+
+      UsersModel updatedUser = UsersModel(
+        userId: uid,
+        phoneNum: phoneNumController.value.text.trim(),
+        name: nameController.value.text.trim(),
+        userType:
+            UserType.values.byName(userTypeController.value.text.toLowerCase()),
+        profilePicPath:
+            isProfilePicChanged.value == true ? profilePicPath : null,
+        idCardFrontPath: isIdFrontChanged.value == true ? frontPath : null,
+        idCardBackPath: isIdBackChanged.value == true ? backPath : null,
+      );
+      await firestoreController.updateUser(user: updatedUser);
+      employeeListScreenController.employeeList[employeeListScreenController
+              .employeeList
+              .indexWhere((user) => user.userId == uid)] =
+          (await firestoreController.getUser(uid: uid))!;
+
+      if (firestoreController.isLoading.value == false) isLoading.value = false;
+    }
   }
 }

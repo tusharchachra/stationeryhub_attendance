@@ -196,8 +196,7 @@ class FirebaseFirestoreController extends GetxController {
           fromFirestore: UsersModel.fromFirestore,
           toFirestore: (UsersModel user, _) => user.toJson(),
         );
-    final docSnap =
-        await ref.get(/*const GetOptions(source: Source.serverAndCache)*/);
+    final docSnap = await ref.get();
     if (docSnap.docs.isNotEmpty) {
       for (var doc in docSnap.docs) {
         userList.add(doc.data());

@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/components/form_field_button.dart';
 import 'package:stationeryhub_attendance/components/gradient_progress_bar.dart';
-import 'package:stationeryhub_attendance/controllers/employee_card_controller.dart';
 import 'package:stationeryhub_attendance/controllers/employee_list_screen_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 import 'package:stationeryhub_attendance/models/users_model.dart';
@@ -17,11 +16,10 @@ class EmployeeListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //Get.put(EmployeeCardController());
     final employeeListScreenController =
         Get.put(EmployeeListScreenController());
 
-    //final FirebaseFirestoreController firestoreController = Get.find();
-    //print(employeeListScreenController.employeeList);
     return ScaffoldDashboard(
       backgroundColour: employeeListScreenController.backgroundColor.value,
       pageTitle: Text(
@@ -107,7 +105,6 @@ class EmployeeListScreen extends StatelessWidget {
 
   Widget buildEmployeeList(
       {required EmployeeListScreenController employeeListScreenController}) {
-    final EmployeeCardController employeeCardController = Get.find();
     employeeListScreenController.backgroundColor.value =
         Constants.colourScaffoldBackground;
     return Column(
@@ -170,19 +167,23 @@ class EmployeeListScreen extends StatelessWidget {
         ),
         Obx(
           () => Expanded(
-            child: ListView.builder(
-              itemCount: employeeListScreenController.employeeList.length,
-              itemBuilder: (context, index) {
-                //print(index);
-                print(employeeListScreenController.employeeList.length);
-                print(employeeCardController.attendanceCountViewList.length);
-                return Obx(() => EmployeeCard(
-                      attendanceCountView:
-                          employeeCardController.attendanceCountViewList[index],
-                      employee:
-                          employeeListScreenController.employeeList[index],
-                    ));
+            child: RefreshIndicator(
+              onRefresh: () {
+                return Future<void>.delayed(const Duration(seconds: 3));
               },
+              backgroundColor: Constants.colourPrimary,
+              color: Colors.white,
+              child: ListView.builder(
+                itemCount: employeeListScreenController.employeeList.length,
+                itemBuilder: (context, index) {
+                  return Obx(() => EmployeeCard(
+                        attendanceCountView: employeeListScreenController
+                            .attendanceCountViewList[index],
+                        employee:
+                            employeeListScreenController.employeeList[index],
+                      ));
+                },
+              ),
             ),
           ),
         )
