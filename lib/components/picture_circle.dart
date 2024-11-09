@@ -11,7 +11,7 @@ class PictureCircle extends StatelessWidget {
     required this.height,
     required this.width,
     required this.imgPath,
-    required this.isNetworkPath,
+    // required this.isNetworkPath,
     this.icon,
     this.iconSize,
     this.backgroundColor,
@@ -21,7 +21,7 @@ class PictureCircle extends StatelessWidget {
   final double height;
   final double width;
   final String imgPath;
-  final bool isNetworkPath;
+  // final bool isNetworkPath;
   final Icon? icon;
   final double? iconSize;
   final Color? backgroundColor;
@@ -29,6 +29,7 @@ class PictureCircle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isNetworkPath = Uri.parse(imgPath).isAbsolute ? true : false;
     return Container(
       width: width,
       height: height,
