@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/controllers/capture_image_screen_controller.dart';
@@ -127,16 +128,37 @@ class UserOnboardingScreenController extends GetxController {
         profilePicPath = await firebaseStorageController.uploadPicture(
             file: XFile(captureImageScreenController.imageFilePath.value),
             storagePath: PicPathEnum.profile);
+        //delete previous file
+        print('deleting previous file');
+        final httpsReferenceToDel = FirebaseStorage.instance.refFromURL(
+            employeeListScreenController.employeeList
+                .firstWhere((user) => user.userId == uid)
+                .profilePicPath!);
+        httpsReferenceToDel.delete();
       }
       if (isIdFrontChanged.value == true) {
         frontPath = await firebaseStorageController.uploadPicture(
             file: XFile(idCardCaptureController.documentFront[0]),
             storagePath: PicPathEnum.idCard);
+        //delete previous file
+        print('deleting previous file');
+        final httpsReferenceToDel = FirebaseStorage.instance.refFromURL(
+            employeeListScreenController.employeeList
+                .firstWhere((user) => user.userId == uid)
+                .idCardFrontPath!);
+        httpsReferenceToDel.delete();
       }
       if (isIdBackChanged.value == true) {
         backPath = await firebaseStorageController.uploadPicture(
             file: XFile(idCardCaptureController.documentBack[0]),
             storagePath: PicPathEnum.idCard);
+        //delete previous file
+        print('deleting previous file');
+        final httpsReferenceToDel = FirebaseStorage.instance.refFromURL(
+            employeeListScreenController.employeeList
+                .firstWhere((user) => user.userId == uid)
+                .idCardBackPath!);
+        httpsReferenceToDel.delete();
       }
       /*UsersModel? temp = await firebaseStorageController.uploadIdCard(
         fileFront: XFile(idCardCaptureController.documentFront[0]),
