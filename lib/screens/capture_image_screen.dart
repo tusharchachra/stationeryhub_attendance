@@ -128,12 +128,7 @@ class CaptureImageScreen extends StatelessWidget {
           SizedBox(width: 35.w),
           GestureDetector(
             onTap: () async {
-              print(
-                  'captureImageScreenController.imageFilePath.value=${captureImageScreenController.imageFilePath.value}');
               await captureImageScreenController.clickPicture();
-              print(
-                  'captureImageScreenController.imageFilePath.value=${captureImageScreenController.imageFilePath.value}');
-
               if (captureImageScreenController.imageFilePath.value != '') {
                 Get.off(() => DisplayCapturedImageScreen(
                       displayForeground: displayForeground,
