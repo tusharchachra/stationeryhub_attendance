@@ -8,7 +8,8 @@ import 'package:stationeryhub_attendance/components/line_animation_view.dart';
 import 'package:stationeryhub_attendance/controllers/capture_image_screen_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
-import 'package:stationeryhub_attendance/screens/display_captured_image_screen.dart';
+
+import 'display_captured_image_screen.dart';
 
 class CaptureImageScreen extends StatelessWidget {
   const CaptureImageScreen({super.key, this.displayForeground});

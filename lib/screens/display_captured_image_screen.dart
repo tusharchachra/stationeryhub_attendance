@@ -35,7 +35,7 @@ class DisplayCapturedImageScreen extends StatelessWidget {
               width: 1.sw,
               height: 1.sh,
               child: Image.file(
-                File(captureImageScreenController.imageFilePath.value),
+                File(captureImageScreenController.imageFile!.path),
                 fit: BoxFit.fill,
               ),
             ),

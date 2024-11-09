@@ -49,7 +49,7 @@ class EmployeeCard extends StatelessWidget {
                     height: 38.h,
                     width: 53.w,
                     imgPath: employee.profilePicPath!,
-                    isNetworkPath: true,
+                    /* isNetworkPath: true,*/
                   ),
                   Text(
                     employee.name ?? '',

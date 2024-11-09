@@ -61,7 +61,7 @@ class AttendanceCard extends StatelessWidget {
                         height: 34.h,
                         width: 34.w,
                         imgPath: attendanceView!.user.profilePicPath!,
-                        isNetworkPath: true,
+                        /* isNetworkPath: true,*/
                         backgroundColor: Constants.colourTextLight,
                       ),
                       SizedBox(width: 12.w),

@@ -468,7 +468,6 @@ class UserOnboardingScreen extends StatelessWidget {
                 width: 90.w,
                 height: 90.w,
                 imgPath: captureImageScreenController.imageFilePath.value,
-                isNetworkPath: isEditing ? true : false,
                 onTap: () {
                   Get.off(() => DisplayCapturedImageScreen());
                 },

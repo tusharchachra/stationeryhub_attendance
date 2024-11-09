@@ -171,8 +171,8 @@ class EmployeeListScreen extends StatelessWidget {
               onRefresh: () {
                 return Future<void>.delayed(const Duration(seconds: 3));
               },
-              backgroundColor: Constants.colourPrimary,
-              color: Colors.white,
+              backgroundColor: Colors.white,
+              color: Constants.colourPrimary,
               child: ListView.builder(
                 itemCount: employeeListScreenController.employeeList.length,
                 itemBuilder: (context, index) {

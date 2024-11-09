@@ -123,13 +123,13 @@ class AdminDashboardScreen extends StatelessWidget {
                             ''),
                         backgroundColor:
                             Constants.colourProfilePicIconBackground,
-                        isNetworkPath: firestoreController
+                        /*isNetworkPath: firestoreController
                                     .registeredOrganization
                                     .value
                                     ?.profilePicPath ==
                                 ''
                             ? false
-                            : true,
+                            : true,*/
                         onTap: () {
                           Get.to(() => UpdateOrganizationScreen());
                         },

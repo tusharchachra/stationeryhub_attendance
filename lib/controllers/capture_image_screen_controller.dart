@@ -11,6 +11,7 @@ class CaptureImageScreenController extends GetxController
       CameraController(cameras[0], ResolutionPreset.max);
   RxInt cameraDirection = 0.obs;
   RxString imageFilePath = ''.obs;
+  XFile? imageFile;
   late Future<void> initializeControllerFuture;
 
   @override
@@ -74,24 +75,27 @@ class CaptureImageScreenController extends GetxController
 
     if (cameraController!.value.isTakingPicture) {
       // A capture is already pending, do nothing.
-      // return null;
-      print('capturing');
+      return null;
     }
 
     try {
-      final XFile? file = await cameraController?.takePicture();
+      print('capturing');
+      await cameraController?.takePicture().then((XFile? file) {
+        imageFile = file;
+      });
+      //final XFile? file = await cameraController?.takePicture();
       //return file;
 
       /*final Uint8List? bytes = await File(file!.path).readAsBytes();
       imageFile?.value = await File(file!.path).create();
       await imageFile?.value?.writeAsBytesSync(bytes);*/
-      imageFilePath.value = file!.path;
-      print('file.path=${file?.path}');
+      imageFilePath.value = imageFile!.path;
+      // print('file.path=${file?.path}');
       // imageFile?.value = file;
-      print('imageFile.path=${imageFilePath?.value}');
+      //print('imageFile.path=${imageFilePath?.value}');
       //print('imageFile${imageFile}');
     } on CameraException catch (e) {
-      print(e);
+      print('Error: $e');
       //return null;
     }
   }

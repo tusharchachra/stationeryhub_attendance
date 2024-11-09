@@ -259,14 +259,14 @@ class UpdateOrganizationScreen extends StatelessWidget {
                   color: Colors.white,
                 ),
                 imgPath: captureImageScreenController.imageFilePath.value,
-                isNetworkPath: captureImageScreenController
+                /*isNetworkPath: captureImageScreenController
                                 .imageFilePath.value !=
                             firestoreController
                                 .registeredOrganization.value?.profilePicPath &&
                         updateOrganizationScreenController.isPicChanged.value ==
                             true
                     ? false
-                    : true,
+                    : true,*/
                 onTap: () {
                   /*Get.off(() => DisplayCapturedImageScreen(
                         displayForeground: false,
