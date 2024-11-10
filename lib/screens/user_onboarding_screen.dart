@@ -49,10 +49,11 @@ class UserOnboardingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final captureImageScreenController =
         Get.put(CaptureImageScreenController());
-    final userOnboardingScreenController =
-        Get.put(UserOnboardingScreenController());
     final idCardCaptureController = Get.put(IdCardCaptureController());
     final formErrorController = Get.put(FormErrorController());
+    final userOnboardingScreenController =
+        Get.put(UserOnboardingScreenController());
+
     //final FirebaseStorageController firebaseStorageController = Get.find();
     //final IdCardCaptureController cardCaptureController = Get.find();
     final FirebaseErrorController errorController = Get.find();

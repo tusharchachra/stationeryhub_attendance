@@ -202,6 +202,7 @@ class FirebaseFirestoreController extends GetxController {
         userList.add(doc.data());
       }
     } else {}
+    userList.sort((a, b) => a.name!.compareTo(b.name!));
     return userList;
   }
 

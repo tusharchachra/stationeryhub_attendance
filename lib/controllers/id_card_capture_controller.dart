@@ -61,6 +61,10 @@ class IdCardCaptureController extends GetxController {
   @override
   void dispose() {
     // TODO: implement dispose
+    documentFront.clear();
+    documentBack.clear();
+    isLoadingFront.value = false;
+    isLoadingBack.value = false;
     super.dispose();
   }
 }

@@ -34,7 +34,7 @@ class AdminDashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(FirebaseStorageController());
-    Get.put(IdCardCaptureController());
+    //Get.put(IdCardCaptureController());
     Get.put(AdminDashboardScreenController(), permanent: true);
     //FirebaseStorageController firebaseStorageController = Get.find();
     /* if (firestoreController.registeredOrganization?.value.id == null) {
