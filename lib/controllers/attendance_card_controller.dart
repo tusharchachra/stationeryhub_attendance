@@ -1,13 +1,15 @@
 import 'package:get/get.dart';
+import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 import 'package:stationeryhub_attendance/models/attendance_view_model.dart';
 import 'package:stationeryhub_attendance/models/user_attendance_model.dart';
-import 'package:stationeryhub_attendance/models/users_model.dart';
 
 import '../helpers/api_service.dart';
 
 class AttendanceCardController extends GetxController {
   final FirebaseFirestoreController firestoreController = Get.find();
+  final AdminDashboardScreenController adminDashboardScreenController =
+      Get.find();
   final ApiService apiService = ApiService();
 
   RxList<AttendanceViewModel> attendanceViewList = <AttendanceViewModel>[].obs;
@@ -31,14 +33,15 @@ class AttendanceCardController extends GetxController {
         records = await apiService.fetchAttendance(empId: empId);
       } else if (startDate != null) {
         //fetch all users from firestore
-        List<UsersModel> userList = await firestoreController.getAllUsers();
+        //List<UsersModel> userList = await firestoreController.getAllUsers();
         attendanceViewList.value = List.generate(
-            userList.length,
-            (index) =>
-                AttendanceViewModel(attendance: [], user: userList[index]));
+            adminDashboardScreenController.employeeList.length,
+            (index) => AttendanceViewModel(
+                attendance: [],
+                user: adminDashboardScreenController.employeeList[index]));
 
         //search for attendance of each user based on the empId on the date
-        for (var user in userList) {
+        for (var user in adminDashboardScreenController.employeeList) {
           records = await apiService.fetchAttendance(
               empId: user.userId, startDate: startDate);
 

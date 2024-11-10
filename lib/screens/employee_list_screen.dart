@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/components/form_field_button.dart';
 import 'package:stationeryhub_attendance/components/gradient_progress_bar.dart';
+import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/employee_list_screen_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 import 'package:stationeryhub_attendance/models/users_model.dart';
@@ -19,6 +20,8 @@ class EmployeeListScreen extends StatelessWidget {
     //Get.put(EmployeeCardController());
     final employeeListScreenController =
         Get.put(EmployeeListScreenController());
+    final AdminDashboardScreenController adminDashboardScreenController =
+        Get.find();
 
     return ScaffoldDashboard(
       backgroundColour: employeeListScreenController.backgroundColor.value,
@@ -28,17 +31,21 @@ class EmployeeListScreen extends StatelessWidget {
       ),
       bodyWidget: Obx(
         () => employeeListScreenController.isLoading.value == true
-            ? buildPlaceholder(employeeListScreenController)
-            : employeeListScreenController.employeeList.isEmpty
+            ? buildPlaceholder(
+                employeeListScreenController, adminDashboardScreenController)
+            : adminDashboardScreenController.employeeList.isEmpty
                 ? buildEmptyEmployeeList()
                 : buildEmployeeList(
-                    employeeListScreenController: employeeListScreenController),
+                    employeeListScreenController: employeeListScreenController,
+                    adminDashboardScreenController:
+                        adminDashboardScreenController),
       ),
     );
   }
 
   Widget buildPlaceholder(
-      EmployeeListScreenController employeeListScreenController) {
+      EmployeeListScreenController employeeListScreenController,
+      AdminDashboardScreenController adminDashboardScreenController) {
     employeeListScreenController.backgroundColor.value =
         Constants.colourScaffoldBackground;
     return Column(
@@ -83,7 +90,7 @@ class EmployeeListScreen extends StatelessWidget {
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: employeeListScreenController.employeeList.length,
+            itemCount: adminDashboardScreenController.employeeList.length,
             itemBuilder: (context, index) {
               return EmployeeCard(
                 showPlaceholder: true,
@@ -104,7 +111,8 @@ class EmployeeListScreen extends StatelessWidget {
   }
 
   Widget buildEmployeeList(
-      {required EmployeeListScreenController employeeListScreenController}) {
+      {required EmployeeListScreenController employeeListScreenController,
+      required AdminDashboardScreenController adminDashboardScreenController}) {
     employeeListScreenController.backgroundColor.value =
         Constants.colourScaffoldBackground;
     return Column(
@@ -194,13 +202,13 @@ class EmployeeListScreen extends StatelessWidget {
               backgroundColor: Colors.white,
               color: Constants.colourPrimary,
               child: ListView.builder(
-                itemCount: employeeListScreenController.employeeList.length,
+                itemCount: adminDashboardScreenController.employeeList.length,
                 itemBuilder: (context, index) {
                   return Obx(() => EmployeeCard(
                         attendanceCountView: employeeListScreenController
                             .attendanceCountViewList[index],
                         employee:
-                            employeeListScreenController.employeeList[index],
+                            adminDashboardScreenController.employeeList[index],
                       ));
                 },
               ),

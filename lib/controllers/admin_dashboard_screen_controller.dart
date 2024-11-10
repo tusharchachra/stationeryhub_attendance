@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 
+import '../models/users_model.dart';
 import 'attendance_card_controller.dart';
 
 class AdminDashboardScreenController extends GetxController {
-  final attendanceCardController =
-      Get.put(AttendanceCardController(), permanent: true);
+  //final AttendanceCardController attendanceCardController = Get.find();
+
+  RxList<UsersModel> employeeList = <UsersModel>[].obs;
 
   Rx<DateTime> selectedDate = DateTime.now().obs;
   Rx<int> selectedMonth = DateTime.now().month.obs;
@@ -43,6 +45,8 @@ class AdminDashboardScreenController extends GetxController {
 
   @override
   onReady() async {
+    employeeList.value = await firestoreController.getAllUsers();
+    final AttendanceCardController attendanceCardController = Get.find();
     selectedDate.listen((date) async {
       await attendanceCardController.loadAttendance(startDate: (date));
     });

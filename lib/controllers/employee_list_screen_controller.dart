@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 import 'package:stationeryhub_attendance/models/users_model.dart';
 
@@ -8,7 +9,7 @@ import '../models/attendance_count_model.dart';
 import '../models/attendance_count_view_model.dart';
 
 class EmployeeListScreenController extends GetxController {
-  RxList<UsersModel> employeeList = <UsersModel>[].obs;
+  //RxList<UsersModel> employeeList = <UsersModel>[].obs;
   RxBool isLoading = false.obs;
   RxDouble present = 0.0.obs;
   final ApiService apiService = ApiService();
@@ -26,19 +27,22 @@ class EmployeeListScreenController extends GetxController {
   }
 
   static final FirebaseFirestoreController firestoreController = Get.find();
+  static final AdminDashboardScreenController adminDashboardScreenController =
+      Get.find();
 
   @override
   void onReady() async {
     // TODO: implement onReady
     super.onReady();
     isLoading.value = true;
-    employeeList.value = await firestoreController.getAllUsers();
+    //employeeList.value = await firestoreController.getAllUsers();
     await loadAttendanceCount();
     isLoading.value = false;
   }
 
   Future<void> refreshScreen() async {
-    employeeList.value = await firestoreController.getAllUsers();
+    adminDashboardScreenController.employeeList.value =
+        await firestoreController.getAllUsers();
     await loadAttendanceCount();
   }
 

@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/components/picture_circle.dart';
 import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
-import 'package:stationeryhub_attendance/controllers/id_card_capture_controller.dart';
 import 'package:stationeryhub_attendance/controllers/local_auth_screen_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 import 'package:stationeryhub_attendance/models/attendance_view_model.dart';
@@ -29,13 +28,14 @@ class AdminDashboardScreen extends StatelessWidget {
 
   static FirebaseFirestoreController firestoreController = Get.find();
   static FirebaseAuthController authController = Get.find();
-  static final AttendanceCardController attendanceCardController = Get.find();
 
   @override
   Widget build(BuildContext context) {
+    Get.put(AdminDashboardScreenController(), permanent: true);
+    Get.put(AttendanceCardController(), permanent: true);
     Get.put(FirebaseStorageController());
     //Get.put(IdCardCaptureController());
-    Get.put(AdminDashboardScreenController(), permanent: true);
+
     //FirebaseStorageController firebaseStorageController = Get.find();
     /* if (firestoreController.registeredOrganization?.value.id == null) {
       Get.to(NewOrganizationScreen());
@@ -94,6 +94,7 @@ class AdminDashboardScreen extends StatelessWidget {
   }
 
   Widget buildDashboard1() {
+    final AttendanceCardController attendanceCardController = Get.find();
     return ScaffoldDashboard(
       leadingWidget: Padding(
           padding: EdgeInsets.fromLTRB(12.w, 13.h, 0, 13.h),

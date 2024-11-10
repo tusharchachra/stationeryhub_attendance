@@ -2,8 +2,8 @@ import 'package:camera/camera.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/capture_image_screen_controller.dart';
-import 'package:stationeryhub_attendance/controllers/employee_list_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_storage_controller.dart';
 import 'package:stationeryhub_attendance/controllers/id_card_capture_controller.dart';
@@ -35,7 +35,9 @@ class UserOnboardingScreenController extends GetxController {
   final CaptureImageScreenController captureImageScreenController = Get.find();
   final FirebaseFirestoreController firestoreController = Get.find();
   final IdCardCaptureController idCardCaptureController = Get.find();
-  final EmployeeListScreenController employeeListScreenController = Get.find();
+  //final EmployeeListScreenController employeeListScreenController = Get.find();
+  final AdminDashboardScreenController adminDashboardScreenController =
+      Get.find();
 
   @override
   void onReady() {
@@ -131,7 +133,7 @@ class UserOnboardingScreenController extends GetxController {
         //delete previous file
         print('deleting previous file');
         final httpsReferenceToDel = FirebaseStorage.instance.refFromURL(
-            employeeListScreenController.employeeList
+            adminDashboardScreenController.employeeList
                 .firstWhere((user) => user.userId == uid)
                 .profilePicPath!);
         httpsReferenceToDel.delete();
@@ -143,7 +145,7 @@ class UserOnboardingScreenController extends GetxController {
         //delete previous file
         print('deleting previous file');
         final httpsReferenceToDel = FirebaseStorage.instance.refFromURL(
-            employeeListScreenController.employeeList
+            adminDashboardScreenController.employeeList
                 .firstWhere((user) => user.userId == uid)
                 .idCardFrontPath!);
         httpsReferenceToDel.delete();
@@ -155,7 +157,7 @@ class UserOnboardingScreenController extends GetxController {
         //delete previous file
         print('deleting previous file');
         final httpsReferenceToDel = FirebaseStorage.instance.refFromURL(
-            employeeListScreenController.employeeList
+            adminDashboardScreenController.employeeList
                 .firstWhere((user) => user.userId == uid)
                 .idCardBackPath!);
         httpsReferenceToDel.delete();
@@ -176,7 +178,7 @@ class UserOnboardingScreenController extends GetxController {
         idCardBackPath: isIdBackChanged.value == true ? backPath : null,
       );
       await firestoreController.updateUser(user: updatedUser);
-      employeeListScreenController.employeeList[employeeListScreenController
+      adminDashboardScreenController.employeeList[adminDashboardScreenController
               .employeeList
               .indexWhere((user) => user.userId == uid)] =
           (await firestoreController.getUser(uid: uid))!;
