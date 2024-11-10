@@ -96,6 +96,7 @@ flutter:
   assets:
     - assets/images/
     - assets/images/employee_options_screen/
+    - assets/images/salary_management_screen/
     - assets/tflite_models/
     - assets/google_fonts/
 

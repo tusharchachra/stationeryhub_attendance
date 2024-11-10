@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
 import 'package:stationeryhub_attendance/screens/employee_list_screen.dart';
+import 'package:stationeryhub_attendance/screens/salary_management_screen.dart';
 import 'package:stationeryhub_attendance/screens/user_onboarding_screen.dart';
 
 class EmployeeOptionsScreen extends StatelessWidget {
@@ -43,9 +44,11 @@ class EmployeeOptionsScreen extends StatelessWidget {
               onTap: () {},
             ),
             buildOption(
-              title: 'Total payout',
+              title: 'Manage Salary',
               imgPath: 'assets/images/employee_options_screen/salary.png',
-              onTap: () {},
+              onTap: () {
+                Get.to(() => SalaryManagementScreen());
+              },
             ),
             buildOption(
               title: 'Payout slip',

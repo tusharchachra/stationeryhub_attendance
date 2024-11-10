@@ -12,6 +12,8 @@ class AdminDashboardScreenController extends GetxController {
 
   RxList<UsersModel> employeeList = <UsersModel>[].obs;
 
+  RxBool isLoading = false.obs;
+
   Rx<DateTime> selectedDate = DateTime.now().obs;
   Rx<int> selectedMonth = DateTime.now().month.obs;
   Rx<int> selectedYear = DateTime.now().year.obs;
@@ -45,11 +47,15 @@ class AdminDashboardScreenController extends GetxController {
 
   @override
   onReady() async {
+    isLoading.value = true;
     employeeList.value = await firestoreController.getAllUsers();
     final AttendanceCardController attendanceCardController = Get.find();
     selectedDate.listen((date) async {
+      isLoading.value = true;
       await attendanceCardController.loadAttendance(startDate: (date));
+      isLoading.value = false;
     });
+    isLoading.value = false;
   }
 
   List<int> getCurrentMonthDates({required int month, required int year}) {

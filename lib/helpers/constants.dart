@@ -42,6 +42,7 @@ class Constants {
   static Color employeeBoxColour = employeeTextColour.withOpacity(0.29);
   static const adminTextColour = Color(0xffFF6C01);
   static Color adminBoxColour = adminTextColour.withOpacity(0.29);
+  static LinearGradient gradientPayTotal=LinearGradient(colors: [colourPrimary,Color(0xff2623C7),Color(0xff300097)]);
 
   static const otpResendTime = 5;
   static const snackbarDuration = 4;
