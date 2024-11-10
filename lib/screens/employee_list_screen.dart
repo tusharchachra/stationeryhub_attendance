@@ -168,8 +168,28 @@ class EmployeeListScreen extends StatelessWidget {
         Obx(
           () => Expanded(
             child: RefreshIndicator(
-              onRefresh: () {
-                return Future<void>.delayed(const Duration(seconds: 3));
+              onRefresh: () async {
+                await employeeListScreenController.refreshScreen();
+                Get.showSnackbar(
+                  GetSnackBar(
+                    messageText: Text(
+                      'Refreshed',
+                      textAlign: TextAlign.center,
+                      style: Get.textTheme.bodyMedium
+                          ?.copyWith(color: Constants.colourTextDark),
+                    ),
+                    duration: const Duration(seconds: 2),
+                    snackPosition: SnackPosition.BOTTOM,
+                    backgroundColor: Colors.white,
+                    boxShadows: [
+                      BoxShadow(color: Colors.grey, blurRadius: 62.0.r),
+                    ],
+                    snackStyle: SnackStyle.FLOATING,
+                    borderRadius: 50.r,
+                    margin: EdgeInsets.all(10.w),
+                  ),
+                );
+                //return Future<void>.delayed(const Duration(seconds: 3));
               },
               backgroundColor: Colors.white,
               color: Constants.colourPrimary,

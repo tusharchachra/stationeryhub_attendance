@@ -37,9 +37,14 @@ class EmployeeListScreenController extends GetxController {
     isLoading.value = false;
   }
 
+  Future<void> refreshScreen() async {
+    employeeList.value = await firestoreController.getAllUsers();
+    await loadAttendanceCount();
+  }
+
   Future<void> loadAttendanceCount(
       {String? empId, DateTime? startDate, DateTime? endDate}) async {
-    isLoading.value = true;
+    //isLoading.value = true;
     DateTime? start;
     DateTime? end;
     List<AttendanceCountModel> records = [];
@@ -102,6 +107,6 @@ class EmployeeListScreenController extends GetxController {
       // Handle error
       print(e);
     } finally {}
-    isLoading.value = false;
+    //isLoading.value = false;
   }
 }
