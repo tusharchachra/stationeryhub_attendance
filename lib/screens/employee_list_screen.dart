@@ -205,7 +205,10 @@ class EmployeeListScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 return Obx(() => EmployeeCard(
                       attendanceCountView: employeeListScreenController
-                          .attendanceCountViewList[index],
+                              .attendanceCountViewList.isEmpty
+                          ? null
+                          : employeeListScreenController
+                              .attendanceCountViewList[index],
                       employee:
                           adminDashboardScreenController.employeeList[index],
                     ));
