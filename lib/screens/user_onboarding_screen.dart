@@ -66,27 +66,7 @@ class UserOnboardingScreen extends StatelessWidget {
     );
 
     if (isEditing && employee != null) {
-      userOnboardingScreenController.isEditing.value = true;
-      userOnboardingScreenController.phoneNumController.value.text =
-          employee!.phoneNum!.trim();
-      userOnboardingScreenController.nameController.value.text =
-          employee!.name!.trim();
-      userOnboardingScreenController.selectedUserType.value =
-          employee!.userType!;
-      userOnboardingScreenController.userTypeController.value.text =
-          employee!.userType!.name.capitalizeFirst!;
-
-      /*userOnboardingScreenController.captureImageScreenController.*/
-      userOnboardingScreenController.captureImageScreenController.imageFilePath
-          .value = employee!.profilePicPath!;
-      userOnboardingScreenController.idCardCaptureController.documentFront
-          .clear();
-      userOnboardingScreenController.idCardCaptureController.documentFront
-          .add(employee!.idCardFrontPath!);
-      userOnboardingScreenController.idCardCaptureController.documentBack
-          .clear();
-      userOnboardingScreenController.idCardCaptureController.documentBack
-          .add(employee!.idCardBackPath!);
+      userOnboardingScreenController.loadStoredData(employee!);
     }
     return ScaffoldDashboard(
       isLoading: false,
@@ -132,6 +112,31 @@ class UserOnboardingScreen extends StatelessWidget {
                     },
                   ),
                   SizedBox(height: 20.h),
+                  Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        Text(
+                          userOnboardingScreenController.isActive.value == true
+                              ? 'Active'
+                              : 'Inactive',
+                          style: Get.textTheme.headlineMedium
+                              ?.copyWith(color: Constants.colourTextMedium),
+                          textAlign: TextAlign.left,
+                        ),
+                        SizedBox(width: 20.w),
+                        Switch(
+                          value: userOnboardingScreenController.isActive.value,
+                          onChanged: (val) {
+                            userOnboardingScreenController.isActive.value = val;
+                          },
+                          activeColor: Constants.colourPrimary,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20.h),
                   FormFieldPhoneNum(
                     focusNode: focusNode,
                     labelText: 'Phone number',
@@ -156,6 +161,22 @@ class UserOnboardingScreen extends StatelessWidget {
                   buildUserTypeField(userOnboardingScreenController),
                   SizedBox(height: 5.h),
                   buildUserTypeSelectionBox(userOnboardingScreenController),
+                  SizedBox(height: 20.h),
+                  FormFieldText(
+                    labelText: 'Salary',
+                    textController:
+                        userOnboardingScreenController.salaryController.value,
+                    hintText: 'Enter salary per month',
+                    inputType: TextInputType.number,
+                    border: outlineInputBorder,
+                    fillColor: Constants.colourBorderLight,
+                    validator: (val) {
+                      /* if (val?.trim() == '') {
+                        return 'Salary is mandatory';
+                      } else
+                        return null;*/
+                    },
+                  ),
                   SizedBox(height: 35.h),
                   buildSubHeading(
                     text: 'ID',

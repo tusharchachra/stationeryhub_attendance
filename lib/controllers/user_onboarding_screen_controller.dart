@@ -14,10 +14,13 @@ import '../models/users_model.dart';
 
 class UserOnboardingScreenController extends GetxController {
   Rx<TextEditingController> nameController = TextEditingController().obs;
+  Rx<TextEditingController> salaryController = TextEditingController().obs;
+
   Rx<TextEditingController> phoneNumController = TextEditingController().obs;
   RxString phoneNum = ('').obs;
   Rx<TextEditingController> userTypeController = TextEditingController().obs;
   RxBool showUserTypeOptions = false.obs;
+  RxBool isActive = true.obs;
   RxBool isPhoneNumValid = false.obs;
   FocusNode userTypeFocusNode = FocusNode();
   RxBool isLoading = false.obs;
@@ -111,6 +114,8 @@ class UserOnboardingScreenController extends GetxController {
       name: nameController.value.text.trim(),
       userType:
           UserType.values.byName(userTypeController.value.text.toLowerCase()),
+      isActive: isActive.value,
+      salary: int.parse(salaryController.value.text),
       profilePicPath: profilePicPath,
       idCardFrontPath: frontPath,
       idCardBackPath: backPath,
@@ -118,6 +123,23 @@ class UserOnboardingScreenController extends GetxController {
     await firestoreController.addNewUser(user: newUser);
 
     if (firestoreController.isLoading.value == false) isLoading.value = false;
+  }
+
+  void loadStoredData(UsersModel employee) {
+    isEditing.value = true;
+    phoneNumController.value.text = employee.phoneNum!.trim();
+    nameController.value.text = employee.name!.trim();
+    selectedUserType.value = employee.userType!;
+
+    userTypeController.value.text = employee.userType!.name.capitalizeFirst!;
+    isActive.value = employee.isActive!;
+    salaryController.value.text = employee.salary!.toString();
+    /*userOnboardingScreenController.captureImageScreenController.*/
+    captureImageScreenController.imageFilePath.value = employee.profilePicPath!;
+    idCardCaptureController.documentFront.clear();
+    idCardCaptureController.documentFront.add(employee.idCardFrontPath!);
+    idCardCaptureController.documentBack.clear();
+    idCardCaptureController.documentBack.add(employee.idCardBackPath!);
   }
 
   Future<void> uploadEditedData({required String uid}) async {
@@ -172,6 +194,8 @@ class UserOnboardingScreenController extends GetxController {
         name: nameController.value.text.trim(),
         userType:
             UserType.values.byName(userTypeController.value.text.toLowerCase()),
+        isActive: isActive.value,
+        salary: int.parse(salaryController.value.text),
         profilePicPath:
             isProfilePicChanged.value == true ? profilePicPath : null,
         idCardFrontPath: isIdFrontChanged.value == true ? frontPath : null,

@@ -20,6 +20,7 @@ class FormFieldText extends StatelessWidget {
     this.focusNode,
     this.border,
     this.fillColor,
+    this.inputType = TextInputType.name,
   });
 
   final FocusNode? focusNode;
@@ -35,6 +36,7 @@ class FormFieldText extends StatelessWidget {
   final Widget? trailingWidget;
   final InputBorder? border;
   final Color? fillColor;
+  final TextInputType? inputType;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +52,7 @@ class FormFieldText extends StatelessWidget {
         controller: textController,
         style: Get.textTheme.headlineMedium
             ?.copyWith(color: Constants.colourTextMedium),
-        keyboardType: TextInputType.name,
+        keyboardType: inputType,
         autofocus: false,
         showCursor: !readOnly,
         readOnly: readOnly,

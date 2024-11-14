@@ -303,6 +303,12 @@ class FirebaseFirestoreController extends GetxController {
       if (user.userType != null) {
         await ref.update({'userType': '${user.userType}'});
       }
+      if (user.isActive != null) {
+        await ref.update({'isActive': '${user.isActive}'});
+      }
+      if (user.salary != null) {
+        await ref.update({'salary': '${user.salary}'});
+      }
       if (user.profilePicPath != null) {
         await ref.update({'profilePicPath': '${user.profilePicPath}'});
       }

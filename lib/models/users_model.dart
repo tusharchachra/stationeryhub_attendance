@@ -12,6 +12,8 @@ class UsersModel {
   String? profilePicPath;
   String? idCardFrontPath;
   String? idCardBackPath;
+  bool? isActive;
+  int? salary; //per month
 
   UsersModel({
     this.firebaseUserId,
@@ -23,6 +25,8 @@ class UsersModel {
     this.profilePicPath,
     this.idCardFrontPath,
     this.idCardBackPath,
+    this.isActive,
+    this.salary,
   });
 
   factory UsersModel.fromFirestore(
@@ -40,6 +44,8 @@ class UsersModel {
       profilePicPath: data['profilePicPath'],
       idCardFrontPath: data['idCardFrontPath'],
       idCardBackPath: data['idCardBackPath'],
+      isActive: bool.parse(data['isActive']),
+      salary: int.parse(data['salary']),
     );
   }
 
@@ -67,7 +73,13 @@ class UsersModel {
             : json['idCardFrontPath'].toString(),
         idCardBackPath = json['idCardBackPath'].toString() == ''
             ? ''
-            : json['idCardBackPath'].toString();
+            : json['idCardBackPath'].toString(),
+        isActive = json['isActive'].toString() == ''
+            ? true
+            : bool.parse(json['isActive'].toString()),
+        salary = json['salary'].toString() == ''
+            ? 0
+            : int.parse(json['salary'].toString());
 
   Map<String, dynamic> toJson() => {
         'firebaseUserId': firebaseUserId ?? 'null',
@@ -79,6 +91,8 @@ class UsersModel {
         'profilePicPath': profilePicPath ?? '',
         'idCardFrontPath': idCardFrontPath ?? '',
         'idCardBackPath': idCardBackPath ?? '',
+        'isActive': isActive ?? true,
+        'salary': salary ?? 0
       };
 
   /*void setUid(String id) {
