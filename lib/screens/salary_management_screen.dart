@@ -67,59 +67,77 @@ class SalaryManagementScreen extends StatelessWidget {
                         border: Border.all(color: Constants.colourBorderLight),
                       ),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(7.w, 5.h, 17.w, 5.h),
-                            child: PictureCircle(
-                                height: 60.h,
-                                width: 60.w,
-                                imgPath: adminDashboardScreenController
-                                    .employeeList[index].profilePicPath!),
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
-                              Text(
-                                adminDashboardScreenController
-                                    .employeeList[index].name!,
-                                style: Get.textTheme.headlineLarge!
-                                    .copyWith(color: Constants.colourTextDark),
+                              Padding(
+                                padding:
+                                    EdgeInsets.fromLTRB(7.w, 5.h, 17.w, 5.h),
+                                child: PictureCircle(
+                                    height: 60.h,
+                                    width: 60.w,
+                                    imgPath: adminDashboardScreenController
+                                        .employeeList[index].profilePicPath!),
                               ),
-                              Row(
+                              Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Image.asset(
-                                      'assets/images/salary_management_screen/bag.png'),
-                                  SizedBox(width: 8.w),
                                   Text(
                                     adminDashboardScreenController
-                                        .employeeList[index]
-                                        .userType!
-                                        .name
-                                        .capitalizeFirst!,
-                                    style: Get.textTheme.titleMedium!.copyWith(
-                                        color: Constants.colourTextMedium),
+                                        .employeeList[index].name!,
+                                    style: Get.textTheme.headlineLarge!
+                                        .copyWith(
+                                            color: Constants.colourTextDark),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Image.asset(
+                                          'assets/images/salary_management_screen/bag.png'),
+                                      SizedBox(width: 8.w),
+                                      Text(
+                                        adminDashboardScreenController
+                                            .employeeList[index]
+                                            .userType!
+                                            .name
+                                            .capitalizeFirst!,
+                                        style: Get.textTheme.titleMedium!
+                                            .copyWith(
+                                                color:
+                                                    Constants.colourTextMedium),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
                             ],
                           ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Wrap(children: [
-                              Text(
-                                salaryPerDay.toString(),
-                                style: Get.textTheme.headlineLarge!.copyWith(
-                                  color: Constants.colourDashboardBox2,
-                                ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 17.0.w),
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Wrap(
+                                children: [
+                                  Text(
+                                    salaryPerDay.toString(),
+                                    style:
+                                        Get.textTheme.headlineLarge!.copyWith(
+                                      color: Constants.colourDashboardBox2,
+                                    ),
+                                  ),
+                                  Text(
+                                    '/day',
+                                    style:
+                                        Get.textTheme.headlineLarge!.copyWith(
+                                      color: Constants.colourTextDark,
+                                    ),
+                                  )
+                                ],
                               ),
-                              Text(
-                                '/day',
-                                style: Get.textTheme.headlineLarge!.copyWith(
-                                  color: Constants.colourTextDark,
-                                ),
-                              )
-                            ]),
+                            ),
                           )
                         ],
                       ),
