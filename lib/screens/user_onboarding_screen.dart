@@ -324,7 +324,23 @@ class UserOnboardingScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5.r),
               ),
-              child: isEditing
+              child: direction == ScanDirection.front
+                  ? Uri.parse(cardCaptureController.documentFront[0]).isAbsolute
+                      ? CachedNetworkImage(
+                          placeholder: (context, url) =>
+                              GradientProgressBar(size: Size(5.w, 5.h)),
+                          imageUrl: direction == ScanDirection.front
+                              ? cardCaptureController.documentFront[0]
+                              : cardCaptureController.documentBack[0],
+                        )
+                      : Image.file(
+                          File(direction == ScanDirection.front
+                              ? cardCaptureController.documentFront[0]
+                              : cardCaptureController.documentBack[0]),
+                          fit: BoxFit.fill,
+                        )
+                  : Container(),
+              /*child: isEditing
                   ? CachedNetworkImage(
                       placeholder: (context, url) =>
                           GradientProgressBar(size: Size(5.w, 5.h)),
@@ -337,7 +353,7 @@ class UserOnboardingScreen extends StatelessWidget {
                           ? cardCaptureController.documentFront[0]
                           : cardCaptureController.documentBack[0]),
                       fit: BoxFit.fill,
-                    ),
+                    ),*/
             ),
             Text(
               direction == ScanDirection.front ? 'Front' : 'Back',
@@ -577,6 +593,7 @@ class UserOnboardingScreen extends StatelessWidget {
                               userOnboardingScreenController
                                   .invertShowUserTypeValue();
                             },
+                            behavior: HitTestBehavior.translucent,
                             child: Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 24.w, vertical: 10.h),
