@@ -19,6 +19,7 @@ class FormFieldText extends StatelessWidget {
     this.trailingWidget,
     this.focusNode,
     this.border,
+    this.enabledBorder,
     this.fillColor,
     this.inputType = TextInputType.name,
   });
@@ -35,52 +36,57 @@ class FormFieldText extends StatelessWidget {
   final bool readOnly;
   final Widget? trailingWidget;
   final InputBorder? border;
+  final InputBorder? enabledBorder;
   final Color? fillColor;
   final TextInputType? inputType;
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(children: [
-      Text(
-        labelText ?? '',
-        style: Get.textTheme.headlineMedium
-            ?.copyWith(color: Constants.colourTextDark),
-      ),
-      SizedBox(height: 20.h),
-      TextFormField(
-        focusNode: focusNode,
-        controller: textController,
-        style: Get.textTheme.headlineMedium
-            ?.copyWith(color: Constants.colourTextMedium),
-        keyboardType: inputType,
-        autofocus: false,
-        showCursor: !readOnly,
-        readOnly: readOnly,
-        cursorColor: Constants.colourTextLight,
-        maxLines: isMultiLine ? 3 : 1,
-        minLines: 1,
-        textCapitalization: TextCapitalization.words,
-        textAlignVertical: TextAlignVertical.center,
-        decoration: const InputDecoration()
-            .applyDefaults(Get.theme.inputDecorationTheme)
-            .copyWith(
-              counterText: '',
-              border: border,
-              fillColor: fillColor,
-              prefixIcon: prefixIcon,
-              prefixIconColor: Constants.colourTextFieldIcon,
-              suffixIcon: trailingWidget,
-              suffixIconColor: Constants.colourTextFieldIcon,
-              hintText: hintText,
-              hintStyle: Get.textTheme.headlineMedium
-                  ?.copyWith(color: Constants.colourTextLight),
-              contentPadding:
-                  EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-            ),
-        validator: validator,
-        onChanged: onChangedAction,
-        cursorOpacityAnimates: true,
-      ),
-    ]);
+    return Wrap(
+      children: [
+        if (labelText != '')
+          Text(
+            labelText ?? '',
+            style: Get.textTheme.headlineMedium
+                ?.copyWith(color: Constants.colourTextDark),
+          ),
+        SizedBox(height: 20.h),
+        TextFormField(
+          focusNode: focusNode,
+          controller: textController,
+          style: Get.textTheme.headlineMedium
+              ?.copyWith(color: Constants.colourTextMedium),
+          keyboardType: inputType,
+          autofocus: false,
+          showCursor: !readOnly,
+          readOnly: readOnly,
+          cursorColor: Constants.colourTextLight,
+          maxLines: isMultiLine ? 3 : 1,
+          minLines: 1,
+          textCapitalization: TextCapitalization.words,
+          textAlignVertical: TextAlignVertical.center,
+          decoration: const InputDecoration()
+              .applyDefaults(Get.theme.inputDecorationTheme)
+              .copyWith(
+                counterText: '',
+                border: border,
+                enabledBorder: enabledBorder,
+                fillColor: fillColor,
+                prefixIcon: prefixIcon,
+                prefixIconColor: Constants.colourTextFieldIcon,
+                suffixIcon: trailingWidget,
+                suffixIconColor: Constants.colourTextFieldIcon,
+                hintText: hintText,
+                hintStyle: Get.textTheme.headlineMedium
+                    ?.copyWith(color: Constants.colourTextLight),
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+              ),
+          validator: validator,
+          onChanged: onChangedAction,
+          cursorOpacityAnimates: true,
+        ),
+      ],
+    );
   }
 }
