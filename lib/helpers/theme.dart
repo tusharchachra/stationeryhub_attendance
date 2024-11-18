@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 import 'package:stationeryhub_attendance/helpers/size_config.dart';
@@ -128,6 +129,61 @@ class ThemeCustom {
                 fontWeight: FontWeight.w600,
               ),
             )),
+      ),
+      datePickerTheme: DatePickerThemeData(
+        //dayForegroundColor: WidgetStatePropertyAll(Constants.colourTextMedium),
+        locale: Locale('en', 'IN'),
+
+        dayOverlayColor: WidgetStatePropertyAll(Colors.transparent),
+        dayBackgroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return Constants.colourPrimary;
+          }
+          return Colors.transparent;
+        }),
+        dayForegroundColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.disabled)
+              ? Constants.colourBorderMedium
+              : states.contains(WidgetState.selected)
+                  ? Colors.white
+                  : Constants.colourTextDark,
+        ),
+        dayStyle: TextStyle(fontSize: Get.textTheme.displaySmall!.fontSize),
+        dayShape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.r),
+            side: BorderSide(color: Colors.transparent),
+          ),
+        ),
+        todayBorder: BorderSide(color: Constants.colourPrimary),
+        todayForegroundColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? Colors.white
+              : Constants.colourPrimary,
+        ),
+        todayBackgroundColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? Constants.colourPrimary
+              : Colors.transparent,
+        ),
+        weekdayStyle: Get.textTheme.displaySmall!.copyWith(
+          color: Constants.colourTextDark,
+        ),
+        yearStyle: Get.textTheme.displaySmall!
+            .copyWith(color: Constants.colourTextDark),
+        yearBackgroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return Constants.colourPrimary;
+          }
+          return Colors.transparent;
+        }),
+        yearForegroundColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.disabled)
+              ? Constants.colourBorderMedium
+              : states.contains(WidgetState.selected)
+                  ? Colors.white
+                  : Constants.colourTextDark,
+        ),
       ),
     );
   }
