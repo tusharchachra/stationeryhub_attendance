@@ -234,7 +234,7 @@ class FirebaseFirestoreController extends GetxController {
         debugPrint('New user Id added = ${ref.id}');
       }
       //update userId of the user
-      await firestoreController.updateUser(user: UsersModel(userId: ref.id));
+      firestoreController.updateUser(user: UsersModel(userId: ref.id));
     } on FirebaseException catch (e) {
       errorController.getErrorMsg(e);
       if (kDebugMode) {
@@ -261,7 +261,7 @@ class FirebaseFirestoreController extends GetxController {
         debugPrint('New user Id added = ${ref.id}');
       }
       //update userId of the user
-      await firestoreController.updateUser(user: UsersModel(userId: ref.id));
+      firestoreController.updateUser(user: UsersModel(userId: ref.id));
     } on FirebaseException catch (e) {
       errorController.getErrorMsg(e);
       if (kDebugMode) {
@@ -286,37 +286,37 @@ class FirebaseFirestoreController extends GetxController {
                 toFirestore: (UsersModel user, _) => user.toJson(),
               );
       if (user.firebaseUserId != null) {
-        await ref.update({'firebaseUserId': '${user.firebaseUserId}'});
+        ref.update({'firebaseUserId': '${user.firebaseUserId}'});
       }
       if (user.userId != null) {
-        await ref.update({'userId': '${user.userId}'});
+        ref.update({'userId': '${user.userId}'});
       }
       if (user.name != null) {
-        await ref.update({'name': '${user.name}'});
+        ref.update({'name': '${user.name}'});
       }
       if (user.phoneNum != null) {
-        await ref.update({'phoneNum': '${user.phoneNum}'});
+        ref.update({'phoneNum': '${user.phoneNum}'});
       }
       if (user.organizationId != null) {
-        await ref.update({'organizationId': '${user.organizationId}'});
+        ref.update({'organizationId': '${user.organizationId}'});
       }
       if (user.userType != null) {
-        await ref.update({'userType': '${user.userType}'});
+        ref.update({'userType': '${user.userType}'});
       }
       if (user.isActive != null) {
-        await ref.update({'isActive': '${user.isActive}'});
+        ref.update({'isActive': user.isActive});
       }
       if (user.salary != null) {
-        await ref.update({'salary': '${user.salary}'});
+        ref.update({'salary': user.salary});
       }
       if (user.profilePicPath != null) {
-        await ref.update({'profilePicPath': '${user.profilePicPath}'});
+        ref.update({'profilePicPath': '${user.profilePicPath}'});
       }
       if (user.idCardFrontPath != null) {
-        await ref.update({'idCardFrontPath': '${user.idCardFrontPath}'});
+        ref.update({'idCardFrontPath': '${user.idCardFrontPath}'});
       }
       if (user.idCardBackPath != null) {
-        await ref.update({'idCardBackPath': '${user.idCardBackPath}'});
+        ref.update({'idCardBackPath': '${user.idCardBackPath}'});
       }
 
       if (kDebugMode) {
@@ -457,8 +457,8 @@ class FirebaseFirestoreController extends GetxController {
       //update orgId on firestore
       var tempOrg = OrganizationModel(
           id: ref.id, createdBy: registeredUser.value?.userId);
-      print('tempOrg=$tempOrg');
-      await updateOrganization(organization: tempOrg);
+      //print('tempOrg=$tempOrg');
+      updateOrganization(organization: tempOrg);
 
       /* AlbumOrganization? insertedOrganization =
           await getOrganization(orgId: ref.id);*/
@@ -473,8 +473,8 @@ class FirebaseFirestoreController extends GetxController {
       //inserting the newOrganizationId to the user's profile on firestore
       UsersModel tempUser = UsersModel(
           userId: registeredUser.value?.userId, organizationId: ref.id);
-      print(tempUser);
-      await updateUser(user: tempUser);
+      //print(tempUser);
+      updateUser(user: tempUser);
       /*await firestoreController.updateOrganizationIdInCreator(
           currentUserId:
               firestoreController.registeredUser!.value!.firebaseUserId!,
@@ -518,35 +518,34 @@ class FirebaseFirestoreController extends GetxController {
             toFirestore: (UsersModel user, _) => user.toJson(),
           );
       if (organization.address != null) {
-        await ref.update({'address': '${organization.address}'});
+        ref.update({'address': '${organization.address}'});
       }
       if (organization.createdBy != null) {
-        await ref.update({'createdBy': '${organization.createdBy}'});
+        ref.update({'createdBy': '${organization.createdBy}'});
       }
       if (organization.createdOn != null) {
-        await ref.update({'createdOn': '${organization.createdOn}'});
+        ref.update({'createdOn': '${organization.createdOn}'});
       }
       if (organization.geoLocationLat != null) {
-        await ref.update({'geolocationLat': '${organization.geoLocationLat}'});
+        ref.update({'geolocationLat': '${organization.geoLocationLat}'});
       }
       if (organization.geoLocationLong != null) {
-        await ref
-            .update({'geoLocationLong': '${organization.geoLocationLong}'});
+        ref.update({'geoLocationLong': '${organization.geoLocationLong}'});
       }
       if (organization.id != null) {
-        await ref.update({'id': '${organization.id}'});
+        ref.update({'id': '${organization.id}'});
       }
       if (organization.name != null) {
-        await ref.update({'name': '${organization.name}'});
+        ref.update({'name': '${organization.name}'});
       }
       if (organization.subscription != null) {
-        await ref.update({'subscription': '${organization.subscription}'});
+        ref.update({'subscription': '${organization.subscription}'});
       }
       if (organization.profilePicPath != null) {
-        await ref.update({'profilePicPath': '${organization.profilePicPath}'});
+        ref.update({'profilePicPath': '${organization.profilePicPath}'});
       }
 
-      await ref.update({'lastUpdatedOn': '${organization.lastUpdatedOn}'});
+      ref.update({'lastUpdatedOn': '${organization.lastUpdatedOn}'});
 
       if (kDebugMode) {
         debugPrint('Organization details updated');
