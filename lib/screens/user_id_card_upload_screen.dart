@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -87,21 +88,36 @@ class UserIdCardUploadScreen extends StatelessWidget {
                               vertical: 20.h,
                             ),
                             child: Container(
-                              clipBehavior: Clip.hardEdge,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.r),
-                              ),
-                              foregroundDecoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.r),
-                                border: Border.all(color: Colors.black),
-                              ),
-                              child: Image.file(
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.r),
+                                ),
+                                foregroundDecoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.r),
+                                  border: Border.all(color: Colors.black),
+                                ),
+                                child: direction == ScanDirection.front
+                                    ? Uri.parse(cardController.documentFront[0])
+                                            .isAbsolute
+                                        ? CachedNetworkImage(
+                                            imageUrl:
+                                                cardController.documentFront[0])
+                                        : Image.file(File(
+                                            cardController.documentFront[0]))
+                                    : Uri.parse(cardController.documentBack[0])
+                                            .isAbsolute
+                                        ? CachedNetworkImage(
+                                            imageUrl:
+                                                cardController.documentBack[0])
+                                        : Image.file(File(
+                                            cardController.documentBack[0]))
+                                /*child: Image.file(
                                 File(direction == ScanDirection.front
                                     ? cardController.documentFront[0]
                                     : cardController.documentBack[0]),
                                 fit: BoxFit.fill,
-                              ),
-                            ),
+                              ),*/
+                                ),
                           )
                         : Text(
                             direction == ScanDirection.front ? 'Front' : 'Back',
