@@ -30,10 +30,11 @@ class EmployeeListScreen extends StatelessWidget {
         style: Get.textTheme.displaySmall?.copyWith(color: Colors.white),
       ),
       bodyWidget: Obx(
-        () => employeeListScreenController.isLoading.value == true
+        () => /* employeeListScreenController.isLoading.value == true
             ? buildPlaceholder(
                 employeeListScreenController, adminDashboardScreenController)
-            : adminDashboardScreenController.employeeList.isEmpty
+            :*/
+            adminDashboardScreenController.employeeList.isEmpty
                 ? buildEmptyEmployeeList()
                 : buildEmployeeList(
                     employeeListScreenController: employeeListScreenController,
