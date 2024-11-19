@@ -64,10 +64,11 @@ class UserOnboardingScreen extends StatelessWidget {
         Radius.circular(10.r),
       ),
     );
-
     if (isEditing && employee != null) {
-      userOnboardingScreenController.loadStoredData(employee!);
+      userOnboardingScreenController.isEditing.value = true;
+      userOnboardingScreenController.editingUser(employee);
     }
+
     return ScaffoldDashboard(
       isLoading: false,
       pageTitle: Text(
@@ -318,29 +319,34 @@ class UserOnboardingScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              width: 83.w,
-              height: 51.h,
-              clipBehavior: Clip.antiAliasWithSaveLayer,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5.r),
-              ),
-              child: direction == ScanDirection.front
-                  ? Uri.parse(cardCaptureController.documentFront[0]).isAbsolute
-                      ? CachedNetworkImage(
-                          placeholder: (context, url) =>
-                              GradientProgressBar(size: Size(5.w, 5.h)),
-                          imageUrl: direction == ScanDirection.front
-                              ? cardCaptureController.documentFront[0]
-                              : cardCaptureController.documentBack[0],
-                        )
-                      : Image.file(
-                          File(direction == ScanDirection.front
-                              ? cardCaptureController.documentFront[0]
-                              : cardCaptureController.documentBack[0]),
-                          fit: BoxFit.fill,
-                        )
-                  : Container(),
-              /*child: isEditing
+                width: 83.w,
+                height: 51.h,
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.r),
+                ),
+                child: direction == ScanDirection.front
+                    ? Uri.parse(cardCaptureController.documentFront[0])
+                            .isAbsolute
+                        ? CachedNetworkImage(
+                            placeholder: (context, url) =>
+                                GradientProgressBar(size: Size(5.w, 5.h)),
+                            imageUrl: cardCaptureController.documentFront[0])
+                        : Image.file(
+                            File(cardCaptureController.documentFront[0]),
+                            fit: BoxFit.fill,
+                          )
+                    : Uri.parse(cardCaptureController.documentBack[0])
+                            .isAbsolute
+                        ? CachedNetworkImage(
+                            placeholder: (context, url) =>
+                                GradientProgressBar(size: Size(5.w, 5.h)),
+                            imageUrl: cardCaptureController.documentBack[0])
+                        : Image.file(
+                            File(cardCaptureController.documentBack[0]),
+                            fit: BoxFit.fill,
+                          )
+                /*child: isEditing
                   ? CachedNetworkImage(
                       placeholder: (context, url) =>
                           GradientProgressBar(size: Size(5.w, 5.h)),
@@ -354,7 +360,7 @@ class UserOnboardingScreen extends StatelessWidget {
                           : cardCaptureController.documentBack[0]),
                       fit: BoxFit.fill,
                     ),*/
-            ),
+                ),
             Text(
               direction == ScanDirection.front ? 'Front' : 'Back',
               style: Get.textTheme.titleMedium
@@ -371,8 +377,7 @@ class UserOnboardingScreen extends StatelessWidget {
                 } else {
                   cardCaptureController.documentBack.clear();
                   if (isEditing) {
-                    userOnboardingScreenController.isIdFrontChanged.value =
-                        true;
+                    userOnboardingScreenController.isIdBackChanged.value = true;
                   }
                 }
               },

@@ -26,6 +26,7 @@ class UserOnboardingScreenController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isFormValid = false.obs;
   RxBool isEditing = false.obs;
+  Rx<UsersModel?> editingUser = UsersModel().obs;
   RxBool isProfilePicChanged = false.obs;
   RxBool isIdFrontChanged = false.obs;
   RxBool isIdBackChanged = false.obs;
@@ -53,6 +54,9 @@ class UserOnboardingScreenController extends GetxController {
         showUserTypeOptions.value = false;
       }
     });
+    if (isEditing.isTrue && editingUser.value != null) {
+      loadStoredData(editingUser.value!);
+    }
   }
 
   @override
@@ -161,6 +165,7 @@ class UserOnboardingScreenController extends GetxController {
         httpsReferenceToDel.delete();
       }
       if (isIdFrontChanged.value == true) {
+        print('changing id front...');
         frontPath = await firebaseStorageController.uploadPicture(
             file: XFile(idCardCaptureController.documentFront[0]),
             storagePath: PicPathEnum.idCard);
@@ -173,6 +178,7 @@ class UserOnboardingScreenController extends GetxController {
         httpsReferenceToDel.delete();
       }
       if (isIdBackChanged.value == true) {
+        print('changing id back...');
         backPath = await firebaseStorageController.uploadPicture(
             file: XFile(idCardCaptureController.documentBack[0]),
             storagePath: PicPathEnum.idCard);
