@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,7 +14,7 @@ class ImagePreviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //bool isNetworkImage = Uri.parse(imagePath).isAbsolute ? true : false;
+    bool isNetworkImage = Uri.parse(imagePath).isAbsolute ? true : false;
 
     return ScaffoldDashboard(
       pageTitle: Text(
@@ -23,7 +25,11 @@ class ImagePreviewScreen extends StatelessWidget {
         alignment: Alignment.center,
         child: PhotoView(
           tightMode: true,
-          imageProvider: CachedNetworkImageProvider(imagePath)
+          imageProvider: isNetworkImage
+              ? CachedNetworkImageProvider(imagePath)
+              : FileImage(
+                  File(imagePath),
+                ) as ImageProvider,
           //backgroundDecoration: BoxDecoration(color: Colors.transparent),
         ),
       ),
