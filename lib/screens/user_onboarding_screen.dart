@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 import 'package:stationeryhub_attendance/components/dotted_border_painter.dart';
 import 'package:stationeryhub_attendance/components/form_error.dart';
 import 'package:stationeryhub_attendance/components/form_field_button.dart';
@@ -11,12 +12,14 @@ import 'package:stationeryhub_attendance/components/form_field_phone_num.dart';
 import 'package:stationeryhub_attendance/components/form_field_text.dart';
 import 'package:stationeryhub_attendance/components/gradient_progress_bar.dart';
 import 'package:stationeryhub_attendance/controllers/capture_image_screen_controller.dart';
+import 'package:stationeryhub_attendance/controllers/face_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 import 'package:stationeryhub_attendance/controllers/form_error_controller.dart';
 import 'package:stationeryhub_attendance/controllers/user_onboarding_screen_controller.dart';
 import 'package:stationeryhub_attendance/models/user_type_enum.dart';
 import 'package:stationeryhub_attendance/models/users_model.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
+import 'package:stationeryhub_attendance/screens/image_preview_screen.dart';
 import 'package:stationeryhub_attendance/screens/pic_info_screen.dart';
 import 'package:stationeryhub_attendance/screens/user_id_card_info_screen.dart';
 
@@ -24,7 +27,6 @@ import '../components/picture_circle.dart';
 import '../controllers/firebase_error_controller.dart';
 import '../controllers/id_card_capture_controller.dart';
 import '../helpers/constants.dart';
-import 'display_captured_image_screen.dart';
 
 enum ScanDirection { front, back }
 
@@ -512,7 +514,10 @@ class UserOnboardingScreen extends StatelessWidget {
                 height: 90.w,
                 imgPath: captureImageScreenController.imageFilePath.value,
                 onTap: () {
-                  Get.off(() => DisplayCapturedImageScreen());
+                  Get.to(() => ImagePreviewScreen(
+                      imagePath:
+                          captureImageScreenController.imageFilePath.value,
+                      imageTitle: 'Profile Picture'));
                 },
               ),
             ),
@@ -647,6 +652,15 @@ class UserOnboardingScreen extends StatelessWidget {
     FormErrorController formErrorController = Get.find();
     formErrorController.resetErrors();
     userOnboardingScreenController.isFormValid.value = false;
+    final faceController = Get.put(FaceController());
+
+    faceController.inputImage = InputImage.fromFile(
+        File(captureImageScreenController.imageFilePath.value));
+    await faceController.detectFace();
+    print('faceController.isFaceDetected=${faceController.isFaceDetected}');
+    if (faceController.isFaceDetected.isFalse) {
+      formErrorController.errors.add('No face detected');
+    }
 
     UsersModel? tempUser =
         await firestoreController.getUser(phoneNum: phoneNum);

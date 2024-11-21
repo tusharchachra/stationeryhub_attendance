@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -23,6 +24,11 @@ class DisplayCapturedImageScreen extends StatelessWidget {
     final CaptureImageScreenController captureImageScreenController =
         Get.find();
 
+    bool isAbsolute =
+        Uri.parse(captureImageScreenController.imageFilePath.value).isAbsolute
+            ? true
+            : false;
+
     return ScaffoldDashboard(
       pageTitle: Text('Confirm Image'),
       bodyWidget: Container(
@@ -33,10 +39,14 @@ class DisplayCapturedImageScreen extends StatelessWidget {
             SizedBox(
               width: 1.sw,
               height: 1.sh,
-              child: Image.file(
-                File(captureImageScreenController.imageFile!.path),
-                fit: BoxFit.fill,
-              ),
+              child: isAbsolute
+                  ? CachedNetworkImage(
+                      imageUrl:
+                          captureImageScreenController.imageFilePath.value)
+                  : Image.file(
+                      File(captureImageScreenController.imageFile!.path),
+                      fit: BoxFit.fill,
+                    ),
             ),
             if (displayForeground ?? true)
               Positioned(
