@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/components/gradient_progress_bar.dart';
 import 'package:stationeryhub_attendance/components/picture_circle.dart';
+import 'package:stationeryhub_attendance/controllers/user_onboarding_screen_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 import 'package:stationeryhub_attendance/models/attendance_count_view_model.dart';
 import 'package:stationeryhub_attendance/models/user_type_enum.dart';
@@ -86,6 +87,7 @@ class EmployeeCard extends StatelessWidget {
                   SizedBox(width: 18.w),
                   GestureDetector(
                     onTap: () {
+                      Get.delete<UserOnboardingScreenController>();
                       Get.to(
                         () => UserOnboardingScreen(
                           isEditing: true,
