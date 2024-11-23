@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/capture_image_screen_controller.dart';
+import 'package:stationeryhub_attendance/controllers/face_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_storage_controller.dart';
 import 'package:stationeryhub_attendance/controllers/id_card_capture_controller.dart';
@@ -15,7 +16,7 @@ import '../models/users_model.dart';
 class UserOnboardingScreenController extends GetxController {
   Rx<TextEditingController> nameController = TextEditingController().obs;
   Rx<TextEditingController> salaryController = TextEditingController().obs;
-
+  RxBool isChangesMade = false.obs;
   Rx<TextEditingController> phoneNumController = TextEditingController().obs;
   RxString phoneNum = ('').obs;
   Rx<TextEditingController> userTypeController = TextEditingController().obs;
@@ -42,6 +43,7 @@ class UserOnboardingScreenController extends GetxController {
   //final EmployeeListScreenController employeeListScreenController = Get.find();
   final AdminDashboardScreenController adminDashboardScreenController =
       Get.find();
+  final FaceController faceController = Get.find();
 
   @override
   void onReady() {
@@ -67,6 +69,7 @@ class UserOnboardingScreenController extends GetxController {
     isProfilePicChanged.value = false;
     isIdFrontChanged.value = false;
     isIdBackChanged.value = false;
+    isChangesMade.value = false;
     super.dispose();
   }
 
@@ -123,6 +126,7 @@ class UserOnboardingScreenController extends GetxController {
       profilePicPath: profilePicPath,
       idCardFrontPath: frontPath,
       idCardBackPath: backPath,
+      embeddings: faceController.embeddings.value,
     );
     await firestoreController.addNewUser(user: newUser);
 
@@ -153,6 +157,7 @@ class UserOnboardingScreenController extends GetxController {
     String? backPath;
     if (isEditing.value == true) {
       if (isProfilePicChanged.value == true) {
+        print('changing profile pic...');
         profilePicPath = await firebaseStorageController.uploadPicture(
             file: XFile(captureImageScreenController.imageFilePath.value),
             storagePath: PicPathEnum.profile);
@@ -206,6 +211,9 @@ class UserOnboardingScreenController extends GetxController {
             isProfilePicChanged.value == true ? profilePicPath : null,
         idCardFrontPath: isIdFrontChanged.value == true ? frontPath : null,
         idCardBackPath: isIdBackChanged.value == true ? backPath : null,
+        embeddings: isProfilePicChanged.value == true
+            ? faceController.embeddings.value
+            : null,
       );
       await firestoreController.updateUser(user: updatedUser);
       adminDashboardScreenController.employeeList[adminDashboardScreenController
