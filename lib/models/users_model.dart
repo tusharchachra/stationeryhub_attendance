@@ -14,6 +14,7 @@ class UsersModel {
   String? idCardBackPath;
   bool? isActive;
   int? salary; //per month
+  String? embeddings;
 
   UsersModel({
     this.firebaseUserId,
@@ -27,6 +28,7 @@ class UsersModel {
     this.idCardBackPath,
     this.isActive,
     this.salary,
+    this.embeddings,
   });
 
   factory UsersModel.fromFirestore(
@@ -89,7 +91,8 @@ class UsersModel {
         'idCardFrontPath': idCardFrontPath ?? '',
         'idCardBackPath': idCardBackPath ?? '',
         'isActive': isActive ?? true,
-        'salary': salary ?? 0
+        'salary': salary ?? 0,
+        'embeddings': embeddings ?? '',
       };
 
   /*void setUid(String id) {

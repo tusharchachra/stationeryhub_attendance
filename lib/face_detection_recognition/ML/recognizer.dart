@@ -6,7 +6,7 @@ import 'package:image/image.dart' as img;
 import 'package:tflite_flutter/tflite_flutter.dart';
 
 import '../DB/face_database_helper.dart';
-import 'Recognition.dart';
+import 'recognition.dart';
 
 class Recognizer {
   late Interpreter interpreter;

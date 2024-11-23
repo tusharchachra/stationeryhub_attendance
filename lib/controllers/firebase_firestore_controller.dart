@@ -318,6 +318,9 @@ class FirebaseFirestoreController extends GetxController {
       if (user.idCardBackPath != null) {
         ref.update({'idCardBackPath': '${user.idCardBackPath}'});
       }
+      if (user.embeddings != null) {
+        ref.update({'embeddings': '${user.embeddings}'});
+      }
 
       if (kDebugMode) {
         debugPrint('User details updated');

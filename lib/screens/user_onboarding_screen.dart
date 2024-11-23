@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 import 'package:stationeryhub_attendance/components/dotted_border_painter.dart';
 import 'package:stationeryhub_attendance/components/form_error.dart';
 import 'package:stationeryhub_attendance/components/form_field_button.dart';
@@ -53,6 +52,7 @@ class UserOnboardingScreen extends StatelessWidget {
         Get.put(CaptureImageScreenController());
     final idCardCaptureController = Get.put(IdCardCaptureController());
     final formErrorController = Get.put(FormErrorController());
+    Get.put(FaceController());
     final userOnboardingScreenController =
         Get.put(UserOnboardingScreenController());
 
@@ -107,6 +107,9 @@ class UserOnboardingScreen extends StatelessWidget {
                     hintText: 'Enter name',
                     border: outlineInputBorder,
                     fillColor: Constants.colourBorderLight,
+                    onChangedAction: (val) {
+                      userOnboardingScreenController.isChangesMade.value = true;
+                    },
                     validator: (val) {
                       if (val?.trim() == '') {
                         return 'Name is mandatory';
@@ -132,6 +135,8 @@ class UserOnboardingScreen extends StatelessWidget {
                         Switch(
                           value: userOnboardingScreenController.isActive.value,
                           onChanged: (val) {
+                            userOnboardingScreenController.isChangesMade.value =
+                                true;
                             userOnboardingScreenController.isActive.value = val;
                           },
                           activeColor: Constants.colourPrimary,
@@ -153,7 +158,9 @@ class UserOnboardingScreen extends StatelessWidget {
                       return userOnboardingScreenController
                           .validatePhoneNum(val);
                     },
-                    onChangedAction: (val) {},
+                    onChangedAction: (val) {
+                      userOnboardingScreenController.isChangesMade.value = true;
+                    },
                   ),
                   SizedBox(height: 35.h),
                   buildSubHeading(
@@ -173,6 +180,9 @@ class UserOnboardingScreen extends StatelessWidget {
                     inputType: TextInputType.number,
                     border: outlineInputBorder,
                     fillColor: Constants.colourBorderLight,
+                    onChangedAction: (val) {
+                      userOnboardingScreenController.isChangesMade.value = true;
+                    },
                     validator: (val) {
                       /* if (val?.trim() == '') {
                         return 'Salary is mandatory';
@@ -231,70 +241,94 @@ class UserOnboardingScreen extends StatelessWidget {
                             height: 56.h,
                             buttonText: isEditing ? 'Submit' : 'Add User',
                             onTapAction: () async {
-                              await validateForm(
-                                  captureImageScreenController:
-                                      captureImageScreenController,
-                                  formErrorController: formErrorController,
-                                  idCardCaptureController:
-                                      idCardCaptureController,
-                                  userOnboardingScreenController:
-                                      userOnboardingScreenController,
-                                  phoneNum: userOnboardingScreenController
-                                      .phoneNumController.value.text
-                                      .trim());
                               if (userOnboardingScreenController
-                                  .formKey.currentState!
-                                  .validate()) {
-                                if (userOnboardingScreenController
-                                        .isFormValid.value ==
-                                    true) {
-                                  isEditing
-                                      ? {
-                                          await userOnboardingScreenController
-                                              .uploadEditedData(
-                                                  uid: employee!.userId!)
-                                        }
-                                      : await userOnboardingScreenController
-                                          .uploadData();
-                                  Get.back();
-                                  Get.showSnackbar(
-                                    GetSnackBar(
-                                      messageText: Text(
-                                        errorController.errorMsg.isNotEmpty
-                                            ? errorController.errorMsg
-                                                .toString()
-                                            : isEditing
-                                                ? 'Update successful'
-                                                : 'New User created',
-                                        textAlign: TextAlign.center,
-                                        style: Get.textTheme.bodyMedium
-                                            ?.copyWith(
-                                                color:
-                                                    Constants.colourTextDark),
-                                      ),
-                                      duration: const Duration(seconds: 2),
-                                      snackPosition: SnackPosition.BOTTOM,
-                                      backgroundColor: Colors.white,
-                                      boxShadows: [
-                                        BoxShadow(
-                                            color: Colors.grey,
-                                            blurRadius: 62.0.r),
-                                      ],
-                                      snackStyle: SnackStyle.FLOATING,
-                                      borderRadius: 50.r,
-                                      margin: EdgeInsets.all(10.w),
+                                  .isChangesMade.isFalse) {
+                                Get.showSnackbar(
+                                  GetSnackBar(
+                                    messageText: Text(
+                                      'No changes made',
+                                      textAlign: TextAlign.center,
+                                      style: Get.textTheme.bodyMedium?.copyWith(
+                                          color: Constants.colourTextDark),
                                     ),
-                                  );
-
-                                  //firestoreController.addNewUser(phoneNum: phoneNum, userType: userType)
-                                }
+                                    duration: const Duration(seconds: 2),
+                                    snackPosition: SnackPosition.BOTTOM,
+                                    backgroundColor: Colors.white,
+                                    boxShadows: [
+                                      BoxShadow(
+                                          color: Colors.grey,
+                                          blurRadius: 62.0.r),
+                                    ],
+                                    snackStyle: SnackStyle.FLOATING,
+                                    borderRadius: 50.r,
+                                    margin: EdgeInsets.all(10.w),
+                                  ),
+                                );
                               } else {
-                                userOnboardingScreenController
-                                    .isFormValid.value = false;
-                                print(formErrorController.errors);
+                                await validateForm(
+                                    captureImageScreenController:
+                                        captureImageScreenController,
+                                    formErrorController: formErrorController,
+                                    idCardCaptureController:
+                                        idCardCaptureController,
+                                    userOnboardingScreenController:
+                                        userOnboardingScreenController,
+                                    phoneNum: userOnboardingScreenController
+                                        .phoneNumController.value.text
+                                        .trim());
+                                if (userOnboardingScreenController
+                                    .formKey.currentState!
+                                    .validate()) {
+                                  if (userOnboardingScreenController
+                                          .isFormValid.value ==
+                                      true) {
+                                    isEditing
+                                        ? {
+                                            await userOnboardingScreenController
+                                                .uploadEditedData(
+                                                    uid: employee!.userId!)
+                                          }
+                                        : await userOnboardingScreenController
+                                            .uploadData();
+                                    Get.back();
+                                    Get.showSnackbar(
+                                      GetSnackBar(
+                                        messageText: Text(
+                                          errorController.errorMsg.isNotEmpty
+                                              ? errorController.errorMsg
+                                                  .toString()
+                                              : isEditing
+                                                  ? 'Update successful'
+                                                  : 'New User created',
+                                          textAlign: TextAlign.center,
+                                          style: Get.textTheme.bodyMedium
+                                              ?.copyWith(
+                                                  color:
+                                                      Constants.colourTextDark),
+                                        ),
+                                        duration: const Duration(seconds: 2),
+                                        snackPosition: SnackPosition.BOTTOM,
+                                        backgroundColor: Colors.white,
+                                        boxShadows: [
+                                          BoxShadow(
+                                              color: Colors.grey,
+                                              blurRadius: 62.0.r),
+                                        ],
+                                        snackStyle: SnackStyle.FLOATING,
+                                        borderRadius: 50.r,
+                                        margin: EdgeInsets.all(10.w),
+                                      ),
+                                    );
+
+                                    //firestoreController.addNewUser(phoneNum: phoneNum, userType: userType)
+                                  }
+                                } else {
+                                  userOnboardingScreenController
+                                      .isFormValid.value = false;
+                                  print(formErrorController.errors);
+                                }
                               }
-                            },
-                          ),
+                            }),
                   ),
                 ],
               ),
@@ -375,11 +409,13 @@ class UserOnboardingScreen extends StatelessWidget {
                   if (isEditing) {
                     userOnboardingScreenController.isIdFrontChanged.value =
                         true;
+                    userOnboardingScreenController.isChangesMade.value = true;
                   }
                 } else {
                   cardCaptureController.documentBack.clear();
                   if (isEditing) {
                     userOnboardingScreenController.isIdBackChanged.value = true;
+                    userOnboardingScreenController.isChangesMade.value = true;
                   }
                 }
               },
@@ -531,7 +567,9 @@ class UserOnboardingScreen extends StatelessWidget {
                   if (isEditing) {
                     userOnboardingScreenController.isProfilePicChanged.value =
                         true;
+                    userOnboardingScreenController.isChangesMade.value = true;
                   }
+
                   Get.to(() => const PicInfoScreen(
                         title: 'New User',
                         infoTile: 'Add a new user',
@@ -573,6 +611,7 @@ class UserOnboardingScreen extends StatelessWidget {
       trailingWidget: IconButton(
           onPressed: () {
             userOnboardingScreenController.invertShowUserTypeValue();
+            userOnboardingScreenController.isChangesMade.value = true;
           },
           icon: userOnboardingScreenController.showUserTypeOptions.value == true
               ? Icon(Icons.keyboard_arrow_left_sharp)
@@ -652,15 +691,7 @@ class UserOnboardingScreen extends StatelessWidget {
     FormErrorController formErrorController = Get.find();
     formErrorController.resetErrors();
     userOnboardingScreenController.isFormValid.value = false;
-    final faceController = Get.put(FaceController());
-
-    faceController.inputImage = InputImage.fromFile(
-        File(captureImageScreenController.imageFilePath.value));
-    await faceController.detectFace();
-    print('faceController.isFaceDetected=${faceController.isFaceDetected}');
-    if (faceController.isFaceDetected.isFalse) {
-      formErrorController.errors.add('No face detected');
-    }
+    final FaceController faceController = Get.find();
 
     UsersModel? tempUser =
         await firestoreController.getUser(phoneNum: phoneNum);
@@ -671,6 +702,16 @@ class UserOnboardingScreen extends StatelessWidget {
 
     if (captureImageScreenController.imageFilePath.isEmpty) {
       formErrorController.errors.add('Click a profile picture');
+    } else {
+      faceController.assignValues(
+          path: captureImageScreenController.imageFilePath.value);
+      await faceController.detectFace();
+      print('faceController.isFaceDetected=${faceController.isFaceDetected}');
+      if (faceController.isFaceDetected.isFalse) {
+        formErrorController.errors.add('No face detected');
+      } else {
+        faceController.processFace();
+      }
     }
 
     if (idCardCaptureController.documentFront.isEmpty ||

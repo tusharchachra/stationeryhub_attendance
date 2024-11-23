@@ -46,6 +46,18 @@ class ScaffoldDashboard extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Constants.colourPrimary,
         leading: leadingWidget,
+        /* Row(
+          children: [
+            if (Get.routeTree.routes.first)
+              BackButton(
+                color: Colors.white,
+                onPressed: () {
+                  Get.back();
+                },
+              ),
+            leadingWidget ?? Container()
+          ],
+        ),*/
         title: pageTitle,
         actions: [
           IconButton(

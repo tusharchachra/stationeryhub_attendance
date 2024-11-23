@@ -7,8 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image/image.dart' as img;
 
-import '../ML/Recognition.dart';
-import '../ML/Recognizer.dart';
+import '../face_detection_recognition/ML/recognition.dart';
+import '../face_detection_recognition/ML/recognizer.dart';
 
 late List<CameraDescription> cameras;
 

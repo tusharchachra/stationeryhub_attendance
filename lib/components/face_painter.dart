@@ -1,14 +1,12 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 
-import '../face_detection_recognition/ML/Recognition.dart';
-
-class FaceDetectorPainter extends CustomPainter {
-  FaceDetectorPainter(this.absoluteImageSize, this.faces, this.camDire2);
+class FacePainter extends CustomPainter {
+  FacePainter(this.absoluteImageSize, this.faces /*, this.camDire2*/);
 
   final Size absoluteImageSize;
-  final List<Recognition> faces;
-  CameraLensDirection camDire2;
+  final List<Face> faces;
+  //CameraLensDirection camDire2;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -19,8 +17,11 @@ class FaceDetectorPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.0
       ..color = Colors.indigoAccent;
+    for (Face face in faces) {
+      canvas.drawRect(face.boundingBox, paint);
+    }
 
-    for (Recognition face in faces) {
+    /*for (Recognition face in faces) {
       canvas.drawRect(
         Rect.fromLTRB(
           camDire2 == CameraLensDirection.front
@@ -45,11 +46,11 @@ class FaceDetectorPainter extends CustomPainter {
       tp.layout();
       tp.paint(canvas,
           Offset(face.location.left * scaleX, face.location.top * scaleY));
-    }
+    }*/
   }
 
   @override
-  bool shouldRepaint(FaceDetectorPainter oldDelegate) {
+  bool shouldRepaint(FacePainter oldDelegate) {
     return true;
   }
 }

@@ -6,6 +6,7 @@ import 'package:stationeryhub_attendance/components/border_painter.dart';
 import 'package:stationeryhub_attendance/components/gradient_progress_bar.dart';
 import 'package:stationeryhub_attendance/components/line_animation_view.dart';
 import 'package:stationeryhub_attendance/controllers/capture_image_screen_controller.dart';
+import 'package:stationeryhub_attendance/controllers/face_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
 
@@ -98,6 +99,7 @@ class CaptureImageScreen extends StatelessWidget {
 
   Widget buildButtons(
       CaptureImageScreenController captureImageScreenController) {
+    final FaceController faceController = Get.find();
     return Positioned(
       bottom: 69.h,
       left: 0,
@@ -130,6 +132,8 @@ class CaptureImageScreen extends StatelessWidget {
             onTap: () async {
               await captureImageScreenController.clickPicture();
               if (captureImageScreenController.imageFilePath.value != '') {
+                faceController.assignValues(
+                    path: captureImageScreenController.imageFilePath.value);
                 Get.off(() => DisplayCapturedImageScreen(
                       displayForeground: displayForeground,
                     ));

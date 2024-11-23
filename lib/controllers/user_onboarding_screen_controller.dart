@@ -70,6 +70,7 @@ class UserOnboardingScreenController extends GetxController {
     isIdFrontChanged.value = false;
     isIdBackChanged.value = false;
     isChangesMade.value = false;
+
     super.dispose();
   }
 
@@ -215,6 +216,8 @@ class UserOnboardingScreenController extends GetxController {
             ? faceController.embeddings.value
             : null,
       );
+      print(
+          'faceController.embeddings.value=${faceController.embeddings.value}');
       await firestoreController.updateUser(user: updatedUser);
       adminDashboardScreenController.employeeList[adminDashboardScreenController
               .employeeList
