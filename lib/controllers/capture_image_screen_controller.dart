@@ -8,7 +8,7 @@ class CaptureImageScreenController extends GetxController
     with GetSingleTickerProviderStateMixin {
   RxBool isCameraInitialized = false.obs;
   CameraController? cameraController =
-      CameraController(cameras[0], ResolutionPreset.max);
+      CameraController(cameras[0], ResolutionPreset.ultraHigh);
   RxInt cameraDirection = 0.obs;
   RxString imageFilePath = ''.obs;
   XFile? imageFile;
@@ -25,6 +25,7 @@ class CaptureImageScreenController extends GetxController
     // TODO: implement onReady
     super.onReady();
     initializeCamera();
+    cameraController!.setFocusMode(FocusMode.auto);
   }
 
   void initializeCamera() {

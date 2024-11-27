@@ -1,32 +1,36 @@
 import 'dart:io';
-import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart' as painting;
 import 'package:get/get.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image/image.dart' as img;
+import 'package:stationeryhub_attendance/face_detection_recognition/ML/recognition.dart';
+import 'package:stationeryhub_attendance/models/users_model.dart';
 
-import '../face_detection_recognition/ML/recognition.dart';
 import '../face_detection_recognition/ML/recognizer.dart';
 
 class FaceController extends GetxController {
   InputImage? inputImage;
   File? image;
   FaceDetectorOptions options = FaceDetectorOptions(
-      minFaceSize: 0.4, performanceMode: FaceDetectorMode.accurate);
+    minFaceSize: 0.4,
+    performanceMode: FaceDetectorMode.accurate,
+  );
   FaceDetector? faceDetector;
   RxList<Face> faces = <Face>[].obs;
-  RxString embeddings = ''.obs;
-
+  //RxString embeddings = ''.obs;
+  Rx<Rect> boundingBox = Rect.zero.obs;
   late Recognizer recognizer;
 
   RxBool isFaceDetected = false.obs;
 
-  void assignValues({required String path}) {
+  /*void assignValues({required String path}) {
     image = File(path);
-  }
+  }*/
 
-  Future<void> detectFace() async {
+  Future<void> detectFace({required String path}) async {
+    image = File(path);
     inputImage = InputImage.fromFile(image!);
     faceDetector = FaceDetector(options: options);
     if (inputImage != null) {
@@ -41,7 +45,8 @@ class FaceController extends GetxController {
     }
   }
 
-  Future<void> processFace() async {
+  Future<String> processFace({required String path}) async {
+    image = File(path);
     recognizer = Recognizer();
     // var imgUInt8List = await image!.readAsBytes();
     var imageDecoded =
@@ -50,19 +55,21 @@ class FaceController extends GetxController {
       imgUInt8List,
       (result) => imageDecoded = result,
     );*/
-    print(imageDecoded);
+    //print(imageDecoded);
     for (Face face in faces) {
-      final Rect boundingBox = face.boundingBox;
-      print('boundingBox=${boundingBox.toString()}');
+      //Rect boundingBox = face.boundingBox;
+      boundingBox.value = face.boundingBox;
 
-      num left = boundingBox.left < 0 ? 0 : boundingBox.left;
-      num top = boundingBox.top < 0 ? 0 : boundingBox.top;
-      num right = boundingBox.right > imageDecoded.width
+      //print('boundingBox=${boundingBox.toString()}');
+
+      num left = boundingBox.value.left < 0 ? 0 : boundingBox.value.left;
+      num top = boundingBox.value.top < 0 ? 0 : boundingBox.value.top;
+      num right = boundingBox.value.right > imageDecoded.width
           ? imageDecoded.width - 1
-          : boundingBox.right;
-      num bottom = boundingBox.bottom > imageDecoded.height
+          : boundingBox.value.right;
+      num bottom = boundingBox.value.bottom > imageDecoded.height
           ? imageDecoded.height - 1
-          : boundingBox.bottom;
+          : boundingBox.value.bottom;
       num width = right - left;
       num height = bottom - top;
       final bytes = await image!.readAsBytes();
@@ -72,11 +79,79 @@ class FaceController extends GetxController {
           y: top.toInt(),
           width: width.toInt(),
           height: height.toInt());
-      print('croppedFace.height=${croppedFace.height}');
-      Recognition recognition = recognizer.recognize(croppedFace, boundingBox);
-      embeddings.value = recognition.embeddings.join(',');
-      print('embeddings.value=${recognition.embeddings}');
+      /* final png = img.encodePng(croppedFace);
+      Get.dialog(Dialog(
+        child: Stack(children: [
+          Image.memory(png),
+        ]),
+      ));*/
+
+      //print('croppedFace.height=${croppedFace.height}');
+      return recognizer.getEmbeddings(croppedFace);
+      //Recognition recognition = recognizer.getEmbeddings(croppedFace, boundingBox);
+      //embeddings.value = recognition.embeddings.join(',');
+      //print('embeddings.value=${recognition.embeddings}');
+      //print(recognition.distance);
     }
+    return '';
+  }
+
+  Recognition recognize(
+      {required List<UsersModel> users,
+      required String currentEmbeddings,
+      required Rect location}) {
+    recognizer = Recognizer();
+    List<List<double>> storedEmbeddings = [];
+    List<double> currentEmbeddingsDouble = [];
+    var tempCurrentEmbeddings = currentEmbeddings.split(',');
+    for (var value in tempCurrentEmbeddings) {
+      currentEmbeddingsDouble.add(double.parse(value));
+    }
+
+    /* for (int i = 0; i < users.length; i++) {
+      var listString = users[i].embeddings?.split(',');
+      if (listString != null) {
+        for (int j = 0; i < listString.length; j++) {
+          storedEmbeddings[i][j] = double.parse(listString[j]);
+        }
+        //print(storedEmbeddings.runtimeType);
+      }
+    }*/
+
+    /* for (UsersModel user in users) {
+      storedEmbeddings.clear();
+      var listString = user.embeddings?.split(',');
+      //print('listString=${listString}');
+      if (listString != null) {
+        for (var value in listString) {
+          storedEmbeddings.add(double.parse(value));
+        }
+        //print(storedEmbeddings.runtimeType);
+      }
+
+      Recognition recognition = recognizer.recognize(
+          storedEmbeddings: storedEmbeddings,
+          currentEmbeddings: currentEmbeddingsDouble,
+          location: location);
+      print('distance=${recognition.distance}');
+
+      //storedEmbeddings.addAll(double.parse(listString));
+    }*/
+
+    /* Recognition recognition = recognizer.recognize(
+        storedEmbeddings: users.map((element) => element.storedEmbeddings).toList(),
+        location: boundingBox.value);*/
+
+    Recognition recognition = recognizer.recognize(
+        users: users,
+        currentEmbeddings: currentEmbeddingsDouble,
+        location: location);
+    return recognition;
+  }
+
+  void resetData() {
+    isFaceDetected(false);
+    faces([]);
   }
 
   @override

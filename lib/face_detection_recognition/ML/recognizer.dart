@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:image/image.dart' as img;
+import 'package:stationeryhub_attendance/models/users_model.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
 import '../DB/face_database_helper.dart';
@@ -96,7 +97,104 @@ class Recognizer {
     return reshapedArray.reshape([1, 112, 112, 3]);
   }
 
-  Recognition recognize(img.Image image, Rect location) {
+  //custom version
+  String getEmbeddings(img.Image image) {
+    //TODO crop face from image resize it and convert it to float array
+    var input = imageToArray(image);
+    //print(input.shape.toString());
+
+    //TODO output array
+    List output = List.filled(1 * 192, 0).reshape([1, 192]);
+
+    //TODO performs inference
+    //final runs = DateTime.now().millisecondsSinceEpoch;
+    interpreter.run(input, output);
+    //final run = DateTime.now().millisecondsSinceEpoch - runs;
+    // print('Time to run inference: $run ms$output');
+
+    //TODO convert dynamic list to double list
+    List<double> outputArray = output.first.cast<double>();
+
+    return outputArray.join(',');
+  }
+
+  //custom version
+  Recognition recognize(
+      { //required List<List<double>> storedEmbeddings,
+      required List<UsersModel> users,
+      required List<double> currentEmbeddings,
+      required Rect location}) {
+    //TODO looks for the nearest embeeding in the database and returns the pair
+    Pair pair = findNearest(
+        //storedEmbeddings: storedEmbeddings,
+        users: users,
+        currentEmbeddings: currentEmbeddings);
+    // print("distance= ${pair.distance}");
+
+    return Recognition(pair.uid, location, currentEmbeddings, pair.distance);
+  }
+
+  //TODO  looks for the nearest embeeding in the database and returns the pair which contain information of registered face with which face is most similar
+  findNearest(
+      { //required List<List<double>> storedEmbeddings,
+      required List<UsersModel> users,
+      required List<double> currentEmbeddings}) {
+    Pair pair = Pair("Unknown", -5);
+    for (var item in users) {
+      final String uid = item.userId!;
+      List<double> knownEmb = [];
+      var listString = item.embeddings?.split(',');
+      print('listString=$listString');
+      if (listString != null) {
+        for (int i = 0; i < listString.length; i++) {
+          knownEmb.add(double.parse(listString[i]));
+        }
+        print('knownEmb=$knownEmb');
+
+        double distance = 0;
+        for (int i = 0; i < currentEmbeddings.length; i++) {
+          double diff = currentEmbeddings[i] - knownEmb[i];
+          distance += diff * diff;
+        }
+        distance = sqrt(distance);
+        if (pair.distance == -5 || distance < pair.distance) {
+          pair.distance = distance;
+          pair.uid = uid;
+        }
+      }
+    }
+    /* for (var user in users) {
+      //final String name = item.key;
+      for (int i = 0; i < users.length; i++) {
+        var listString = users[i].embeddings?.split(',');
+        if (listString != null) {
+          for (int j = 0; i < listString.length; j++) {
+            storedEmbeddings[i][j] = double.parse(listString[j]);
+          }
+          //print(storedEmbeddings.runtimeType);
+        }
+      }
+      List<double> knownEmb = user.embeddings;
+      double distance = 0;
+      for (int i = 0; i < currentEmbeddings.length; i++) {
+        double diff = currentEmbeddings[i] - knownEmb[i];
+        distance += diff * diff;
+      }
+      distance = sqrt(distance);
+      if (pair.distance == -5 || distance < pair.distance) {
+        pair.distance = distance;
+        //pair.name = name;
+      }
+    }*/
+    return pair;
+  }
+
+  void close() {
+    interpreter.close();
+  }
+
+  //original version
+  /* Recognition recognize(img.Image image, Rect location) {
     //TODO crop face from image resize it and convert it to float array
     var input = imageToArray(image);
     print(input.shape.toString());
@@ -118,35 +216,31 @@ class Recognizer {
     print("distance= ${pair.distance}");
 
     return Recognition(pair.name, location, outputArray, pair.distance);
-  }
+  }*/
 
-  //TODO  looks for the nearest embeeding in the database and returns the pair which contain information of registered face with which face is most similar
-  findNearest(List<double> emb) {
-    Pair pair = Pair("Unknown", -5);
-    for (MapEntry<String, Recognition> item in registered.entries) {
-      final String name = item.key;
-      List<double> knownEmb = item.value.embeddings;
-      double distance = 0;
-      for (int i = 0; i < emb.length; i++) {
-        double diff = emb[i] - knownEmb[i];
-        distance += diff * diff;
-      }
-      distance = sqrt(distance);
-      if (pair.distance == -5 || distance < pair.distance) {
-        pair.distance = distance;
-        pair.name = name;
-      }
-    }
-    return pair;
-  }
-
-  void close() {
-    interpreter.close();
-  }
+  //original version
+  /* findNearest(List<double> emb) {
+        Pair pair = Pair("Unknown", -5);
+        for (MapEntry<String, Recognition> item in registered.entries) {
+          final String name = item.key;
+          List<double> knownEmb = item.value.embeddings;
+          double distance = 0;
+          for (int i = 0; i < emb.length; i++) {
+            double diff = emb[i] - knownEmb[i];
+            distance += diff * diff;
+          }
+          distance = sqrt(distance);
+          if (pair.distance == -5 || distance < pair.distance) {
+            pair.distance = distance;
+            pair.name = name;
+          }
+        }
+        return pair;
+      }*/
 }
 
 class Pair {
-  String name;
+  String uid;
   double distance;
-  Pair(this.name, this.distance);
+  Pair(this.uid, this.distance);
 }

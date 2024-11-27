@@ -123,16 +123,17 @@ class _MarkAtt3State extends State<MarkAtt3> {
           height: faceRect.height.toInt());
 
       //TODO pass cropped face to face recognition model
-      Recognition recognition = recognizer.recognize(croppedFace!, faceRect);
+      /*Recognition recognition =
+          recognizer.getEmbeddings(croppedFace!, faceRect);
       if (recognition.distance > 1.0) {
         recognition.name = "Unknown";
       }
 
-      recognitions.add(recognition);
+      recognitions.add(recognition);*/
 
       //TODO show face registration dialogue
       if (register) {
-        showFaceRegistrationDialogue(croppedFace!, recognition);
+        //  showFaceRegistrationDialogue(croppedFace!, recognition);
         register = false;
       }
     }

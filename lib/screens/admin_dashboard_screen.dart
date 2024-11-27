@@ -21,7 +21,7 @@ import '../controllers/firebase_firestore_controller.dart';
 import '../controllers/firebase_storage_controller.dart';
 import '../services/firebase_login_services.dart';
 import 'employee_options_screen.dart';
-import 'mark_att_5.dart';
+import 'mark_attendance_screen.dart';
 import 'new_organization_screen.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
@@ -296,7 +296,7 @@ class AdminDashboardScreen extends StatelessWidget {
                 child: Text('Emp list')),
             TextButton(
                 onPressed: () {
-                  Get.to(() => MarkAtt5());
+                  Get.to(() => MarkAttendanceScreen());
                 },
                 child: Text('Mark attendance')),
           ],

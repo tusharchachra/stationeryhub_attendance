@@ -132,8 +132,8 @@ class CaptureImageScreen extends StatelessWidget {
             onTap: () async {
               await captureImageScreenController.clickPicture();
               if (captureImageScreenController.imageFilePath.value != '') {
-                faceController.assignValues(
-                    path: captureImageScreenController.imageFilePath.value);
+                /*faceController.assignValues(
+                    path: captureImageScreenController.imageFilePath.value);*/
                 Get.off(() => DisplayCapturedImageScreen(
                       displayForeground: displayForeground,
                     ));

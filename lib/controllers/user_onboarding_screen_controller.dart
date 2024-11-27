@@ -107,6 +107,8 @@ class UserOnboardingScreenController extends GetxController {
     String? profilePicPath = await firebaseStorageController.uploadPicture(
         file: XFile(captureImageScreenController.imageFilePath.value),
         storagePath: PicPathEnum.profile);
+    String embeddings = await faceController.processFace(
+        path: captureImageScreenController.imageFilePath.value);
     String? frontPath = await firebaseStorageController.uploadPicture(
         file: XFile(idCardCaptureController.documentFront[0]),
         storagePath: PicPathEnum.idCard);
@@ -127,7 +129,7 @@ class UserOnboardingScreenController extends GetxController {
       profilePicPath: profilePicPath,
       idCardFrontPath: frontPath,
       idCardBackPath: backPath,
-      embeddings: faceController.embeddings.value,
+      embeddings: embeddings,
     );
     await firestoreController.addNewUser(user: newUser);
 
@@ -156,12 +158,15 @@ class UserOnboardingScreenController extends GetxController {
     String? profilePicPath;
     String? frontPath;
     String? backPath;
+    String embeddings = '';
     if (isEditing.value == true) {
       if (isProfilePicChanged.value == true) {
         print('changing profile pic...');
         profilePicPath = await firebaseStorageController.uploadPicture(
             file: XFile(captureImageScreenController.imageFilePath.value),
             storagePath: PicPathEnum.profile);
+        embeddings = await faceController.processFace(
+            path: captureImageScreenController.imageFilePath.value);
         //delete previous file
         print('deleting previous file');
         final httpsReferenceToDel = FirebaseStorage.instance.refFromURL(
@@ -212,12 +217,9 @@ class UserOnboardingScreenController extends GetxController {
             isProfilePicChanged.value == true ? profilePicPath : null,
         idCardFrontPath: isIdFrontChanged.value == true ? frontPath : null,
         idCardBackPath: isIdBackChanged.value == true ? backPath : null,
-        embeddings: isProfilePicChanged.value == true
-            ? faceController.embeddings.value
-            : null,
+        embeddings: isProfilePicChanged.value == true ? embeddings : null,
       );
-      print(
-          'faceController.embeddings.value=${faceController.embeddings.value}');
+      print('faceController.embeddings.value=$embeddings');
       await firestoreController.updateUser(user: updatedUser);
       adminDashboardScreenController.employeeList[adminDashboardScreenController
               .employeeList

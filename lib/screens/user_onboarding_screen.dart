@@ -703,15 +703,15 @@ class UserOnboardingScreen extends StatelessWidget {
     if (captureImageScreenController.imageFilePath.isEmpty) {
       formErrorController.errors.add('Click a profile picture');
     } else {
-      faceController.assignValues(
+      await faceController.detectFace(
           path: captureImageScreenController.imageFilePath.value);
-      await faceController.detectFace();
       print('faceController.isFaceDetected=${faceController.isFaceDetected}');
       if (faceController.isFaceDetected.isFalse) {
         formErrorController.errors.add('No face detected');
-      } else {
-        faceController.processFace();
-      }
+      } /*else {
+        faceController.processFace(
+            path: captureImageScreenController.imageFilePath.value);
+      }*/
     }
 
     if (idCardCaptureController.documentFront.isEmpty ||

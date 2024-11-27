@@ -87,7 +87,7 @@ class StationeryHubAttendance extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+/*class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
@@ -103,4 +103,4 @@ class HomePage extends StatelessWidget {
 
     return SplashScreen();
   }
-}
+}*/

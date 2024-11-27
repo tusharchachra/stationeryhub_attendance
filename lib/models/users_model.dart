@@ -48,6 +48,7 @@ class UsersModel {
       idCardBackPath: data['idCardBackPath'],
       isActive: (data['isActive']),
       salary: (data['salary']),
+      embeddings: data['embeddings'],
     );
   }
 
@@ -78,7 +79,9 @@ class UsersModel {
             : json['idCardBackPath'].toString(),
         isActive =
             json['isActive'].toString() == '' ? true : (json['isActive']),
-        salary = json['salary'].toString() == '' ? 0 : (json['salary']);
+        salary = json['salary'].toString() == '' ? 0 : (json['salary']),
+        embeddings =
+            json['embeddings'].toString() == '' ? '' : json['embeddings'];
 
   Map<String, dynamic> toJson() => {
         'firebaseUserId': firebaseUserId ?? 'null',
