@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/components/form_field_button.dart';
+import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 import 'package:stationeryhub_attendance/controllers/mark_attendance_screen_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 
@@ -34,6 +35,8 @@ class MarkAttendanceResultScreen extends StatelessWidget {
 
   Widget buildSuccess(
       MarkAttendanceScreenController markAttendanceScreenController) {
+    final FirebaseFirestoreController firestoreController = Get.find();
+
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: 20.w,
@@ -56,13 +59,28 @@ class MarkAttendanceResultScreen extends StatelessWidget {
                 .copyWith(color: Constants.colourTextMedium),
           ),
           SizedBox(height: 10.h),
-          FormFieldButton(
-              width: 200.w,
-              height: 50.h,
-              buttonText: 'Okay',
-              onTapAction: () {
-                Get.back();
-              })
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              FormFieldButton(
+                width: 150.w,
+                height: 50.h,
+                buttonText: 'Correct',
+                onTapAction: () async {
+                  markAttendanceScreenController.isRecognitionCorrect(true);
+                  Get.back();
+                },
+              ),
+              FormFieldButton(
+                width: 150.w,
+                height: 50.h,
+                buttonText: 'Wrong',
+                onTapAction: () {
+                  Get.back();
+                },
+              ),
+            ],
+          ),
         ],
       ),
     );

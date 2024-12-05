@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
+import 'package:stationeryhub_attendance/models/attendance_model_old.dart';
 import 'package:stationeryhub_attendance/models/attendance_view_model.dart';
-import 'package:stationeryhub_attendance/models/user_attendance_model.dart';
 
 import '../helpers/api_service.dart';
 
@@ -25,7 +25,7 @@ class AttendanceCardController extends GetxController {
       {String? empId, DateTime? startDate, String? endDate}) async {
     isLoading.value = true;
     // List<UserAttendanceModel> records = [];
-    List<AttendanceModel> records = [];
+    List<AttendanceModelOld> records = [];
     attendanceViewList.clear();
     //attendanceList.clear();
     try {

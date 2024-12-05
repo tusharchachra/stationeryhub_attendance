@@ -133,7 +133,6 @@ class ThemeCustom {
       datePickerTheme: DatePickerThemeData(
         //dayForegroundColor: WidgetStatePropertyAll(Constants.colourTextMedium),
         locale: Locale('en', 'IN'),
-
         dayOverlayColor: WidgetStatePropertyAll(Colors.transparent),
         dayBackgroundColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
@@ -148,7 +147,8 @@ class ThemeCustom {
                   ? Colors.white
                   : Constants.colourTextDark,
         ),
-        dayStyle: TextStyle(fontSize: Get.textTheme.displaySmall!.fontSize),
+        dayStyle: TextStyle(
+            fontSize: Get.textTheme.displaySmall!.fontSize, inherit: true),
         dayShape: WidgetStatePropertyAll(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.r),
@@ -168,9 +168,12 @@ class ThemeCustom {
         ),
         weekdayStyle: Get.textTheme.displaySmall!.copyWith(
           color: Constants.colourTextDark,
+          inherit: true,
         ),
-        yearStyle: Get.textTheme.displaySmall!
-            .copyWith(color: Constants.colourTextDark),
+        yearStyle: Get.textTheme.displaySmall!.copyWith(
+          color: Constants.colourTextDark,
+          inherit: true,
+        ),
         yearBackgroundColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
             return Constants.colourPrimary;

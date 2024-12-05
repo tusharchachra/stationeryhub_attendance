@@ -1,8 +1,8 @@
-import 'package:stationeryhub_attendance/models/user_attendance_model.dart';
+import 'package:stationeryhub_attendance/models/attendance_model_old.dart';
 import 'package:stationeryhub_attendance/models/users_model.dart';
 
 class AttendanceViewModel {
-  List<AttendanceModel> attendance;
+  List<AttendanceModelOld> attendance;
   final UsersModel user;
 
   AttendanceViewModel({required this.attendance, required this.user});

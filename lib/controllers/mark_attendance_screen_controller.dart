@@ -9,6 +9,7 @@ import 'capture_image_screen_controller.dart';
 class MarkAttendanceScreenController extends GetxController {
   RxBool isLoading = false.obs;
   Rx<UsersModel> recognizedUser = UsersModel().obs;
+  RxBool isRecognitionCorrect = false.obs;
 
   @override
   void onReady() {
@@ -23,27 +24,28 @@ class MarkAttendanceScreenController extends GetxController {
           adminDashboardScreenController}) async {
     isLoading(true);
     recognizedUser(UsersModel());
+    isRecognitionCorrect(false);
 
     print('Marking attendance...');
     await captureImageScreenController.clickPicture();
     if (captureImageScreenController.imageFilePath.value != '') {
       await faceController.detectFace(
           path: captureImageScreenController.imageFilePath.value);
-      print(faceController.isFaceDetected);
+      //print(faceController.isFaceDetected);
       if (faceController.isFaceDetected.isTrue) {
         String embeddings = await faceController.processFace(
             path: captureImageScreenController.imageFilePath.value);
-        print(embeddings);
+        // print(embeddings);
         Recognition recognition = faceController.recognize(
             users: adminDashboardScreenController.employeeList,
             currentEmbeddings: embeddings,
             location: faceController.boundingBox.value);
-        print('recoginition.distance=${recognition.distance}');
+        //print('recognition.distance=${recognition.distance}');
         if (recognition.distance < 0.9) {
           recognizedUser(adminDashboardScreenController.employeeList
               .firstWhere((val) => val.userId == recognition.name));
           String name = recognizedUser.value.name!;
-          print('name=$name');
+          print('recognizedUser.value.name=$name');
         } else {
           print('unknown');
         }

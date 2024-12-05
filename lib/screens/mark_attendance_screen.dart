@@ -6,14 +6,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:stationeryhub_attendance/controllers/capture_image_screen_controller.dart';
+import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
-import 'package:stationeryhub_attendance/screens/mark_attendance_result_screen.dart';
 
 import '../components/gradient_progress_bar.dart';
 import '../controllers/admin_dashboard_screen_controller.dart';
 import '../controllers/face_controller.dart';
 import '../controllers/mark_attendance_screen_controller.dart';
 import '../helpers/constants.dart';
+import '../models/attendance_model.dart';
+
+enum MarkedBy { user, admin }
 
 class MarkAttendanceScreen extends StatelessWidget {
   const MarkAttendanceScreen({super.key});
@@ -22,14 +25,13 @@ class MarkAttendanceScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final captureImageScreenController =
         Get.put(CaptureImageScreenController());
-
-    //final FirebaseFirestoreController firestoreController = Get.find();
     captureImageScreenController.cameraDirection.value = 1;
     final faceController = Get.put(FaceController());
     final markAttendanceScreenController =
         Get.put(MarkAttendanceScreenController());
     final AdminDashboardScreenController adminDashboardScreenController =
         Get.find();
+    final FirebaseFirestoreController firestoreController = Get.find();
     return ScaffoldDashboard(
       pageTitle: Text(
         'Mark attendance',
@@ -93,53 +95,47 @@ class MarkAttendanceScreen extends StatelessWidget {
                                       /*captureImageScreenController
                                           .cameraController!
                                           .pausePreview();*/
-                                      await markAttendanceScreenController
+                                      await firestoreController.storeAttendance(
+                                          attendance: AttendanceModel(
+                                              userId:
+                                                  adminDashboardScreenController
+                                                      .employeeList[0].userId,
+                                              dateTime: DateTime.now(),
+                                              markedBy: MarkedBy.user),
+                                          orgId: adminDashboardScreenController
+                                              .employeeList[0].organizationId!);
+                                      /* await markAttendanceScreenController
                                           .markAttendance(
                                               faceController: faceController,
                                               captureImageScreenController:
                                                   captureImageScreenController,
                                               adminDashboardScreenController:
                                                   adminDashboardScreenController);
-                                      /* if (captureImageScreenController
-                                          .cameraController!
-                                          .value
-                                          .isPreviewPaused)*/
-                                      /*  captureImageScreenController
-                                          .cameraController!
-                                          .resumePreview();*/
-
-                                      Get.dialog(
-                                        MarkAttendanceResultScreen(),
+                                      await Get.dialog(
+                                        const MarkAttendanceResultScreen(),
                                         barrierDismissible: false,
                                       );
-                                      /*if (faceController.isFaceDetected.isTrue) {
-                                    await markAttendanceScreenController
-                                        .markAttendance(
-                                            faceController: faceController,
-                                            captureImageScreenController:
-                                                captureImageScreenController,
-                                            adminDashboardScreenController:
-                                                adminDashboardScreenController);
-                                    if (markAttendanceScreenController
-                                            .recognizedUser.value.userId !=
-                                        null) {
-                                      Get.off(MarkAttendanceResultScreen());
-                                    }
-                                  }*/
-                                      /*  if (faceController.isFaceDetected.isFalse ||
-                                      markAttendanceScreenController
-                                              .recognizedUser.value.userId ==
-                                          null) {
-                                    Get.dialog(Dialog(
-                                      child: Text(
-                                        'No face detected. Try again\nYou may try taking a close-up picture',
-                                        style: Get.textTheme.displaySmall!
-                                            .copyWith(
-                                                color:
-                                                    Constants.colourTextMedium),
-                                      ),
-                                    ));
-                               }   }*/
+                                      print(
+                                          'markAttendanceScreenController.isRecognitionCorrect=${markAttendanceScreenController.isRecognitionCorrect}');
+                                      if (markAttendanceScreenController
+                                          .isRecognitionCorrect.isTrue) {
+                                        AttendanceModel attendance =
+                                            AttendanceModel(
+                                                userId:
+                                                    markAttendanceScreenController
+                                                        .recognizedUser
+                                                        .value
+                                                        .userId,
+                                                dateTime: DateTime.now(),
+                                                markedBy: MarkedBy.user);
+                                        await firestoreController.storeAttendance(
+                                            attendance: attendance,
+                                            orgId:
+                                                markAttendanceScreenController
+                                                    .recognizedUser
+                                                    .value
+                                                    .organizationId!);
+                                      }*/
                                     },
                                     child: Container(
                                       width: 94.w,
