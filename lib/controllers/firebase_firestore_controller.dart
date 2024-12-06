@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
 import '../controllers/firebase_auth_controller.dart';
+import '../helpers/constants.dart';
 import '../models/organizations_model.dart';
 import '../models/user_type_enum.dart';
 import '../models/users_model.dart';
@@ -446,22 +447,25 @@ class FirebaseFirestoreController extends GetxController {
       debugPrint('Creating new Organization...');
     }
     try {
-      final ref =
-          firestoreInstance.collection("organizations").doc().withConverter(
-                fromFirestore: OrganizationModel.fromFirestore,
-                toFirestore: (OrganizationModel organization, _) =>
-                    organization.toJson(),
-              );
+      final ref = firestoreInstance
+          .collection(Constants.organizationNodeName)
+          .doc(newOrganization.id)
+          .withConverter(
+            fromFirestore: OrganizationModel.fromFirestore,
+            toFirestore: (OrganizationModel organization, _) =>
+                organization.toJson(),
+          );
       await ref.set(newOrganization);
       if (kDebugMode) {
         debugPrint('New organization added = ${ref.id}');
       }
 
       //update orgId on firestore
-      var tempOrg = OrganizationModel(
-          id: ref.id, createdBy: registeredUser.value?.userId);
+      /*var tempOrg = OrganizationModel(
+          id: registeredUser.value?.userId,
+          createdBy: registeredUser.value?.userId);*/
       //print('tempOrg=$tempOrg');
-      updateOrganization(organization: tempOrg);
+      //updateOrganization(organization: tempOrg);
 
       /* AlbumOrganization? insertedOrganization =
           await getOrganization(orgId: ref.id);*/

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
+import 'package:stationeryhub_attendance/models/organizations_model.dart';
 
 import '../components/form_field_button.dart';
 import '../components/form_field_otp.dart';
@@ -11,7 +12,6 @@ import '../controllers/firebase_firestore_controller.dart';
 import '../controllers/login_screen_controller.dart';
 import '../controllers/otp_screen_controller.dart';
 import '../helpers/constants.dart';
-import '../models/user_type_enum.dart';
 import '../scaffold/scaffold_onboarding.dart';
 
 class OtpScreen extends StatelessWidget {
@@ -174,14 +174,30 @@ class OtpScreen extends StatelessWidget {
                               '{authController.firebaseUser.value?.uid=${authController.firebaseUser.value?.uid}');
                           print(otpController.isNewUser);
                           if (authController.firebaseUser.value?.uid != null) {
-                            if (otpController.isNewUser.isTrue) {
-                              await firestoreController.registerNewUser(
+                            //if (otpController.isNewUser.isTrue) {
+                            /*await firestoreController.registerNewUser(
                                 phoneNum: loginController.phoneNum.value,
                                 userType: UserType.admin,
+                              );*/
+                            OrganizationModel? tempOrganization =
+                                await firestoreController.getOrganization(
+                                    orgId:
+                                        authController.firebaseUser.value?.uid);
+                            if (tempOrganization == null) {
+                              print('Organization not found');
+                              OrganizationModel newOrganization =
+                                  OrganizationModel(
+                                createdOn: DateTime.now(),
+                                id: authController.firebaseUser.value?.uid,
+                                lastUpdatedOn: DateTime.now(),
                               );
-                              otpController.isNewUser.value = false;
+                              await firestoreController.createOrganization(
+                                  newOrganization: newOrganization);
                             }
-                            firestoreController.attachUserListener();
+
+                            //otpController.isNewUser.value = false;
+                            // }
+                            //firestoreController.attachUserListener();
                           }
 
                           ///TODO: set error on pinput if wrong OTP is used

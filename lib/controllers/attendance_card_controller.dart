@@ -30,7 +30,7 @@ class AttendanceCardController extends GetxController {
     //attendanceList.clear();
     try {
       if (empId != null) {
-        records = await apiService.fetchAttendance(empId: empId);
+        //records = await apiService.fetchAttendance(empId: empId);
       } else if (startDate != null) {
         //fetch all users from firestore
         //List<UsersModel> userList = await firestoreController.getAllUsers();
@@ -42,8 +42,8 @@ class AttendanceCardController extends GetxController {
 
         //search for attendance of each user based on the empId on the date
         for (var user in adminDashboardScreenController.employeeList) {
-          records = await apiService.fetchAttendance(
-              empId: user.userId, startDate: startDate);
+          /*records = await apiService.fetchAttendance(
+              empId: user.userId, startDate: startDate);*/
 
           //assign the fetched attendance to the attendanceViewList
           attendanceViewList

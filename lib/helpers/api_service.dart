@@ -2,10 +2,9 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:stationeryhub_attendance/helpers/logger_stack_trace.dart';
 import 'package:stationeryhub_attendance/models/attendance_count_model.dart';
 
-import '../models/user_attendance_model.dart';
+import '../models/attendance_model.dart';
 
 class ApiService {
   Future<List<AttendanceModel>> fetchAttendance(

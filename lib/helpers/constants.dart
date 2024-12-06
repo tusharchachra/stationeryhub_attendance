@@ -12,6 +12,10 @@ class Constants {
   static const webPathAtt = 'https://www.aayaam3d.com/empAtt/newAppAPI';
   static const webPathEnv = 'https://www.aayaam3d.com/env';
 
+  static const organizationNodeName = 'organizations';
+  static const attendanceNodeName = 'attendance';
+  static const usersNodeName = 'users';
+
   static const colourPrimary = Color(0xFF0055FD);
   //static const colourBackground = Color(0x000fffff);
   static final Color colourIconBackground =
@@ -42,7 +46,8 @@ class Constants {
   static Color employeeBoxColour = employeeTextColour.withOpacity(0.29);
   static const adminTextColour = Color(0xffFF6C01);
   static Color adminBoxColour = adminTextColour.withOpacity(0.29);
-  static LinearGradient gradientPayTotal=LinearGradient(colors: [colourPrimary,Color(0xff2623C7),Color(0xff300097)]);
+  static LinearGradient gradientPayTotal = LinearGradient(
+      colors: [colourPrimary, Color(0xff2623C7), Color(0xff300097)]);
 
   static const otpResendTime = 5;
   static const snackbarDuration = 4;
