@@ -192,6 +192,8 @@ class FirebaseFirestoreController extends GetxController {
   //get all users of the organization
   Future<List<UsersModel>> getAllUsers() async {
     //List<UsersModel> userList = [];
+    userList.clear();
+    userList.refresh();
     final ref = firestoreInstance
         .collection(Constants.organizationNodeName)
         .doc(firestoreController.registeredOrganization.value?.id)
@@ -258,7 +260,12 @@ class FirebaseFirestoreController extends GetxController {
       debugPrint('Storing new user to firestore...');
     }
     try {
-      final ref = firestoreInstance.collection("users").doc().withConverter(
+      final ref = firestoreInstance
+          .collection(Constants.organizationNodeName)
+          .doc(firestoreController.registeredOrganization.value?.id)
+          .collection(Constants.usersNodeName)
+          .doc()
+          .withConverter(
             fromFirestore: UsersModel.fromFirestore,
             toFirestore: (UsersModel user, _) => user.toJson(),
           );
@@ -267,14 +274,16 @@ class FirebaseFirestoreController extends GetxController {
         debugPrint('New user Id added = ${ref.id}');
       }
       //update userId of the user
-      firestoreController.updateUser(user: UsersModel(userId: ref.id));
+      //firestoreController.updateUser(user: UsersModel(userId: ref.id));
     } on FirebaseException catch (e) {
       errorController.getErrorMsg(e);
       if (kDebugMode) {
         print('Error:${e.toString()}');
       }
     }
-    setUserCountForOrganization();
+    //setUserCountForOrganization();
+    firestoreController.userList.add(user);
+
     isLoading.value = false;
   }
 

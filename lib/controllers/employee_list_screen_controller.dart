@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
-import 'package:stationeryhub_attendance/models/users_model.dart';
 
 import '../helpers/api_service.dart';
 import '../models/attendance_count_model.dart';
@@ -27,23 +25,23 @@ class EmployeeListScreenController extends GetxController {
   }
 
   static final FirebaseFirestoreController firestoreController = Get.find();
-  static final AdminDashboardScreenController adminDashboardScreenController =
-      Get.find();
+  /*static final AdminDashboardScreenController adminDashboardScreenController =
+      Get.find();*/
 
   @override
   void onReady() async {
     // TODO: implement onReady
     super.onReady();
     isLoading.value = true;
-    //employeeList.value = await firestoreController.getAllUsers();
-    await loadAttendanceCount();
+
+    //await loadAttendanceCount();
     isLoading.value = false;
   }
 
   Future<void> refreshScreen() async {
-    adminDashboardScreenController.employeeList.value =
+    firestoreController.userList.value =
         await firestoreController.getAllUsers();
-    await loadAttendanceCount();
+    //await loadAttendanceCount();
   }
 
   Future<void> loadAttendanceCount(
@@ -56,11 +54,12 @@ class EmployeeListScreenController extends GetxController {
     print('loading attendance');
 
     //fetch all users from firestore
-    List<UsersModel> userList = await firestoreController.getAllUsers();
+    //List<UsersModel> userList = await firestoreController.getAllUsers();
     attendanceCountViewList.value = List.generate(
-        userList.length,
+        firestoreController.userList.length,
         (index) => AttendanceCountViewModel(
-            attendanceCountList: [], user: userList[index]));
+            attendanceCountList: [],
+            user: firestoreController.userList[index]));
 
     //check if dates are set. if not, we shall consider the current month from 1st to date
     ///TODO switch commented lines when live data is available in the db
@@ -85,7 +84,7 @@ class EmployeeListScreenController extends GetxController {
     }
     try {
       //get attendanceCount of each user based on the empId between the dates
-      for (var user in userList) {
+      for (var user in firestoreController.userList) {
         records = await apiService.fetchAttendanceCount(
             empId: user.userId, startDate: start, endDate: end, getCount: true);
         print('records=${records.toString()}');

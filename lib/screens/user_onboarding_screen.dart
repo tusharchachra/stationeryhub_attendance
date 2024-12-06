@@ -632,7 +632,7 @@ class UserOnboardingScreen extends StatelessWidget {
               shrinkWrap: true,
               children: UserType.values
                   .map(
-                    (e) => (e.getName() != 'creator')
+                    (e) => (e != UserType.employer)
                         ? GestureDetector(
                             onTap: () {
                               userOnboardingScreenController.userTypeController

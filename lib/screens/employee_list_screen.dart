@@ -5,6 +5,7 @@ import 'package:stationeryhub_attendance/components/form_field_button.dart';
 import 'package:stationeryhub_attendance/components/gradient_progress_bar.dart';
 import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/employee_list_screen_controller.dart';
+import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 import 'package:stationeryhub_attendance/models/users_model.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
@@ -20,8 +21,9 @@ class EmployeeListScreen extends StatelessWidget {
     //Get.put(EmployeeCardController());
     final employeeListScreenController =
         Get.put(EmployeeListScreenController());
-    final AdminDashboardScreenController adminDashboardScreenController =
-        Get.find();
+    final FirebaseFirestoreController firebaseFirestoreController = Get.find();
+    /* final AdminDashboardScreenController adminDashboardScreenController =
+        Get.find();*/
 
     return ScaffoldDashboard(
       backgroundColour: employeeListScreenController.backgroundColor.value,
@@ -34,12 +36,11 @@ class EmployeeListScreen extends StatelessWidget {
             ? buildPlaceholder(
                 employeeListScreenController, adminDashboardScreenController)
             :*/
-            adminDashboardScreenController.employeeList.isEmpty
+            firebaseFirestoreController.userList.isEmpty
                 ? buildEmptyEmployeeList()
                 : buildEmployeeList(
                     employeeListScreenController: employeeListScreenController,
-                    adminDashboardScreenController:
-                        adminDashboardScreenController),
+                    firestoreController: firebaseFirestoreController),
       ),
     );
   }
@@ -113,7 +114,7 @@ class EmployeeListScreen extends StatelessWidget {
 
   Widget buildEmployeeList(
       {required EmployeeListScreenController employeeListScreenController,
-      required AdminDashboardScreenController adminDashboardScreenController}) {
+      required FirebaseFirestoreController firestoreController}) {
     employeeListScreenController.backgroundColor.value =
         Constants.colourScaffoldBackground;
     return Column(
@@ -202,7 +203,7 @@ class EmployeeListScreen extends StatelessWidget {
             backgroundColor: Colors.white,
             color: Constants.colourPrimary,
             child: ListView.builder(
-              itemCount: adminDashboardScreenController.employeeList.length,
+              itemCount: firestoreController.userList.length,
               itemBuilder: (context, index) {
                 return Obx(() => EmployeeCard(
                       attendanceCountView: employeeListScreenController
@@ -210,8 +211,7 @@ class EmployeeListScreen extends StatelessWidget {
                           ? null
                           : employeeListScreenController
                               .attendanceCountViewList[index],
-                      employee:
-                          adminDashboardScreenController.employeeList[index],
+                      employee: firestoreController.userList[index],
                     ));
               },
             ),
@@ -242,7 +242,9 @@ class EmployeeListScreen extends StatelessWidget {
               width: 384.w,
               height: 56.h,
               buttonText: '+ Create new employee',
-              onTapAction: () {}),
+              onTapAction: () {
+                Get.to(() => UserOnboardingScreen());
+              }),
         )
       ],
     );

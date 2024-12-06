@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_storage_controller.dart';
@@ -125,6 +126,26 @@ class UpdateOrganizationScreen extends StatelessWidget {
                     },
                   ),
                   SizedBox(height: 20.h),
+                  Wrap(
+                    direction: Axis.vertical,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 130.w,
+                        height: 130.w,
+                        child: QrImageView(
+                            version: QrVersions.auto,
+                            gapless: false,
+                            data: firestoreController
+                                .registeredOrganization.value!.id!),
+                      ),
+                      Text(
+                        'Organization ID',
+                        style: Get.textTheme.labelSmall
+                            ?.copyWith(color: Constants.colourTextLight),
+                      ),
+                    ],
+                  ),
                   /*FormFieldText(
                     labelText: 'Your name',
                     textController: updateOrganizationScreenController

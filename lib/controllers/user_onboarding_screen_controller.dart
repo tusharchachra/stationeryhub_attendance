@@ -104,7 +104,31 @@ class UserOnboardingScreenController extends GetxController {
 
   Future<void> uploadData() async {
     isLoading.value = true;
-    String? profilePicPath = await firebaseStorageController.uploadPicture(
+    String? profilePicPath;
+    String? embeddings;
+    String? frontPath;
+    String? backPath;
+    Future.wait([
+      firebaseStorageController.uploadPicture(
+          file: XFile(captureImageScreenController.imageFilePath.value),
+          storagePath: PicPathEnum.profile),
+      firebaseStorageController.uploadPicture(
+          file: XFile(captureImageScreenController.imageFilePath.value),
+          storagePath: PicPathEnum.profile),
+      firebaseStorageController.uploadPicture(
+          file: XFile(idCardCaptureController.documentFront[0]),
+          storagePath: PicPathEnum.idCard),
+      firebaseStorageController.uploadPicture(
+          file: XFile(idCardCaptureController.documentBack[0]),
+          storagePath: PicPathEnum.idCard)
+    ]).then((val) {
+      profilePicPath = val[0];
+      embeddings = val[1];
+      frontPath = val[2];
+      backPath = val[3];
+    });
+
+    /* String? profilePicPath = await firebaseStorageController.uploadPicture(
         file: XFile(captureImageScreenController.imageFilePath.value),
         storagePath: PicPathEnum.profile);
     String embeddings = await faceController.processFace(
@@ -114,7 +138,7 @@ class UserOnboardingScreenController extends GetxController {
         storagePath: PicPathEnum.idCard);
     String? backPath = await firebaseStorageController.uploadPicture(
         file: XFile(idCardCaptureController.documentBack[0]),
-        storagePath: PicPathEnum.idCard);
+        storagePath: PicPathEnum.idCard);*/
     /*UsersModel? temp = await firebaseStorageController.uploadIdCard(
         fileFront: XFile(idCardCaptureController.documentFront[0]),
         fileBack: XFile(idCardCaptureController.documentBack[0]));*/
@@ -133,7 +157,8 @@ class UserOnboardingScreenController extends GetxController {
     );
     await firestoreController.addNewUser(user: newUser);
 
-    if (firestoreController.isLoading.value == false) isLoading.value = false;
+    /*if (firestoreController.isLoading.value == false)*/
+    isLoading.value = false;
   }
 
   void loadStoredData(UsersModel employee) {
