@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 import 'package:stationeryhub_attendance/models/organizations_model.dart';
+import 'package:stationeryhub_attendance/models/subscription_type_enum.dart';
 
 import '../components/form_field_button.dart';
 import '../components/form_field_otp.dart';
@@ -168,37 +169,33 @@ class OtpScreen extends StatelessWidget {
                           //user sign in
                           await authController.signIn(
                               authCredential: authController.credential?.value);
+                          //check if organization collection has sub-collection by the name of authController.firebaseUser.value?.uid
+                          //if it does not, then create one
+                          OrganizationModel? tempOrganization =
+                              await firestoreController.getOrganization();
+                          if (tempOrganization == null) {
+                            print('Organization not found');
+                            OrganizationModel newOrganization =
+                                OrganizationModel(
+                              createdOn: DateTime.now(),
+                              id: authController.firebaseUser.value?.uid,
+                              lastUpdatedOn: DateTime.now(),
+                              subscription: SubscriptionType.basic,
+                              name: 'My Organization',
+                            );
+                            await firestoreController.createOrganization(
+                                newOrganization: newOrganization);
+                          }
+                        }
 
-                          //store user to firestore
+                        /*//store user to firestore
                           print(
                               '{authController.firebaseUser.value?.uid=${authController.firebaseUser.value?.uid}');
-                          print(otpController.isNewUser);
-                          if (authController.firebaseUser.value?.uid != null) {
-                            //if (otpController.isNewUser.isTrue) {
-                            /*await firestoreController.registerNewUser(
-                                phoneNum: loginController.phoneNum.value,
-                                userType: UserType.admin,
-                              );*/
-                            OrganizationModel? tempOrganization =
-                                await firestoreController.getOrganization(
-                                    orgId:
-                                        authController.firebaseUser.value?.uid);
-                            if (tempOrganization == null) {
-                              print('Organization not found');
-                              OrganizationModel newOrganization =
-                                  OrganizationModel(
-                                createdOn: DateTime.now(),
-                                id: authController.firebaseUser.value?.uid,
-                                lastUpdatedOn: DateTime.now(),
-                              );
-                              await firestoreController.createOrganization(
-                                  newOrganization: newOrganization);
-                            }
+                          print(
+                              'otpController.isNewUser=${otpController.isNewUser}');*/
 
-                            //otpController.isNewUser.value = false;
-                            // }
-                            //firestoreController.attachUserListener();
-                          }
+                        if (authController.firebaseUser.value?.uid != null) {
+                          //if (otpController.isNewUser.isTrue) {
 
                           ///TODO: set error on pinput if wrong OTP is used
                           if (errorController.errorMsg.isNotEmpty) {
@@ -231,6 +228,17 @@ class OtpScreen extends StatelessWidget {
                         }
                       },
                     ),
+            ),
+            TextButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: Text(
+                'Cancel',
+                style: Get.textTheme.bodyMedium?.copyWith(
+                  color: Constants.colourTextMedium,
+                ),
+              ),
             )
           ],
         ),

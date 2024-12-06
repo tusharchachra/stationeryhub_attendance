@@ -32,8 +32,8 @@ class AdminDashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(AdminDashboardScreenController(), permanent: true);
-    Get.put(AttendanceCardController(), permanent: true);
+    Get.put(AdminDashboardScreenController());
+    Get.put(AttendanceCardController());
     Get.put(FirebaseStorageController());
     //Get.put(IdCardCaptureController());
 
@@ -100,7 +100,7 @@ class AdminDashboardScreen extends StatelessWidget {
       leadingWidget: Padding(
           padding: EdgeInsets.fromLTRB(12.w, 13.h, 0, 13.h),
           child: Obx(
-            () => firestoreController.isLoading.value == true
+            () => firestoreController.isLoading.isTrue
                 ? Container(
                     width: 22.w,
                     height: 22.h,
@@ -166,11 +166,11 @@ class AdminDashboardScreen extends StatelessWidget {
                     style: Get.textTheme.headlineLarge
                         ?.copyWith(color: Colors.white),
                   ),
-                  Text(
+                  /*Text(
                     '${firestoreController.registeredUser.value?.name} - ${firestoreController.registeredUser.value?.userType?.name.capitalizeFirst}',
                     style: Get.textTheme.titleMedium
                         ?.copyWith(color: Colors.white),
-                  ),
+                  ),*/
                 ],
               ),
       ),
@@ -189,8 +189,7 @@ class AdminDashboardScreen extends StatelessWidget {
                   AdminDashboardBox(
                     colour: Constants.colourStatusBar,
                     title: 'Total employees',
-                    subTitle:
-                        firestoreController.userCountForOrganization.toString(),
+                    subTitle: firestoreController.userList.length.toString(),
                     showPlaceholder: firestoreController.showPlaceholder.value,
                   ),
                   AdminDashboardBox(
@@ -223,7 +222,7 @@ class AdminDashboardScreen extends StatelessWidget {
             DateCarousel(),
             SizedBox(height: 10.h),
             Text(
-              'Employee List',
+              'Attendance List',
               style: Get.textTheme.headlineMedium
                   ?.copyWith(color: Constants.colourTextMedium),
             ),

@@ -38,7 +38,7 @@ class PictureCircle extends StatelessWidget {
         shape: BoxShape.circle,
         color: backgroundColor ?? Colors.transparent,
       ),
-      child: imgPath == ''
+      child: imgPath == '' || imgPath == 'null'
           ? icon ??
               Icon(
                 Icons.person,

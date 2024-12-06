@@ -1,4 +1,4 @@
-enum UserType { admin, employee, creator }
+enum UserType { admin, employee, employer }
 
 extension UserTypeString on UserType {
   String getName() {

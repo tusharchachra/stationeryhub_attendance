@@ -145,8 +145,8 @@ class NewOrganizationScreen extends StatelessWidget {
                                     await firestoreController
                                         .createOrganization(
                                             newOrganization: newOrganization);
-                                await firestoreController
-                                    .attachOrganizationListener();
+                                /* await firestoreController
+                                    .attachOrganizationListener();*/
 
                                 //fetch user from shared prefs
                                 /* AlbumUsers? currentUser =

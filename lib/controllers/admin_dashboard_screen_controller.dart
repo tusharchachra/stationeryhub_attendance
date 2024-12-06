@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 
 import '../models/users_model.dart';
-import 'attendance_card_controller.dart';
 
 class AdminDashboardScreenController extends GetxController {
   //final AttendanceCardController attendanceCardController = Get.find();
@@ -49,12 +48,13 @@ class AdminDashboardScreenController extends GetxController {
   onReady() async {
     isLoading.value = true;
     employeeList.value = await firestoreController.getAllUsers();
-    final AttendanceCardController attendanceCardController = Get.find();
+    print('employeeList.value=${employeeList}');
+    /*final AttendanceCardController attendanceCardController = Get.find();
     selectedDate.listen((date) async {
       isLoading.value = true;
       await attendanceCardController.loadAttendance(startDate: (date));
       isLoading.value = false;
-    });
+    });*/
     isLoading.value = false;
   }
 

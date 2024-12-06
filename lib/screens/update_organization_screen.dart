@@ -43,11 +43,11 @@ class UpdateOrganizationScreen extends StatelessWidget {
     final FirebaseErrorController errorController = Get.find();
 
     updateOrganizationScreenController.creatorNameController.value.text =
-        firestoreController.registeredUser.value!.name!;
+        firestoreController.registeredOrganization.value!.name!;
     updateOrganizationScreenController.orgNameController.value.text =
         firestoreController.registeredOrganization.value!.name!;
     updateOrganizationScreenController.addressController.value.text =
-        firestoreController.registeredOrganization.value!.address!;
+        firestoreController.registeredOrganization.value!.address ?? '';
     captureImageScreenController.imageFilePath.value =
         firestoreController.registeredOrganization.value?.profilePicPath ?? '';
 
@@ -125,7 +125,7 @@ class UpdateOrganizationScreen extends StatelessWidget {
                     },
                   ),
                   SizedBox(height: 20.h),
-                  FormFieldText(
+                  /*FormFieldText(
                     labelText: 'Your name',
                     textController: updateOrganizationScreenController
                         .creatorNameController.value,
@@ -142,7 +142,7 @@ class UpdateOrganizationScreen extends StatelessWidget {
                       } else
                         return null;
                     },
-                  ),
+                  ),*/
                   SizedBox(height: 14.h),
                   (formErrorController.errors.isNotEmpty)
                       ? FormError()
@@ -152,7 +152,7 @@ class UpdateOrganizationScreen extends StatelessWidget {
                           .registeredOrganization.value?.lastUpdatedOn !=
                       null)
                     Text(
-                      'Previous update: ${DateFormat('d/M/y hh:mm a').format(firestoreController.registeredOrganization.value!.lastUpdatedOn!)}',
+                      'Last update: ${DateFormat('d/M/y hh:mm a').format(firestoreController.registeredOrganization.value!.lastUpdatedOn!)}',
                       //'Previous update: ${firestoreController.registeredOrganization.value!.lastUpdatedOn!}',
 
                       style: Get.textTheme.labelSmall

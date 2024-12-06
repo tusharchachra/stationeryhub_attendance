@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -11,7 +10,6 @@ import '../controllers/firebase_firestore_controller.dart';
 import '../controllers/login_screen_controller.dart';
 import '../controllers/otp_screen_controller.dart';
 import '../helpers/constants.dart';
-import '../models/users_model.dart';
 import '../scaffold/scaffold_onboarding.dart';
 import 'otp_screen.dart';
 
@@ -104,19 +102,22 @@ class LoginScreen extends StatelessWidget {
                         loginController.focusNode.unfocus();
                         loginController.formKey.currentState!.validate();
                         if (loginController.isPhoneNumValid.value) {
+                          //send otp to the user
+                          loginProcess();
                           /* await loginController.updateRegisteredUser();
                           if (kDebugMode) {
                             print(
                                 'registered user= ${firestoreController.registeredUser}');
                           }*/
-                          UsersModel? tempUser =
+                          /*UsersModel? tempUser =
                               await firestoreController.getUser(
-                                  phoneNum: loginController.phoneNum.value);
+                                  phoneNum: loginController.phoneNum.value);*/
                           //if registered user is found in the firestore, send otp. if not, show bottom sheet to confirm usage
-                          if (tempUser != null) {
+                          /* if (tempUser != null) {
                             loginProcess();
                             otpController.isNewUser.value = false;
-                          } else {
+                          } else*/
+                          /*{
                             if (kDebugMode) {
                               print(authController.firebaseMessage);
                             }
@@ -124,7 +125,7 @@ class LoginScreen extends StatelessWidget {
                             //show dialog to register the new user or cancel
                             Get.bottomSheet(buildBottomSheet(),
                                 backgroundColor: Colors.white);
-                          }
+                          }*/
                         } else {}
                         loginController.isLoading.value = false;
                       },

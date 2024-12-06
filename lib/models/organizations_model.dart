@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:stationeryhub_attendance/models/users_model.dart';
 
 import 'subscription_type_enum.dart';
 
@@ -14,6 +15,7 @@ class OrganizationModel {
   String? createdBy;
   String? profilePicPath;
   SubscriptionType? subscription;
+  List<UsersModel>? users;
 
   OrganizationModel({
     this.id,
@@ -26,13 +28,14 @@ class OrganizationModel {
     this.createdBy,
     this.profilePicPath,
     this.subscription,
+    this.users,
   });
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'name': name,
-      'address': address,
+      'address': address ?? '',
       'geoLocationLat': geoLocationLat ?? '',
       'geoLocationLong': geoLocationLong ?? '',
       'createdOn': createdOn?.toIso8601String(),
@@ -64,10 +67,10 @@ class OrganizationModel {
             : DateTime.parse(data['lastUpdatedOn'].toString()),
         createdBy: data['createdBy'],
         profilePicPath: data['profilePicPath'],
+        //converts the string to enum
         subscription: data['subscription'] == null
             ? null
-            : SubscriptionType.values
-                .byName(data['subscription'])); //converts the string to enum
+            : SubscriptionType.values.byName(data['subscription']));
   }
 
   OrganizationModel.fromJson(Map<String, dynamic> json)
@@ -88,10 +91,10 @@ class OrganizationModel {
         profilePicPath = json['profilePicPath'].toString() == ''
             ? ''
             : json['profilePicPath'].toString(),
+        //converts the string to enum
         subscription = json['subscription'] == null
             ? null
-            : SubscriptionType.values.byName(
-                json['subscription'].toString()); //converts the string to enum
+            : SubscriptionType.values.byName(json['subscription'].toString());
 
   @override
   String toString() {

@@ -8,7 +8,6 @@ import 'package:stationeryhub_attendance/models/users_model.dart';
 
 import '../screens/admin_dashboard_screen.dart';
 import '../screens/login_screen.dart';
-import '../screens/new_organization_screen.dart';
 import 'firebase_error_controller.dart';
 import 'firebase_firestore_controller.dart';
 import 'otp_screen_controller.dart';
@@ -76,11 +75,12 @@ class FirebaseAuthController extends GetxController {
       firestoreController
           .registeredOrganization(await firestoreController.getOrganization());
 
-      if (firestoreController.registeredOrganization.value?.id == null) {
+      /* if (firestoreController.registeredOrganization.value?.id == null) {
         Get.offAll(() => NewOrganizationScreen());
-      } else {
-        await firestoreController.attachOrganizationListener();
-        await firestoreController.attachUserListener();
+      } else*/
+      {
+        //await firestoreController.attachOrganizationListener();
+        /* await firestoreController.attachUserListener();*/
         /*  Get.bottomSheet(LocalAuthScreen(),
             backgroundColor: Colors.white, isDismissible: false);*/
         Get.offAll(() => AdminDashboardScreen());

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:stationeryhub_attendance/services/shared_prefs_services.dart';
 
 import '../controllers/firebase_auth_controller.dart';
 import '../helpers/constants.dart';
@@ -18,6 +17,8 @@ class FirebaseFirestoreController extends GetxController {
   static FirebaseErrorController errorController = Get.find();
   Rx<UsersModel?> registeredUser = UsersModel().obs;
   Rx<OrganizationModel?> registeredOrganization = OrganizationModel().obs;
+  RxList<UsersModel> userList = <UsersModel>[].obs;
+
   final FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
 
   RxBool isLoading = false.obs;
@@ -103,12 +104,14 @@ class FirebaseFirestoreController extends GetxController {
           'Attaching listener for organization = ${registeredOrganization.value?.id}');
     }
     firestoreInstance
-        .collection("organizations")
-        .where('id', isEqualTo: registeredOrganization.value?.id)
+        .collection(Constants.organizationNodeName)
+        .doc(authController.firebaseUser.value?.uid)
+        /* .where('id', isEqualTo: registeredOrganization.value?.id)*/
         .snapshots()
         .listen((event) {
-      registeredOrganization(OrganizationModel.fromJson(event.docs[0].data()));
-      setUserCountForOrganization();
+      registeredOrganization(OrganizationModel.fromJson(event.data()!));
+      print('registered Organization=$registeredOrganization');
+      //setUserCountForOrganization();
       if (kDebugMode) {
         print('Organization data changed and synchronized');
       }
@@ -188,11 +191,13 @@ class FirebaseFirestoreController extends GetxController {
 
   //get all users of the organization
   Future<List<UsersModel>> getAllUsers() async {
-    List<UsersModel> userList = [];
+    //List<UsersModel> userList = [];
     final ref = firestoreInstance
-        .collection("users")
-        .where('organizationId', isEqualTo: registeredOrganization.value?.id)
-        .where('userType', isNotEqualTo: UserType.creator.toString())
+        .collection(Constants.organizationNodeName)
+        .doc(firestoreController.registeredOrganization.value?.id)
+        .collection(Constants.usersNodeName)
+        //.where('organizationId', isEqualTo: registeredOrganization.value?.id)
+        .where('userType', isNotEqualTo: UserType.employer.toString())
         .withConverter(
           fromFirestore: UsersModel.fromFirestore,
           toFirestore: (UsersModel user, _) => user.toJson(),
@@ -202,8 +207,8 @@ class FirebaseFirestoreController extends GetxController {
       for (var doc in docSnap.docs) {
         userList.add(doc.data());
       }
+      userList.sort((a, b) => a.name!.compareTo(b.name!));
     } else {}
-    userList.sort((a, b) => a.name!.compareTo(b.name!));
     return userList;
   }
 
@@ -336,21 +341,28 @@ class FirebaseFirestoreController extends GetxController {
   }
 
   //fetch Organization data from firestore
-  Future<OrganizationModel?> getOrganization({
-    String? orgId,
+  Future<OrganizationModel?> getOrganization(
+/* String? orgId,
     UsersModel? user,
-    GetOptions? getOptions,
-  }) async {
+    GetOptions? getOptions,*/
+      ) async {
     isLoading.value = true;
 
     OrganizationModel? tempOrganization;
     if (kDebugMode) {
-      debugPrint(
-          'Fetching registered organization details from firestore for orgId=$orgId,user=$user...');
+      debugPrint('Fetching registered organization details from firestore...');
     }
-    Query<OrganizationModel> ref;
+    DocumentReference<OrganizationModel> ref;
     try {
-      if (orgId != null) {
+      ref = firestoreInstance
+          .collection(Constants.organizationNodeName)
+          .doc(authController.firebaseUser.value?.uid)
+          .withConverter(
+            fromFirestore: OrganizationModel.fromFirestore,
+            toFirestore: (OrganizationModel user, _) => user.toJson(),
+          );
+
+      /*if (orgId != null) {
         ref = firestoreInstance
             .collection("organizations")
             .where('id', isEqualTo: orgId)
@@ -358,7 +370,7 @@ class FirebaseFirestoreController extends GetxController {
               fromFirestore: OrganizationModel.fromFirestore,
               toFirestore: (OrganizationModel user, _) => user.toJson(),
             );
-      } else {
+      }*/ /* else {
         ref = firestoreInstance
             .collection("organizations")
             .where('id', isEqualTo: user?.organizationId)
@@ -366,15 +378,17 @@ class FirebaseFirestoreController extends GetxController {
               fromFirestore: OrganizationModel.fromFirestore,
               toFirestore: (OrganizationModel user, _) => user.toJson(),
             );
-      }
+      }*/
 
-      final docSnap = await ref
-          .get(getOptions ?? const GetOptions(source: Source.serverAndCache));
-      if (docSnap.docs.isNotEmpty) {
+      final docSnap =
+          await ref.get(/*const GetOptions(source: Source.serverAndCache)*/);
+      /*print(docSnap.data());*/
+      /*if (docSnap.data()) {
         tempOrganization = docSnap.docs[0].data();
         //tempUser.setUid(authController.firebaseUser.value!.uid);
-      } else {}
-      return tempOrganization;
+      }*/ /*else {}*/
+      tempOrganization = docSnap.data();
+      registeredOrganization(tempOrganization);
     } on FirebaseException catch (e) {
       // TODO
       errorController.getErrorMsg(e);
@@ -384,8 +398,7 @@ class FirebaseFirestoreController extends GetxController {
       }
     }
     isLoading.value = false;
-
-    return null;
+    return tempOrganization;
     //return {'user': tempUser, 'userId': };
   }
 
@@ -478,10 +491,10 @@ class FirebaseFirestoreController extends GetxController {
       });*/
 
       //inserting the newOrganizationId to the user's profile on firestore
-      UsersModel tempUser = UsersModel(
-          userId: registeredUser.value?.userId, organizationId: ref.id);
+      /* UsersModel tempUser = UsersModel(
+          userId: registeredUser.value?.userId, organizationId: ref.id);*/
       //print(tempUser);
-      updateUser(user: tempUser);
+      /*  updateUser(user: tempUser);*/
       /*await firestoreController.updateOrganizationIdInCreator(
           currentUserId:
               firestoreController.registeredUser!.value!.firebaseUserId!,
@@ -494,7 +507,8 @@ class FirebaseFirestoreController extends GetxController {
         await SharedPrefsServices.sharedPrefsInstance
             .storeOrganizationToSharedPrefs(organization: insertedOrganization);
       }*/
-
+      isLoading.value = false;
+      registeredOrganization(newOrganization);
       return ref.id;
     } on Exception catch (e) {
       // TODO
@@ -518,7 +532,7 @@ class FirebaseFirestoreController extends GetxController {
     }
     try {
       final ref = firestoreInstance
-          .collection("organizations")
+          .collection(Constants.organizationNodeName)
           .doc(organization.id)
           .withConverter(
             fromFirestore: UsersModel.fromFirestore,
@@ -564,10 +578,11 @@ class FirebaseFirestoreController extends GetxController {
       }
     }
     isLoading.value = false;
+    firestoreController.getOrganization();
   }
 
   //update OrganizationId to the user's/creator's profile
-  Future<void> updateOrganizationIdInCreator(
+  /*Future<void> updateOrganizationIdInCreator(
       {required String currentUserId, required String organizationId}) async {
     isLoading.value = true;
 
@@ -596,8 +611,8 @@ class FirebaseFirestoreController extends GetxController {
           if (kDebugMode) {
             print('Updated user details:$currentUser');
           }
-          /* await SharedPrefsServices.sharedPrefsInstance
-              .storeUserToSharedPrefs(user: currentUser!);*/
+          */ /* await SharedPrefsServices.sharedPrefsInstance
+              .storeUserToSharedPrefs(user: currentUser!);*/ /*
         },
         onError: (e) {
           if (kDebugMode) {
@@ -612,7 +627,7 @@ class FirebaseFirestoreController extends GetxController {
       }
     }
     isLoading.value = false;
-  }
+  }*/
 
   Future<void> setUserCountForOrganization() async {
     showPlaceholder.value = true;

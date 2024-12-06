@@ -7,7 +7,6 @@ import 'package:stationeryhub_attendance/controllers/firebase_storage_controller
 import 'package:stationeryhub_attendance/models/pic_path_enum.dart';
 
 import '../models/organizations_model.dart';
-import '../models/users_model.dart';
 
 class UpdateOrganizationScreenController extends GetxController {
   // RxBool isFormValid = false.obs;
@@ -69,10 +68,10 @@ class UpdateOrganizationScreenController extends GetxController {
       await firestoreController.updateOrganization(
           organization: updatedOrganization);
 
-      UsersModel updatedCreator = UsersModel(
+      /*UsersModel updatedCreator = UsersModel(
           userId: firestoreController.registeredUser.value?.userId,
           name: creatorNameController.value.text.trim());
-      await firestoreController.updateUser(user: updatedCreator);
+      await firestoreController.updateUser(user: updatedCreator);*/
       if (firestoreController.isLoading.value == false) isLoading.value = false;
     }
   }
