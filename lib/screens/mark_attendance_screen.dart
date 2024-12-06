@@ -14,7 +14,6 @@ import '../controllers/admin_dashboard_screen_controller.dart';
 import '../controllers/face_controller.dart';
 import '../controllers/mark_attendance_screen_controller.dart';
 import '../helpers/constants.dart';
-import '../models/attendance_model.dart';
 
 enum MarkedBy { user, admin }
 
@@ -95,7 +94,7 @@ class MarkAttendanceScreen extends StatelessWidget {
                                       /*captureImageScreenController
                                           .cameraController!
                                           .pausePreview();*/
-                                      await firestoreController.storeAttendance(
+                                      /* await firestoreController.storeAttendance(
                                           attendance: AttendanceModel(
                                               userId:
                                                   adminDashboardScreenController
@@ -103,7 +102,7 @@ class MarkAttendanceScreen extends StatelessWidget {
                                               dateTime: DateTime.now(),
                                               markedBy: MarkedBy.user),
                                           orgId: adminDashboardScreenController
-                                              .employeeList[0].organizationId!);
+                                              .employeeList[0].organizationId!);*/
                                       /* await markAttendanceScreenController
                                           .markAttendance(
                                               faceController: faceController,
