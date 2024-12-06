@@ -1,16 +1,16 @@
 # stationeryhub_attendance
+Attendance app
 
-A new Flutter project.
+## Old flow
+* Insert phone number
+* Search in user list
+    * If present, navigate to appropriate screen according to user type
+    * If not, option to create organization or notify employee to ask for access from employe
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## new flow
+*  Ask user type
+  *  If employer
+     * phone number authentication
+     * search organization in 'organizations' collection by collection name as employer's Firebase UID
+     * if present, fetch data and redirect to AdminDashboardScreen
+     * If not, create new organization inside 'organizations' collection with doc name same as employer's Firebase UID
