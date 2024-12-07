@@ -9,6 +9,7 @@ import '../models/users_model.dart';
 class AdminDashboardScreenController extends GetxController {
   //final AttendanceCardController attendanceCardController = Get.find();
 
+  //Replace this list with firestoreController.userListz
   RxList<UsersModel> employeeList = <UsersModel>[].obs;
 
   RxBool isLoading = false.obs;
@@ -47,8 +48,9 @@ class AdminDashboardScreenController extends GetxController {
   @override
   onReady() async {
     isLoading.value = true;
-    employeeList.value = await firestoreController.getAllUsers();
-    print('employeeList.value=${employeeList}');
+    /*firestoreController.userList.value =*/
+    await firestoreController.getAllUsers();
+    print('firestoreController.userList.value=${firestoreController.userList}');
     /*final AttendanceCardController attendanceCardController = Get.find();
     selectedDate.listen((date) async {
       isLoading.value = true;

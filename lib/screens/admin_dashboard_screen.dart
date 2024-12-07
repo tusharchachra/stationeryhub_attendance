@@ -6,13 +6,11 @@ import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_cont
 import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
 import 'package:stationeryhub_attendance/controllers/local_auth_screen_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
-import 'package:stationeryhub_attendance/models/attendance_view_model.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
 import 'package:stationeryhub_attendance/screens/local_auth_screen.dart';
 import 'package:stationeryhub_attendance/screens/update_organization_screen.dart';
 
 import '../components/admin_dashboard_box.dart';
-import '../components/attendance_card.dart';
 import '../components/date_carousel.dart';
 import '../components/form_field_button.dart';
 import '../components/gradient_progress_bar.dart';
@@ -189,7 +187,8 @@ class AdminDashboardScreen extends StatelessWidget {
                   AdminDashboardBox(
                     colour: Constants.colourStatusBar,
                     title: 'Total employees',
-                    subTitle: firestoreController.userList.length.toString(),
+                    subTitle:
+                        '' /*firestoreController.userList.length.toString()*/,
                     showPlaceholder: firestoreController.showPlaceholder.value,
                   ),
                   AdminDashboardBox(
@@ -227,7 +226,7 @@ class AdminDashboardScreen extends StatelessWidget {
                   ?.copyWith(color: Constants.colourTextMedium),
             ),
             //EmployeeAttendanceCard(),
-            Obx(
+            /*Obx(
               () => (attendanceCardController.attendanceViewList.isEmpty &&
                       attendanceCardController.isLoading.value == false)
                   ? Expanded(
@@ -263,7 +262,7 @@ class AdminDashboardScreen extends StatelessWidget {
                         },
                       ),
                     ),
-            ),
+            ),*/
 
             /* TextButton(
                 onPressed: () {

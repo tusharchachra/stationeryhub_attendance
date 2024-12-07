@@ -39,8 +39,7 @@ class EmployeeListScreenController extends GetxController {
   }
 
   Future<void> refreshScreen() async {
-    firestoreController.userList.value =
-        await firestoreController.getAllUsers();
+    await firestoreController.getAllUsers();
     //await loadAttendanceCount();
   }
 

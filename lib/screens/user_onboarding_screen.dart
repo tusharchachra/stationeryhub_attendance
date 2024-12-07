@@ -230,7 +230,9 @@ class UserOnboardingScreen extends StatelessWidget {
                       : Container(),
                   SizedBox(height: 10.h),
                   Obx(
-                    () => userOnboardingScreenController.isLoading.value == true
+                    () => userOnboardingScreenController.isLoading.value ==
+                                true ||
+                            firestoreController.isLoading.isTrue
                         ? SizedBox(
                             width: 25.w,
                             height: 25.h,

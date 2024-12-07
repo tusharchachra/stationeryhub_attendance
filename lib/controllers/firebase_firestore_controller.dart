@@ -190,10 +190,10 @@ class FirebaseFirestoreController extends GetxController {
   }
 
   //get all users of the organization
-  Future<List<UsersModel>> getAllUsers() async {
-    //List<UsersModel> userList = [];
-    userList.clear();
-    userList.refresh();
+  Future<void> getAllUsers() async {
+    List<UsersModel> tempUserList = [];
+    //userList.clear();
+    // userList.refresh();
     final ref = firestoreInstance
         .collection(Constants.organizationNodeName)
         .doc(firestoreController.registeredOrganization.value?.id)
@@ -207,11 +207,12 @@ class FirebaseFirestoreController extends GetxController {
     final docSnap = await ref.get();
     if (docSnap.docs.isNotEmpty) {
       for (var doc in docSnap.docs) {
-        userList.add(doc.data());
+        tempUserList.add(doc.data());
       }
-      userList.sort((a, b) => a.name!.compareTo(b.name!));
+      tempUserList.sort((a, b) => a.name!.compareTo(b.name!));
     } else {}
-    return userList;
+    userList(tempUserList);
+    //return userList;
   }
 
   //register user
@@ -282,7 +283,8 @@ class FirebaseFirestoreController extends GetxController {
       }
     }
     //setUserCountForOrganization();
-    firestoreController.userList.add(user);
+    //firestoreController.userList.add(user);
+    //firestoreController.getAllUsers();
 
     isLoading.value = false;
   }

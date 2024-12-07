@@ -5,13 +5,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_error_controller.dart';
-import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 import 'package:stationeryhub_attendance/models/pic_path_enum.dart';
 
 class FirebaseStorageController extends GetxController {
   RxBool isLoading = false.obs;
   final FirebaseErrorController errorController = Get.find();
-  final FirebaseFirestoreController firestoreController = Get.find();
+  //final FirebaseFirestoreController firestoreController = Get.find();
 
   Future<String?> uploadPicture(
       {required XFile? file, required PicPathEnum storagePath}) async {
