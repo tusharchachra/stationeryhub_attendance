@@ -144,7 +144,9 @@ class FirebaseFirestoreController extends GetxController {
     try {
       if (phoneNum != null && firebaseId == null && uid == null) {
         ref = firestoreInstance
-            .collection("users")
+            .collection(Constants.organizationNodeName)
+            .doc(firestoreController.registeredOrganization.value?.id)
+            .collection(Constants.usersNodeName)
             .where('phoneNum', isEqualTo: phoneNum)
             .withConverter(
               fromFirestore: UsersModel.fromFirestore,
@@ -152,7 +154,9 @@ class FirebaseFirestoreController extends GetxController {
             );
       } else if (phoneNum == null && firebaseId == null && uid != null) {
         ref = firestoreInstance
-            .collection("users")
+            .collection(Constants.organizationNodeName)
+            .doc(firestoreController.registeredOrganization.value?.id)
+            .collection(Constants.usersNodeName)
             .where('userId', isEqualTo: uid)
             .withConverter(
               fromFirestore: UsersModel.fromFirestore,
@@ -160,7 +164,9 @@ class FirebaseFirestoreController extends GetxController {
             );
       } else {
         ref = firestoreInstance
-            .collection("users")
+            .collection(Constants.organizationNodeName)
+            .doc(firestoreController.registeredOrganization.value?.id)
+            .collection(Constants.usersNodeName)
             .where('firebaseUserId', isEqualTo: firebaseId)
             .withConverter(
               fromFirestore: UsersModel.fromFirestore,
@@ -275,7 +281,7 @@ class FirebaseFirestoreController extends GetxController {
         debugPrint('New user Id added = ${ref.id}');
       }
       //update userId of the user
-      //firestoreController.updateUser(user: UsersModel(userId: ref.id));
+      firestoreController.updateUser(user: UsersModel(userId: ref.id));
     } on FirebaseException catch (e) {
       errorController.getErrorMsg(e);
       if (kDebugMode) {
@@ -297,11 +303,15 @@ class FirebaseFirestoreController extends GetxController {
       debugPrint('Updating user details in firestore...');
     }
     try {
-      final ref =
-          firestoreInstance.collection("users").doc(user.userId).withConverter(
-                fromFirestore: UsersModel.fromFirestore,
-                toFirestore: (UsersModel user, _) => user.toJson(),
-              );
+      final ref = firestoreInstance
+          .collection(Constants.organizationNodeName)
+          .doc(firestoreController.registeredOrganization.value?.id)
+          .collection(Constants.usersNodeName)
+          .doc(user.userId)
+          .withConverter(
+            fromFirestore: UsersModel.fromFirestore,
+            toFirestore: (UsersModel user, _) => user.toJson(),
+          );
       if (user.firebaseUserId != null) {
         ref.update({'firebaseUserId': '${user.firebaseUserId}'});
       }

@@ -230,9 +230,7 @@ class UserOnboardingScreen extends StatelessWidget {
                       : Container(),
                   SizedBox(height: 10.h),
                   Obx(
-                    () => userOnboardingScreenController.isLoading.value ==
-                                true ||
-                            firestoreController.isLoading.isTrue
+                    () => userOnboardingScreenController.isLoading.value == true
                         ? SizedBox(
                             width: 25.w,
                             height: 25.h,
@@ -285,11 +283,9 @@ class UserOnboardingScreen extends StatelessWidget {
                                           .isFormValid.value ==
                                       true) {
                                     isEditing
-                                        ? {
-                                            await userOnboardingScreenController
-                                                .uploadEditedData(
-                                                    uid: employee!.userId!)
-                                          }
+                                        ? await userOnboardingScreenController
+                                            .uploadEditedData(
+                                                uid: employee!.userId!)
                                         : await userOnboardingScreenController
                                             .uploadData();
                                     Get.back();
@@ -695,16 +691,16 @@ class UserOnboardingScreen extends StatelessWidget {
     userOnboardingScreenController.isFormValid.value = false;
     final FaceController faceController = Get.find();
 
-    UsersModel? tempUser =
+    /* UsersModel? tempUser =
         await firestoreController.getUser(phoneNum: phoneNum);
     if (tempUser != null && !isEditing) {
       formErrorController.errors.add('User already exists');
-    }
+    }*/
     userOnboardingScreenController.isLoading.value = false;
 
     if (captureImageScreenController.imageFilePath.isEmpty) {
       formErrorController.errors.add('Click a profile picture');
-    } else {
+    } else if (userOnboardingScreenController.isProfilePicChanged.isTrue) {
       await faceController.detectFace(
           path: captureImageScreenController.imageFilePath.value);
       print('faceController.isFaceDetected=${faceController.isFaceDetected}');

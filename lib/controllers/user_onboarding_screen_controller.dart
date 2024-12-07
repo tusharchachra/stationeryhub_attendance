@@ -160,17 +160,19 @@ class UserOnboardingScreenController extends GetxController {
     String? backPath;
     String embeddings = '';
     if (isEditing.value == true) {
-      if (isProfilePicChanged.value == true) {
+      if (!Uri.parse(captureImageScreenController.imageFilePath.value)
+          .isAbsolute /*isProfilePicChanged.value == true*/) {
         print('changing profile pic...');
         profilePicPath = await firebaseStorageController.uploadPicture(
             file: XFile(captureImageScreenController.imageFilePath.value),
             storagePath: PicPathEnum.profile);
         embeddings = await faceController.processFace(
             path: captureImageScreenController.imageFilePath.value);
+        print('faceController.embeddings.value=$embeddings');
         //delete previous file
         print('deleting previous file');
         final httpsReferenceToDel = FirebaseStorage.instance.refFromURL(
-            adminDashboardScreenController.employeeList
+            firestoreController.userList
                 .firstWhere((user) => user.userId == uid)
                 .profilePicPath!);
         httpsReferenceToDel.delete();
@@ -183,7 +185,7 @@ class UserOnboardingScreenController extends GetxController {
         //delete previous file
         print('deleting previous file');
         final httpsReferenceToDel = FirebaseStorage.instance.refFromURL(
-            adminDashboardScreenController.employeeList
+            firestoreController.userList
                 .firstWhere((user) => user.userId == uid)
                 .idCardFrontPath!);
         httpsReferenceToDel.delete();
@@ -196,7 +198,7 @@ class UserOnboardingScreenController extends GetxController {
         //delete previous file
         print('deleting previous file');
         final httpsReferenceToDel = FirebaseStorage.instance.refFromURL(
-            adminDashboardScreenController.employeeList
+            firestoreController.userList
                 .firstWhere((user) => user.userId == uid)
                 .idCardBackPath!);
         httpsReferenceToDel.delete();
@@ -219,14 +221,19 @@ class UserOnboardingScreenController extends GetxController {
         idCardBackPath: isIdBackChanged.value == true ? backPath : null,
         embeddings: isProfilePicChanged.value == true ? embeddings : null,
       );
-      print('faceController.embeddings.value=$embeddings');
+
       await firestoreController.updateUser(user: updatedUser);
-      adminDashboardScreenController.employeeList[adminDashboardScreenController
-              .employeeList
+      firestoreController.userList[firestoreController.userList
               .indexWhere((user) => user.userId == uid)] =
           (await firestoreController.getUser(uid: uid))!;
+      firestoreController.userList.sort((a, b) => a.name!.compareTo(b.name!));
 
-      if (firestoreController.isLoading.value == false) isLoading.value = false;
+      /*  firestoreController.userList[adminDashboardScreenController
+              .employeeList
+              .indexWhere((user) => user.userId == uid)] =
+          (await firestoreController.getUser(uid: uid))!;*/
+
+      isLoading.value = false;
     }
   }
 }
