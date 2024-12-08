@@ -10,6 +10,7 @@ import 'package:stationeryhub_attendance/controllers/firebase_storage_controller
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
 import 'package:stationeryhub_attendance/screens/capture_image_screen.dart';
 
+import '../controllers/user_onboarding_screen_controller.dart';
 import '../helpers/constants.dart';
 
 class DisplayCapturedImageScreen extends StatelessWidget {
@@ -105,6 +106,12 @@ class DisplayCapturedImageScreen extends StatelessWidget {
             onTap: () async {
               /*  var x = firebaseStorageController
                   .uploadProfilePic((captureImageScreenController.imageFile));*/
+              final UserOnboardingScreenController
+                  userOnboardingScreenController = Get.find();
+              if (userOnboardingScreenController.isEditing.isTrue) {
+                userOnboardingScreenController.isProfilePicChanged.value = true;
+                userOnboardingScreenController.isChangesMade.value = true;
+              }
               Get.back();
               //Get.offUntil(AdminDashboardScreen() as Route, (route) => false);
               //Get.offUntil(()=>UserOnboardingScreen(), predicate)

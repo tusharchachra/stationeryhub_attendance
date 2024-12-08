@@ -562,11 +562,11 @@ class UserOnboardingScreen extends StatelessWidget {
             left: 80.w,
             child: GestureDetector(
                 onTap: () {
-                  if (isEditing) {
+                  /* if (isEditing) {
                     userOnboardingScreenController.isProfilePicChanged.value =
                         true;
                     userOnboardingScreenController.isChangesMade.value = true;
-                  }
+                  }*/
 
                   Get.to(() => const PicInfoScreen(
                         title: 'New User',

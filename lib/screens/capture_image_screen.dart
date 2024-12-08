@@ -99,6 +99,7 @@ class CaptureImageScreen extends StatelessWidget {
   Widget buildButtons(
       CaptureImageScreenController captureImageScreenController) {
     //final FaceController faceController = Get.put(FaceController());
+
     return Positioned(
       bottom: 69.h,
       left: 0,
