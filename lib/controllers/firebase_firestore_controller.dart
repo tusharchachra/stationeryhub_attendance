@@ -179,7 +179,7 @@ class FirebaseFirestoreController extends GetxController {
       if (docSnap.docs.isNotEmpty) {
         tempUser = docSnap.docs[0].data();
       } else {}
-
+      isLoading.value = false;
       return tempUser;
     } on FirebaseException catch (e) {
       // TODO
@@ -197,6 +197,7 @@ class FirebaseFirestoreController extends GetxController {
 
   //get all users of the organization
   Future<void> getAllUsers() async {
+    isLoading(true);
     List<UsersModel> tempUserList = [];
     //userList.clear();
     // userList.refresh();
@@ -218,6 +219,8 @@ class FirebaseFirestoreController extends GetxController {
       tempUserList.sort((a, b) => a.name!.compareTo(b.name!));
     } else {}
     userList(tempUserList);
+    isLoading(false);
+
     //return userList;
   }
 
@@ -528,8 +531,9 @@ class FirebaseFirestoreController extends GetxController {
         await SharedPrefsServices.sharedPrefsInstance
             .storeOrganizationToSharedPrefs(organization: insertedOrganization);
       }*/
-      isLoading.value = false;
+
       registeredOrganization(newOrganization);
+      isLoading.value = false;
       return ref.id;
     } on Exception catch (e) {
       // TODO
