@@ -14,9 +14,7 @@ import '../components/admin_dashboard_box.dart';
 import '../components/date_carousel.dart';
 import '../components/form_field_button.dart';
 import '../components/gradient_progress_bar.dart';
-import '../controllers/attendance_card_controller.dart';
 import '../controllers/firebase_firestore_controller.dart';
-import '../controllers/firebase_storage_controller.dart';
 import '../services/firebase_login_services.dart';
 import 'employee_options_screen.dart';
 import 'mark_attendance_screen.dart';
@@ -30,9 +28,11 @@ class AdminDashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //Get.put(FirebaseFirestoreController());
     Get.put(AdminDashboardScreenController());
-    Get.put(AttendanceCardController());
-    Get.put(FirebaseStorageController());
+    // Get.put(AttendanceCardController());
+    //Get.put(FirebaseErrorController());
+    //Get.put(FirebaseStorageController());
     //Get.put(IdCardCaptureController());
 
     //FirebaseStorageController firebaseStorageController = Get.find();
@@ -93,7 +93,8 @@ class AdminDashboardScreen extends StatelessWidget {
   }
 
   Widget buildDashboard1() {
-    final AttendanceCardController attendanceCardController = Get.find();
+    //final AttendanceCardController attendanceCardController = Get.find();
+    print(firestoreController.isLoading);
     return ScaffoldDashboard(
       leadingWidget: Padding(
           padding: EdgeInsets.fromLTRB(12.w, 13.h, 0, 13.h),

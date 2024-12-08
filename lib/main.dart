@@ -8,10 +8,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 import 'package:stationeryhub_attendance/controllers/utils.dart';
 import 'package:stationeryhub_attendance/helpers/theme.dart';
 import 'package:stationeryhub_attendance/screens/screen_splash.dart';
 
+import 'controllers/firebase_auth_controller.dart';
 import 'firebase_options.dart';
 
 ///TODO:perform setup steps for iOs for google_mlkit_face_detection using steps in pub.dev
@@ -76,6 +78,9 @@ class StationeryHubAttendance extends StatelessWidget {
       // enableScaleText: () => true,
       // enableScaleWH: () => true,
       builder: (_, child) {
+        Get.put(FirebaseFirestoreController());
+        Get.put(FirebaseAuthController());
+
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeCustom.lightTheme,

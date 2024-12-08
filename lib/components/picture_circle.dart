@@ -3,7 +3,8 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:stationeryhub_attendance/components/gradient_progress_bar.dart';
+
+import 'gradient_progress_bar.dart';
 
 class PictureCircle extends StatelessWidget {
   const PictureCircle({
@@ -53,13 +54,7 @@ class PictureCircle extends StatelessWidget {
                 }
               },
               child: isNetworkPath
-                  ? /*Image.network(
-                      imgPath,
-                      fit: BoxFit.fitWidth,
-                      loadingBuilder: (context, child, loadingProgress) =>
-                          GradientProgressBar(size: Size(34.w, 34.h)),
-                    )*/
-                  CachedNetworkImage(
+                  ? CachedNetworkImage(
                       imageUrl: imgPath,
                       fit: BoxFit.fitWidth,
                       useOldImageOnUrlChange: true,

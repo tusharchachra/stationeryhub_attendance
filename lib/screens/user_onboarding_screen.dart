@@ -13,6 +13,7 @@ import 'package:stationeryhub_attendance/components/gradient_progress_bar.dart';
 import 'package:stationeryhub_attendance/controllers/capture_image_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/face_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
+import 'package:stationeryhub_attendance/controllers/firebase_storage_controller.dart';
 import 'package:stationeryhub_attendance/controllers/form_error_controller.dart';
 import 'package:stationeryhub_attendance/controllers/user_onboarding_screen_controller.dart';
 import 'package:stationeryhub_attendance/models/user_type_enum.dart';
@@ -48,11 +49,14 @@ class UserOnboardingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(FirebaseErrorController());
+    Get.put(FirebaseStorageController());
     final captureImageScreenController =
         Get.put(CaptureImageScreenController());
     final idCardCaptureController = Get.put(IdCardCaptureController());
     final formErrorController = Get.put(FormErrorController());
     Get.put(FaceController());
+
     final userOnboardingScreenController =
         Get.put(UserOnboardingScreenController());
 
