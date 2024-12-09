@@ -94,7 +94,6 @@ class AdminDashboardScreen extends StatelessWidget {
 
   Widget buildDashboard1() {
     //final AttendanceCardController attendanceCardController = Get.find();
-    print(firestoreController.isLoading);
     return ScaffoldDashboard(
       leadingWidget: Padding(
           padding: EdgeInsets.fromLTRB(12.w, 13.h, 0, 13.h),
