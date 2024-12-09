@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:stationeryhub_attendance/components/form_field_text.dart';
 import 'package:stationeryhub_attendance/components/picture_circle.dart';
 import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
-import 'package:stationeryhub_attendance/controllers/salary_management_screen_controller.dart';
+import 'package:stationeryhub_attendance/controllers/manage_salary_screen_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
 import 'package:stationeryhub_attendance/screens/date_filter_dialog.dart';
@@ -15,15 +15,15 @@ import 'package:stationeryhub_attendance/screens/date_filter_dialog.dart';
 import '../components/filter_button.dart';
 import '../controllers/date_filter_dialog_controller.dart';
 
-class SalaryManagementScreen extends StatelessWidget {
-  const SalaryManagementScreen({super.key});
+class ManageSalaryScreen extends StatelessWidget {
+  const ManageSalaryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final AdminDashboardScreenController adminDashboardScreenController =
         Get.find();
     final salaryManagementScreenController =
-        Get.put(SalaryManagementScreenController());
+        Get.put(ManageSalaryScreenController());
     final dateFilterDialogController = Get.put(DateFilterDialogController());
 
     /* element.name
@@ -97,7 +97,7 @@ class SalaryManagementScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Obx(
+                        /* Obx(
                           () => GestureDetector(
                             onTap: () {
                               salaryManagementScreenController
@@ -114,7 +114,7 @@ class SalaryManagementScreen extends StatelessWidget {
                               color: Colors.white,
                             ),
                           ),
-                        )
+                        )*/
                       ],
                     ),
                   );
@@ -193,7 +193,7 @@ class SalaryManagementScreen extends StatelessWidget {
   }
 
   ListView buildEmpList(
-      SalaryManagementScreenController salaryManagementScreenController,
+      ManageSalaryScreenController salaryManagementScreenController,
       AdminDashboardScreenController adminDashboardScreenController) {
     return ListView.builder(
         itemCount: salaryManagementScreenController.tempEmpList.length,
@@ -206,10 +206,8 @@ class SalaryManagementScreen extends StatelessWidget {
                               year: DateTime.now().year)
                           .length)
                   .ceil();
-          print(salaryManagementScreenController.tempEmpList[index].isActive);
           if (salaryManagementScreenController.tempEmpList[index].isActive ==
-              true)
-          {
+              true) {
             return Padding(
               padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 11.w),
               child: Container(
@@ -300,8 +298,8 @@ class SalaryManagementScreen extends StatelessWidget {
                 ),
               ),
             );
-          }
-          else return Container();
+          } else
+            return Container();
         });
   }
 }

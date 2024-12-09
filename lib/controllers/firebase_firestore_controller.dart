@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../controllers/firebase_auth_controller.dart';
 import '../helpers/constants.dart';
+import '../models/attendance_model.dart';
 import '../models/organizations_model.dart';
 import '../models/user_type_enum.dart';
 import '../models/users_model.dart';
@@ -680,5 +682,37 @@ class FirebaseFirestoreController extends GetxController {
       }
     }
     showPlaceholder.value = false;
+  }
+
+  Future<void> storeAttendance(
+      {required AttendanceModel attendance, required String orgId}) async {
+    isLoading(true);
+    print('storing attendance...');
+    try {
+      /*bool isCollectionExists = await firestoreInstance
+          .collection('attendance')
+          .doc(orgId)
+          .get()
+          .then((val) => (val));*/
+      var temp = firestoreInstance
+          .collection(Constants.organizationNodeName)
+          .doc(firestoreController.registeredOrganization.value?.id)
+          .collection(Constants.usersNodeName)
+          .doc(attendance.userId)
+          .collection(Constants.attendanceNodeName)
+          .doc(DateFormat('dd-MM-y').format(DateTime.now()))
+          .withConverter(
+            fromFirestore: AttendanceModel.fromFirestore,
+            toFirestore: (AttendanceModel attendance, _) => attendance.toJson(),
+          );
+      await temp.set(attendance);
+    } on FirebaseException catch (e) {
+      errorController.getErrorMsg(e);
+      if (kDebugMode) {
+        print('Error:${e.toString()}');
+      }
+    }
+    isLoading(false);
+    print('attendence stored');
   }
 }

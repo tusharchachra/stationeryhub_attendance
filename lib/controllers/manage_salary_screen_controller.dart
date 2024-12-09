@@ -1,12 +1,13 @@
 import 'package:get/get.dart';
-import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
+import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 import 'package:stationeryhub_attendance/models/users_model.dart';
 
-class SalaryManagementScreenController extends GetxController {
-  final AdminDashboardScreenController adminDashboardScreenController =
-      Get.find();
+class ManageSalaryScreenController extends GetxController {
+  /* final AdminDashboardScreenController adminDashboardScreenController =
+      Get.find();*/
+  final FirebaseFirestoreController firestoreController = Get.find();
   RxList<UsersModel> tempEmpList = <UsersModel>[].obs;
-  RxBool showTotal = false.obs;
+  RxBool showTotal = true.obs;
 
   @override
   void onInit() {
@@ -16,7 +17,7 @@ class SalaryManagementScreenController extends GetxController {
   }
 
   void loadEmpList() {
-    tempEmpList.value = adminDashboardScreenController.employeeList;
+    tempEmpList.value = firestoreController.userList;
     tempEmpList.refresh();
   }
 
@@ -30,7 +31,7 @@ class SalaryManagementScreenController extends GetxController {
     if (showTotal.value == false) {
       showTotal.value = true;
       //change to false after 5 seconds
-      Future.delayed(Duration(seconds: 5))
+      /*var a=*/ Future.delayed(const Duration(seconds: 5))
           .then((val) => showTotal.value = false);
     } else {
       showTotal.value = false;
@@ -41,7 +42,7 @@ class SalaryManagementScreenController extends GetxController {
     if (val == '') {
       loadEmpList();
     }
-    tempEmpList.value = adminDashboardScreenController.employeeList
+    tempEmpList.value = firestoreController.userList
         .where((element) =>
             element.name!.toLowerCase().contains(val.toLowerCase()))
         .toList();

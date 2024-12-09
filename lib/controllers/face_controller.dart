@@ -107,41 +107,6 @@ class FaceController extends GetxController {
     for (var value in tempCurrentEmbeddings) {
       currentEmbeddingsDouble.add(double.parse(value));
     }
-
-    /* for (int i = 0; i < users.length; i++) {
-      var listString = users[i].embeddings?.split(',');
-      if (listString != null) {
-        for (int j = 0; i < listString.length; j++) {
-          storedEmbeddings[i][j] = double.parse(listString[j]);
-        }
-        //print(storedEmbeddings.runtimeType);
-      }
-    }*/
-
-    /* for (UsersModel user in users) {
-      storedEmbeddings.clear();
-      var listString = user.embeddings?.split(',');
-      //print('listString=${listString}');
-      if (listString != null) {
-        for (var value in listString) {
-          storedEmbeddings.add(double.parse(value));
-        }
-        //print(storedEmbeddings.runtimeType);
-      }
-
-      Recognition recognition = recognizer.recognize(
-          storedEmbeddings: storedEmbeddings,
-          currentEmbeddings: currentEmbeddingsDouble,
-          location: location);
-      print('distance=${recognition.distance}');
-
-      //storedEmbeddings.addAll(double.parse(listString));
-    }*/
-
-    /* Recognition recognition = recognizer.recognize(
-        storedEmbeddings: users.map((element) => element.storedEmbeddings).toList(),
-        location: boundingBox.value);*/
-
     Recognition recognition = recognizer.recognize(
         users: users,
         currentEmbeddings: currentEmbeddingsDouble,

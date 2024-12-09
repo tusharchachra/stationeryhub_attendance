@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/controllers/face_controller.dart';
+import 'package:stationeryhub_attendance/controllers/firebase_firestore_controller.dart';
 import 'package:stationeryhub_attendance/models/users_model.dart';
 
 import '../face_detection_recognition/ML/recognition.dart';
-import 'admin_dashboard_screen_controller.dart';
 import 'capture_image_screen_controller.dart';
 
 class MarkAttendanceScreenController extends GetxController {
@@ -17,12 +17,12 @@ class MarkAttendanceScreenController extends GetxController {
     super.onReady();
   }
 
-  Future<void> markAttendance(
-      {required FaceController faceController,
-      required CaptureImageScreenController captureImageScreenController,
-      required AdminDashboardScreenController
-          adminDashboardScreenController}) async {
+  Future<void> markAttendance() async {
     isLoading(true);
+    final CaptureImageScreenController captureImageScreenController =
+        Get.find();
+    final FirebaseFirestoreController firestoreController = Get.find();
+    final FaceController faceController = Get.find();
     recognizedUser(UsersModel());
     isRecognitionCorrect(false);
 
@@ -37,12 +37,12 @@ class MarkAttendanceScreenController extends GetxController {
             path: captureImageScreenController.imageFilePath.value);
         // print(embeddings);
         Recognition recognition = faceController.recognize(
-            users: adminDashboardScreenController.employeeList,
+            users: firestoreController.userList,
             currentEmbeddings: embeddings,
             location: faceController.boundingBox.value);
         //print('recognition.distance=${recognition.distance}');
         if (recognition.distance < 0.9) {
-          recognizedUser(adminDashboardScreenController.employeeList
+          recognizedUser(firestoreController.userList
               .firstWhere((val) => val.userId == recognition.name));
           String name = recognizedUser.value.name!;
           print('recognizedUser.value.name=$name');

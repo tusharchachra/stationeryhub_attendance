@@ -82,6 +82,7 @@ class UserOnboardingScreenController extends GetxController {
     /*if (value == '7808814341') {
       return null;    } else*/
 
+    isLoading(true);
     phoneNum = RxString(value!.trim());
     //print('value=$value');
     String? temp;
@@ -98,6 +99,7 @@ class UserOnboardingScreenController extends GetxController {
       isPhoneNumValid.value = false;
       temp = 'Unauthorised user';
     }
+    isLoading(false);
 
     return temp;
   }

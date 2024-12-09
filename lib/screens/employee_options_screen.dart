@@ -5,7 +5,7 @@ import 'package:stationeryhub_attendance/helpers/constants.dart';
 import 'package:stationeryhub_attendance/scaffold/scaffold_dashboard.dart';
 import 'package:stationeryhub_attendance/screens/employee_list_screen.dart';
 import 'package:stationeryhub_attendance/screens/leave_management_screen.dart';
-import 'package:stationeryhub_attendance/screens/salary_management_screen.dart';
+import 'package:stationeryhub_attendance/screens/manage_salary_screen.dart';
 import 'package:stationeryhub_attendance/screens/user_onboarding_screen.dart';
 
 class EmployeeOptionsScreen extends StatelessWidget {
@@ -48,7 +48,7 @@ class EmployeeOptionsScreen extends StatelessWidget {
               title: 'Manage Salary',
               imgPath: 'assets/images/employee_options_screen/salary.png',
               onTap: () {
-                Get.to(() => SalaryManagementScreen());
+                Get.to(() => ManageSalaryScreen());
               },
             ),
             buildOption(

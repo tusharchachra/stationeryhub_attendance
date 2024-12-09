@@ -14,6 +14,8 @@ import '../controllers/admin_dashboard_screen_controller.dart';
 import '../controllers/face_controller.dart';
 import '../controllers/mark_attendance_screen_controller.dart';
 import '../helpers/constants.dart';
+import '../models/attendance_model.dart';
+import 'mark_attendance_result_screen.dart';
 
 enum MarkedBy { user, admin }
 
@@ -103,13 +105,8 @@ class MarkAttendanceScreen extends StatelessWidget {
                                               markedBy: MarkedBy.user),
                                           orgId: adminDashboardScreenController
                                               .employeeList[0].organizationId!);*/
-                                      /* await markAttendanceScreenController
-                                          .markAttendance(
-                                              faceController: faceController,
-                                              captureImageScreenController:
-                                                  captureImageScreenController,
-                                              adminDashboardScreenController:
-                                                  adminDashboardScreenController);
+                                      await markAttendanceScreenController
+                                          .markAttendance();
                                       await Get.dialog(
                                         const MarkAttendanceResultScreen(),
                                         barrierDismissible: false,
@@ -134,7 +131,7 @@ class MarkAttendanceScreen extends StatelessWidget {
                                                     .recognizedUser
                                                     .value
                                                     .organizationId!);
-                                      }*/
+                                      }
                                     },
                                     child: Container(
                                       width: 94.w,
