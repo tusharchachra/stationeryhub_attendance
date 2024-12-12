@@ -1,50 +1,34 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stationeryhub_attendance/screens/mark_attendance_screen.dart';
 
 class AttendanceModel {
-  String? userId;
   DateTime? dateTime;
-
-  /// Override marking attendance by Admin
   MarkedBy? markedBy;
 
-  /// If overridden, when
-  DateTime? markedAt;
+  AttendanceModel({this.dateTime, this.markedBy});
 
-  AttendanceModel({
-    this.userId,
-    this.dateTime,
-    this.markedBy,
-    this.markedAt,
-  });
+  Map<String, dynamic> toJson() => {
+        'dateTime': dateTime,
+        'markedBy': markedBy,
+      };
 
-  factory AttendanceModel.fromFirestore(
+  AttendanceModel.fromJson(Map<String, dynamic> json)
+      : dateTime = DateTime.parse(json.keys.first.toString()),
+        markedBy = MarkedBy.values
+            .byName(json.values.first.toString().split('.').last);
+
+  /* factory AttendanceModel.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
     SnapshotOptions? options,
   ) {
     final data = snapshot.data();
     return AttendanceModel(
-      userId: data?['userId'],
-      dateTime: DateTime.parse(data!['dateTime'].toString()),
-      markedBy: MarkedBy.values.byName(data['markedBy'].split('.').last),
-      markedAt: DateTime.parse(data['markedAt'].toString()),
+      dateTime:
+          data?.keys.
+      markedBy: data['markedBy'] != null
+          ? MarkedBy.values.byName(data['markedBy'].split('.').last)
+          : null,
     );
-  }
-
-  AttendanceModel.fromJson(Map<String, dynamic> json)
-      : userId =
-            json['userId'].toString() == '' ? '' : json['userId'].toString(),
-        dateTime = DateTime.parse(json['dateTime'].toString()),
-        //json returns "MarkedBy.admin" hence splitting the string to get the exact enum
-        markedBy = MarkedBy.values.byName(json['markedBy'].split('.').last),
-        markedAt = DateTime.parse(json['markedAt'].toString());
-
-  Map<String, dynamic> toJson() => {
-        'userId': userId ?? 'null',
-        'dateTime': dateTime?.toIso8601String(),
-        'markedBy': markedBy.toString(),
-        'markedAt': markedAt?.toIso8601String(),
-      };
+  }*/
 
   @override
   String toString() {

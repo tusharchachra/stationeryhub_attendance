@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:stationeryhub_attendance/controllers/attendance_card_day_controller.dart';
 
 import '../controllers/admin_dashboard_screen_controller.dart';
 import '../helpers/constants.dart';
@@ -14,12 +15,13 @@ class DateCarousel extends StatelessWidget {
 
   static AdminDashboardScreenController adminDashboardScreenController =
       Get.find();
+  static AttendanceCardDayController attendanceCardDayController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     ///TODO: change 2020 to 2023, uncomment DateTime.now().year, remove 2027
 
-    /* List<int> years = List<int>.generate(2027 - 2020, (i) => (i + 1) + 2020);*/
+    /*List<int> years = List<int>.generate(2027 - 2020, (i) => (i + 1) + 2020);*/
     List<int> years =
         List<int>.generate(DateTime.now().year - 2023, (i) => (i + 1) + 2023);
     List<String> months = [
@@ -43,7 +45,7 @@ class DateCarousel extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           //for year
-          /*  Row(
+          /* Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -63,7 +65,6 @@ class DateCarousel extends StatelessWidget {
 
           //for day
           buildDayCarousel(),
-          //for day
         ],
       ),
     );
@@ -229,6 +230,7 @@ class DateCarousel extends StatelessWidget {
               onTap: () {
                 adminDashboardScreenController.selectedDay.value = item;
                 adminDashboardScreenController.setDate();
+                attendanceCardDayController.att();
               },
               child: Container(
                 width: 76.w,

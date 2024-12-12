@@ -4,10 +4,10 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:stationeryhub_attendance/models/attendance_count_model.dart';
 
-import '../models/attendance_model.dart';
+import '../models/attendance_model_old.dart';
 
 class ApiService {
-  Future<List<AttendanceModel>> fetchAttendance(
+  Future<List<AttendanceModelOld>> fetchAttendance(
       {String? empId,
       DateTime? startDate,
       DateTime? endDate,
@@ -119,9 +119,9 @@ class ApiService {
       print('responseBody=${response.body}');
       if (response.statusCode == 200) {
         var jsonData = json.decode(response.body);
-        List<AttendanceModel> attendanceRecord = [];
+        List<AttendanceModelOld> attendanceRecord = [];
         for (var data in jsonData) {
-          attendanceRecord.add(AttendanceModel.fromJson(data));
+          attendanceRecord.add(AttendanceModelOld.fromJson(data));
         }
 
         print('attendanceRecord=$attendanceRecord');

@@ -14,7 +14,7 @@ import '../controllers/admin_dashboard_screen_controller.dart';
 import '../controllers/face_controller.dart';
 import '../controllers/mark_attendance_screen_controller.dart';
 import '../helpers/constants.dart';
-import '../models/attendance_model.dart';
+import '../models/attendance_model_old.dart';
 import 'mark_attendance_result_screen.dart';
 
 enum MarkedBy { user, admin }
@@ -115,8 +115,8 @@ class MarkAttendanceScreen extends StatelessWidget {
                                           'markAttendanceScreenController.isRecognitionCorrect=${markAttendanceScreenController.isRecognitionCorrect}');
                                       if (markAttendanceScreenController
                                           .isRecognitionCorrect.isTrue) {
-                                        AttendanceModel attendance =
-                                            AttendanceModel(
+                                        AttendanceModelOld attendance =
+                                            AttendanceModelOld(
                                                 userId:
                                                     markAttendanceScreenController
                                                         .recognizedUser
@@ -124,13 +124,19 @@ class MarkAttendanceScreen extends StatelessWidget {
                                                         .userId,
                                                 dateTime: DateTime.now(),
                                                 markedBy: MarkedBy.user);
-                                        await firestoreController.storeAttendance(
-                                            attendance: attendance,
-                                            orgId:
-                                                markAttendanceScreenController
-                                                    .recognizedUser
-                                                    .value
-                                                    .organizationId!);
+                                        await firestoreController
+                                            .storeAttendance(
+                                                /* attendance: attendance,*/
+                                                userId:
+                                                    markAttendanceScreenController
+                                                        .recognizedUser
+                                                        .value
+                                                        .userId!,
+                                                orgId:
+                                                    markAttendanceScreenController
+                                                        .recognizedUser
+                                                        .value
+                                                        .organizationId!);
                                       }
                                     },
                                     child: Container(

@@ -2,10 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:stationeryhub_attendance/models/attendance_model.dart';
+import 'package:stationeryhub_attendance/screens/mark_attendance_screen.dart';
 
 import '../controllers/firebase_auth_controller.dart';
 import '../helpers/constants.dart';
-import '../models/attendance_model.dart';
 import '../models/organizations_model.dart';
 import '../models/user_type_enum.dart';
 import '../models/users_model.dart';
@@ -685,7 +686,8 @@ class FirebaseFirestoreController extends GetxController {
   }
 
   Future<void> storeAttendance(
-      {required AttendanceModel attendance, required String orgId}) async {
+      {/*required AttendanceModel attendance*/ required String userId,
+      required String orgId}) async {
     isLoading(true);
     print('storing attendance...');
     try {
@@ -695,17 +697,22 @@ class FirebaseFirestoreController extends GetxController {
           .get()
           .then((val) => (val));*/
       var temp = firestoreInstance
-          .collection(Constants.organizationNodeName)
-          .doc(firestoreController.registeredOrganization.value?.id)
-          .collection(Constants.usersNodeName)
-          .doc(attendance.userId)
-          .collection(Constants.attendanceNodeName)
-          .doc(DateFormat('dd-MM-y').format(DateTime.now()))
-          .withConverter(
+              .collection(Constants.organizationNodeName)
+              .doc(firestoreController.registeredOrganization.value?.id)
+              .collection(Constants.usersNodeName)
+              .doc(userId)
+              .collection(Constants.attendanceNodeName)
+              .doc(DateFormat('dd-MM-y').format(DateTime.now()))
+          /*.withConverter(
             fromFirestore: AttendanceModel.fromFirestore,
             toFirestore: (AttendanceModel attendance, _) => attendance.toJson(),
-          );
-      await temp.set(attendance);
+          )*/
+          ;
+      Map<String, dynamic> attendance = {
+        DateFormat('y-M-d H:m').format(DateTime.now()): MarkedBy.user.toString()
+      };
+      await temp.set(attendance, SetOptions(merge: true));
+      //await temp.set({'entries': attendance}, SetOptions(merge: true));
     } on FirebaseException catch (e) {
       errorController.getErrorMsg(e);
       if (kDebugMode) {
@@ -713,6 +720,55 @@ class FirebaseFirestoreController extends GetxController {
       }
     }
     isLoading(false);
-    print('attendence stored');
+    print('attendance stored');
+  }
+
+  Future<List<AttendanceModel>> fetchAttendanceDay(
+      {required String userId, required DateTime date}) async {
+    print('fetching attendance for $userId...');
+    List<AttendanceModel> attendance = <AttendanceModel>[];
+    try {
+      /*bool isCollectionExists = await firestoreInstance
+          .collection('attendance')
+          .doc(orgId)
+          .get()
+          .then((val) => (val));*/
+
+      //AttendanceModel fetchedAttendance;
+      var ref = firestoreInstance
+              .collection(Constants.organizationNodeName)
+              .doc(firestoreController.registeredOrganization.value?.id)
+              .collection(Constants.usersNodeName)
+              .doc(userId)
+              .collection(Constants.attendanceNodeName)
+              .doc(DateFormat('dd-MM-y').format(date))
+          /*.withConverter(
+            fromFirestore: AttendanceModel.fromFirestore,
+            toFirestore: (AttendanceModel attendance, _) => attendance.toJson(),
+          )*/
+          ;
+      var docSnap = await ref.get();
+      print(docSnap.data());
+      if (docSnap.data() != null) {
+        docSnap.data()?.forEach((key, value) =>
+            attendance.add(AttendanceModel.fromJson({key: value})));
+      }
+      //print(attendance);
+      /* print(doc.data());
+      print(doc.exists);*/
+      /*if (doc.exists) {
+          final data = doc.data() as Map<String, dynamic>;
+          attendance.add(AttendanceModel.fromJson(data));
+          print(attendance);
+        }*/
+
+      //print('attendance=${att.data()}');
+    } on FirebaseException catch (e) {
+      errorController.getErrorMsg(e);
+      if (kDebugMode) {
+        print('Error:${e.toString()}');
+      }
+    }
+    return attendance;
   }
 }

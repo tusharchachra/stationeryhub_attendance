@@ -1,24 +1,50 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:stationeryhub_attendance/screens/mark_attendance_screen.dart';
+
 class AttendanceModelOld {
-  String? empId;
-  DateTime? date;
-  int? action;
+  String? userId;
+  DateTime? dateTime;
+
+  /// Override marking attendance by Admin
+  MarkedBy? markedBy;
+
+  /// If overridden, when
+  DateTime? markedAt;
 
   AttendanceModelOld({
-    this.empId,
-    this.action,
-    this.date,
+    this.userId,
+    this.dateTime,
+    this.markedBy,
+    this.markedAt,
   });
 
-  Map<String, dynamic> toJson() => {
-        'empId': empId,
-        'dateTime': date,
-        'action': action,
-      };
+  factory AttendanceModelOld.fromFirestore(
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) {
+    final data = snapshot.data();
+    return AttendanceModelOld(
+      userId: data?['userId'],
+      dateTime: DateTime.parse(data!['dateTime'].toString()),
+      markedBy: MarkedBy.values.byName(data['markedBy'].split('.').last),
+      markedAt: DateTime.parse(data['markedAt'].toString()),
+    );
+  }
 
   AttendanceModelOld.fromJson(Map<String, dynamic> json)
-      : empId = (json['empId']),
-        action = int.parse(json['action']),
-        date = DateTime.parse(json['date']);
+      : userId =
+            json['userId'].toString() == '' ? '' : json['userId'].toString(),
+        dateTime = DateTime.parse(json['dateTime'].toString()),
+        //json returns "MarkedBy.admin" hence splitting the string to get the exact enum
+        markedBy = MarkedBy.values.byName(json['markedBy'].split('.').last),
+        markedAt = DateTime.parse(json['markedAt'].toString());
+
+  Map<String, dynamic> toJson() => {
+        'userId': userId ?? 'null',
+        'dateTime': dateTime?.toIso8601String(),
+        'markedBy': markedBy.toString(),
+        'markedAt': markedAt?.toIso8601String(),
+      };
 
   @override
   String toString() {
