@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -12,9 +13,9 @@ import 'package:stationeryhub_attendance/controllers/firebase_firestore_controll
 import 'package:stationeryhub_attendance/controllers/login_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/utils.dart';
 import 'package:stationeryhub_attendance/helpers/theme.dart';
-import 'package:stationeryhub_attendance/screens/screen_splash.dart';
+import 'package:stationeryhub_attendance/screens/splash_screen.dart';
+import 'package:stationeryhub_attendance/translations/languages.dart';
 
-import 'controllers/attendance_card_day_controller.dart';
 import 'controllers/firebase_auth_controller.dart';
 import 'controllers/firebase_error_controller.dart';
 import 'firebase_options.dart';
@@ -88,6 +89,21 @@ class StationeryHubAttendance extends StatelessWidget {
 
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
+          translations: Languages(),
+          supportedLocales: Languages().keys.keys.map((val) => Locale(val)),
+          /*supportedLocales: const [
+            Locale('en'),
+            Locale('hi'),
+          ],*/
+
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            // add other library integrated locals
+          ],
+          locale: Get.deviceLocale,
+          fallbackLocale: Locale('en'),
           theme: ThemeCustom.lightTheme,
           home: SplashScreen(),
         );

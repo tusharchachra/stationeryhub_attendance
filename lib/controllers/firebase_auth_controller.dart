@@ -5,9 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:stationeryhub_attendance/models/organizations_model.dart';
 import 'package:stationeryhub_attendance/models/users_model.dart';
+import 'package:stationeryhub_attendance/screens/language_screen.dart';
 
 import '../screens/admin_dashboard_screen.dart';
-import '../screens/login_screen.dart';
 import 'firebase_error_controller.dart';
 import 'firebase_firestore_controller.dart';
 import 'otp_screen_controller.dart';
@@ -70,7 +70,7 @@ class FirebaseAuthController extends GetxController {
 
   _initialScreen(User? user) async {
     if (user == null) {
-      Get.offAll(() => LoginScreen());
+      Get.offAll(() => LanguageScreen());
     } else {
       firestoreController
           .registeredOrganization(await firestoreController.getOrganization());

@@ -16,20 +16,6 @@ class AttendanceModel {
         markedBy = MarkedBy.values
             .byName(json.values.first.toString().split('.').last);
 
-  /* factory AttendanceModel.fromFirestore(
-    DocumentSnapshot<Map<String, dynamic>> snapshot,
-    SnapshotOptions? options,
-  ) {
-    final data = snapshot.data();
-    return AttendanceModel(
-      dateTime:
-          data?.keys.
-      markedBy: data['markedBy'] != null
-          ? MarkedBy.values.byName(data['markedBy'].split('.').last)
-          : null,
-    );
-  }*/
-
   @override
   String toString() {
     // TODO: implement toString

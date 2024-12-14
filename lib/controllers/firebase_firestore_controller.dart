@@ -728,41 +728,19 @@ class FirebaseFirestoreController extends GetxController {
     print('fetching attendance for $userId...');
     List<AttendanceModel> attendance = <AttendanceModel>[];
     try {
-      /*bool isCollectionExists = await firestoreInstance
-          .collection('attendance')
-          .doc(orgId)
-          .get()
-          .then((val) => (val));*/
-
-      //AttendanceModel fetchedAttendance;
       var ref = firestoreInstance
-              .collection(Constants.organizationNodeName)
-              .doc(firestoreController.registeredOrganization.value?.id)
-              .collection(Constants.usersNodeName)
-              .doc(userId)
-              .collection(Constants.attendanceNodeName)
-              .doc(DateFormat('dd-MM-y').format(date))
-          /*.withConverter(
-            fromFirestore: AttendanceModel.fromFirestore,
-            toFirestore: (AttendanceModel attendance, _) => attendance.toJson(),
-          )*/
-          ;
+          .collection(Constants.organizationNodeName)
+          .doc(firestoreController.registeredOrganization.value?.id)
+          .collection(Constants.usersNodeName)
+          .doc(userId)
+          .collection(Constants.attendanceNodeName)
+          .doc(DateFormat('dd-MM-y').format(date));
       var docSnap = await ref.get();
       print(docSnap.data());
       if (docSnap.data() != null) {
         docSnap.data()?.forEach((key, value) =>
             attendance.add(AttendanceModel.fromJson({key: value})));
       }
-      //print(attendance);
-      /* print(doc.data());
-      print(doc.exists);*/
-      /*if (doc.exists) {
-          final data = doc.data() as Map<String, dynamic>;
-          attendance.add(AttendanceModel.fromJson(data));
-          print(attendance);
-        }*/
-
-      //print('attendance=${att.data()}');
     } on FirebaseException catch (e) {
       errorController.getErrorMsg(e);
       if (kDebugMode) {

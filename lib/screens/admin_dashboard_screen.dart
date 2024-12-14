@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:stationeryhub_attendance/components/attendance_card_day.dart';
+import 'package:stationeryhub_attendance/components/attendance_list_day.dart';
 import 'package:stationeryhub_attendance/components/picture_circle.dart';
 import 'package:stationeryhub_attendance/controllers/admin_dashboard_screen_controller.dart';
 import 'package:stationeryhub_attendance/controllers/firebase_auth_controller.dart';
@@ -15,7 +15,7 @@ import '../components/admin_dashboard_box.dart';
 import '../components/date_carousel.dart';
 import '../components/form_field_button.dart';
 import '../components/gradient_progress_bar.dart';
-import '../controllers/attendance_card_day_controller.dart';
+import '../controllers/attendance_list_day_controller.dart';
 import '../controllers/firebase_firestore_controller.dart';
 import '../services/firebase_login_services.dart';
 import 'employee_options_screen.dart';
@@ -32,7 +32,7 @@ class AdminDashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     //Get.put(FirebaseFirestoreController());
     Get.put(AdminDashboardScreenController());
-    Get.put(AttendanceCardDayController());
+    Get.put(AttendanceListDayController());
     //Get.put(FirebaseErrorController());
     //Get.put(FirebaseStorageController());
     //Get.put(IdCardCaptureController());
@@ -81,23 +81,9 @@ class AdminDashboardScreen extends StatelessWidget {
       adminDashboardScreenController.pageSubTitle2.value =
           (' - ${firestoreController.registeredUser.value?.userType?.name.capitalizeFirst}');
     }
-
-    /*if()
-
-
-        ? ''
-        : firestoreController.registeredUser.value?.name;
-    pageSubTitle2 = ''.obs;
-    firestoreController.registeredUser.value?.userType?.name == 'null'
-        ? ''
-        : firestoreController
-            .registeredUser.value?.userType?.name.capitalizeFirst;*/
   }
 
   Widget buildDashboard1() {
-    final AttendanceCardDayController attendanceCardController = Get.find();
-    final AdminDashboardScreenController adminDashboardScreenController =
-        Get.find();
     return ScaffoldDashboard(
       leadingWidget: Padding(
           padding: EdgeInsets.fromLTRB(12.w, 13.h, 0, 13.h),
@@ -140,15 +126,7 @@ class AdminDashboardScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-          ) /* CircleAvatar(
-                  maxRadius: 22.r,
-                  //backgroundColor: colourProfilePicIconBackground,
-                  child: const Icon(
-                    Icons.person,
-                    color: Colors.white,
-                  ),
-                ),*/
-          ),
+          )),
       pageTitle: Obx(
         () => firestoreController.isLoading.value == true
             ? const Column(
@@ -229,68 +207,7 @@ class AdminDashboardScreen extends StatelessWidget {
               style: Get.textTheme.headlineMedium
                   ?.copyWith(color: Constants.colourTextMedium),
             ),
-            AttendanceCardDay(),
-            /*Obx(
-              () => Expanded(
-                  child: ListView.builder(
-                itemCount: firestoreController.userList.length,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-
-                  //return AttendanceCardDay(att: att);
-                  return Obx(
-                    () => AttendanceCardDay(
-                      empId: firestoreController.userList[index].userId!,
-                      dateTime:
-                          adminDashboardScreenController.selectedDate.value,
-                    ),
-                  );
-                },
-              )),
-            ),*/
-            /*Obx(
-              () => (attendanceCardController.attendanceViewList.isEmpty &&
-                      attendanceCardController.isLoading.value == false)
-                  ? Expanded(
-                      child: Center(
-                        child: Text(
-                          'No data available',
-                          style: Get.textTheme.displaySmall
-                              ?.copyWith(color: Constants.colourTextLight),
-                        ),
-                      ),
-                    )
-                  : Expanded(
-                      child: ListView.builder(
-                        itemCount: attendanceCardController.isLoading.value
-                            ? 3
-                            : attendanceCardController
-                                .attendanceViewList.length,
-                        itemBuilder: (context, index) {
-                          AttendanceViewModel? attendanceView;
-                          if (attendanceCardController
-                                  .attendanceViewList.isNotEmpty &&
-                              attendanceCardController.isLoading.value ==
-                                  false) {
-                            attendanceView = attendanceCardController
-                                .attendanceViewList[index];
-                          }
-
-                          return AttendanceCard(
-                            attendanceView: attendanceView,
-                            showPlaceholder:
-                                attendanceCardController.isLoading.value,
-                          );
-                        },
-                      ),
-                    ),
-            ),*/
-
-            /* TextButton(
-                onPressed: () {
-                  Get.to(() => UserOnboardingScreen());
-                },
-                child: Text('Create new user')),*/
+            const AttendanceListDay(),
             TextButton(
                 onPressed: () {
                   authController.signOutUser();

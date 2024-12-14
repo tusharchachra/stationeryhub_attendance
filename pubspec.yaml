@@ -69,6 +69,8 @@ dependencies:
   local_auth: ^2.3.0
   photo_view: ^0.15.0
   qr_flutter: ^4.1.0
+  flutter_localizations:
+    sdk: flutter
 
 
 
@@ -99,6 +101,7 @@ flutter:
     - assets/images/
     - assets/images/employee_options_screen/
     - assets/images/salary_management_screen/
+    - assets/images/language_screen/
     - assets/images/generic/
     - assets/tflite_models/
     - assets/google_fonts/

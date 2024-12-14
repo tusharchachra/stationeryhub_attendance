@@ -4,76 +4,36 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:stationeryhub_attendance/components/gradient_progress_bar.dart';
 import 'package:stationeryhub_attendance/components/picture_circle.dart';
-import 'package:stationeryhub_attendance/controllers/attendance_card_day_controller.dart';
+import 'package:stationeryhub_attendance/controllers/attendance_list_day_controller.dart';
 import 'package:stationeryhub_attendance/helpers/constants.dart';
 
-class AttendanceCardDay extends StatelessWidget {
-  const AttendanceCardDay({
+class AttendanceListDay extends StatelessWidget {
+  const AttendanceListDay({
     super.key,
-    //required this.att,
-    /* required this.empId,
-    required this.dateTime,*/
-
-    /* required this.attendanceView,
-    this.showPlaceholder = false,*/
-    /*required this.user*/
   });
-  //final List<AttendanceModel> att;
-/*  final bool showPlaceholder;
-  final AttendanceViewModel? attendanceView;*/
-  //final UsersModel? user;
-  /* final String empId;
-  final DateTime dateTime;*/
 
   @override
   Widget build(BuildContext context) {
-    print('rebuilding');
-    final attendanceCardDayController = Get.put(AttendanceCardDayController());
-    attendanceCardDayController.att();
-    /*attendanceCardDayController.empId = empId;
-    attendanceCardDayController.loadAttendance(
-        empId: empId, startDate: dateTime);*/
-    /*final AttendanceCardDayController attendanceCardController =
-        Get.put(AttendanceCardDayController());
-    attendanceCardController.loadAttendance(empId: empId);
-    bool showLocalPlaceholder = false;*/
-    /*if (attendance != null) {
-      attendanceCardController.setUser(attendance!.empId!);
-    }*/
-    /* if (attendanceView?.attendance == null) {
-      showLocalPlaceholder = true;
-    }
-    return showPlaceholder || showLocalPlaceholder
-        ? buildPlaceholder()
-        : buildView();*/
-
-    /*return Text(
-            '${attendanceCardDayController.attendanceRecords}',
-            style: Get.textTheme.displaySmall?.copyWith(color: Colors.red),
-          );*/
-    return Obx(() => attendanceCardDayController.isLoading.isTrue
-        ? CircularProgressIndicator()
-        : Expanded(
-            child: ListView.builder(
-                //scrollDirection: Axis.horizontal,
-                itemCount:
-                    attendanceCardDayController.attendanceViewList.length,
-                shrinkWrap: true,
-                itemBuilder: (context, index) => attendanceCardDayController
-                        .attendanceViewList[index].attendance.isEmpty
-                    ? Container()
-                    : buildView(
-                        index) /*Text(
-                attendanceCardDayController.attendanceViewList[index].attendance
-                    .toString(),
-                style: Get.textTheme.displaySmall?.copyWith(color: Colors.red),
-              ),*/
-                ),
-          ));
+    final attendanceListDayController = Get.put(AttendanceListDayController());
+    attendanceListDayController.loadAttendance();
+    return Obx(
+      () => attendanceListDayController.isLoading.isTrue
+          ? CircularProgressIndicator()
+          : Expanded(
+              child: ListView.builder(
+                  itemCount:
+                      attendanceListDayController.attendanceViewList.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) => attendanceListDayController
+                          .attendanceViewList[index].attendance.isEmpty
+                      ? Container()
+                      : buildView(index)),
+            ),
+    );
   }
 
   Padding buildView(int index) {
-    final AttendanceCardDayController attendanceCardDayController = Get.find();
+    final AttendanceListDayController attendanceCardDayController = Get.find();
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 14.h),
       child: Container(

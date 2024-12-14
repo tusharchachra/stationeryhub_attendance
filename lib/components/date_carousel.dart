@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:stationeryhub_attendance/controllers/attendance_card_day_controller.dart';
+import 'package:stationeryhub_attendance/controllers/attendance_list_day_controller.dart';
 
 import '../controllers/admin_dashboard_screen_controller.dart';
 import '../helpers/constants.dart';
@@ -15,7 +15,7 @@ class DateCarousel extends StatelessWidget {
 
   static AdminDashboardScreenController adminDashboardScreenController =
       Get.find();
-  static AttendanceCardDayController attendanceCardDayController = Get.find();
+  static AttendanceListDayController attendanceListDayController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -230,7 +230,7 @@ class DateCarousel extends StatelessWidget {
               onTap: () {
                 adminDashboardScreenController.selectedDay.value = item;
                 adminDashboardScreenController.setDate();
-                attendanceCardDayController.att();
+                attendanceListDayController.loadAttendance();
               },
               child: Container(
                 width: 76.w,
